@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap");
+
+body {
+    font-family: "Noto Sans TC", '微軟正黑體', sans-serif !important;
+}
+
+.cartDeleteBtn {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    padding: 0 !important;
+
+    i {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+    }
+}
+
+.full-height {
+    min-height: calc(100vh - 253px - 78px);
+}
+
+.loadingPage{
+    background-color: rgba(224, 224, 134, 0.247);
+    backdrop-filter: blur(2px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.myNavbar{
+    background:linear-gradient(180deg, rgba(0,0,0,1) 11%, rgba(0, 0, 0, 0) 29%);
+   
+    .navbarSection{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 1.2rem;
+    }
+}
+
+.top-10{
+    top: 10%;
+}
