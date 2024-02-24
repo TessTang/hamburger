@@ -41,13 +41,17 @@ body {
 
 .myNavbar{
     background:linear-gradient(180deg, rgba(0,0,0,1) 11%, rgba(0, 0, 0, 0) 29%);
-   
+    color: white;
     .navbarSection{
         display: flex;
         flex-direction: row;
         align-items: center;
         font-size: 1.2rem;
     }
+}
+
+.active{
+    background-color: black;
 }
 
 .top-10{
