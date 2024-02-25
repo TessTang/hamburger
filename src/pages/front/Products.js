@@ -29,7 +29,9 @@ export default function Products() {
     }
 
     return (<>
-
+        <div className="container-fluid bg-secondary px-0 mt-2">
+            <img className="img-fluid" src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" alt="banners" />
+        </div>
         <div className="container mt-md-5 mt-3 mb-7">
             <div className="row">
                 <div className="col-md-3">

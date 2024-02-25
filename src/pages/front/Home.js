@@ -1,8 +1,7 @@
 export default function Home() {
     return (
         <>
-            <div className="container d-flex flex-column" style={{ minHeight: '100vh' }}>
-
+            <div className="container-fluid d-flex flex-column bg-secondary" style={{ minHeight: '100vh' }}>
                 <div className="row justify-content-center my-auto">
                     <div className="col-md-4 text-center">
                         <h2>Lorem ipsum.</h2>

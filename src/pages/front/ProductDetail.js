@@ -69,7 +69,7 @@ export default function ProductDetail() {
     }
 
     return (<>
-        <div className="container-fluid bg-danger px-0">
+        <div className="container-fluid bg-secondary px-0 mt-2">
             <img className="img-fluid" src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" alt="banners" />
         </div>
         <div className="container d-flex flex-column flex-sm-row align-items-center mt-4">
@@ -102,7 +102,7 @@ export default function ProductDetail() {
             </div>
         </div>
         <div className="my-5">
-            <p className="bg-secondary text-center py-2">成分</p>
+            <p className="bg-light text-center py-2">成分</p>
             <p className="ps-3" style={{ whiteSpace: "pre-line" }}>
                 {product.content}
             </p>
