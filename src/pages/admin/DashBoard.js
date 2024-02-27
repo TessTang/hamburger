@@ -86,6 +86,7 @@ export default function Dashboard() {
                             <i className="bi bi-receipt me-2" />
                             訂單列表
                         </Link>
+                        <Link to='../' className="btn btn-dark mt-5">回前台</Link>
                     </ul>
                 </div>
                 <div className="w-100">

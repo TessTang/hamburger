@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useMemo, useCallback } from "react";
 import axios from "axios";
 import {CartData} from "../../store/cartStore";
 
@@ -10,20 +10,21 @@ export default function ProductDetail() {
     const [product, setProduct] = useState({});
     const [otherProducts, setOtherProducts] = useState([]);
     const [quantity, setQuantity] = useState([]);
+    const [isRotated, setRotate] = useState(false);
 
-    const changeQty = (i, type) => {
+    const changeQty = useCallback((i, type) => {
 
         const index = quantity.findIndex((val) => { return val.product_id === i });
         if (type === 'plus') {
             setQuantity((pre) => pre.map((item, idx) => (idx === index ? { ...item, qty: item.qty + 1 } : item)))
         } else {
             quantity.find((val) => { return val.product_id === i }).qty === 1 ||
-                setQuantity((pre) => pre.map((item, idx) => (idx === index ? { ...item, qty: item.qty - 1 } : item)))
+            setQuantity((pre) => pre.map((item, idx) => (idx === index ? { ...item, qty: item.qty - 1 } : item)))
         }
-    }
+    }, [quantity])
 
     //隨機三樣推薦相同分類產品
-    const filterOther = (array) => {
+    const filterOther = useCallback((array) => {
         if(array.length <= 3){
             return array
         } else {
@@ -35,7 +36,7 @@ export default function ProductDetail() {
             }
             return other;
         }
-    }
+    }, [])
 
     //取得完整產品列表，抓取id品項且列出同分類
     useEffect(() => {
@@ -54,14 +55,14 @@ export default function ProductDetail() {
             }
         }
         getProduct();
-
     }, [id])
 
     const submit = async (id) => {
         try {
-           const res =  await axios.post(`/v2/api/${process.env.REACT_APP_API_PATH}/cart`, {data: quantity.find((val) =>  val.product_id === id)});
-           console.log('res', res)
+            console.log(quantity);
+           await axios.post(`/v2/api/${process.env.REACT_APP_API_PATH}/cart`, {data: quantity.find((val) =>  val.product_id === id)});
            getCart();
+           setQuantity((pre)=>{return pre.map(item => item.product_id === id ? { ...item, qty: 1 } : item)})
         }
         catch (error) {
             console.log(error)
@@ -111,11 +112,11 @@ export default function ProductDetail() {
         <h4 className="text-center">其他可參考的品項</h4>
         <div className="d-flex flex-wrap justify-content-center">
             {otherProducts.map(product => {
-                return <div key={product.id} className="card text-center m-3" style={{ maxWidth: "300px" }}>
+                return <div key={product.id} className="productsList myHover card text-center m-3 p-1" style={{ maxWidth: "300px" }}>
                     <img className="card-img-top" src={product.imageUrl} alt={product?.title} />
                     <div className="card-body">
                         <div>
-                            <Link to={`/product/${product.id}`}><p>{product.title}</p></Link>
+                            <Link className="productsList fs-4" to={`/product/${product.id}`}><p>{product.title}</p></Link>
                             <p>NT${product.price} <span className="text-muted"><del>NT${product.origin_price}</del></span></p>
                         </div>
                         <div className="d-flex align-items-center">
@@ -134,12 +135,12 @@ export default function ProductDetail() {
                                 </div>
                             </div>
                         </div>
-                        <button type="button" className="btn btn-dark mt-2" onClick={()=>{submit(product.id)}}>加入購物車</button>
+                        <button type="button" className="btn btn-dark mt-2" onClick={()=>{submit(product.id); setRotate(!isRotated)}}>
+                            加入購物車
+                        </button>
                     </div>
                 </div>
             })}
-
-
         </div>
 
     </>)

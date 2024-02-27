@@ -1,8 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap");
 
+//all
 body {
     font-family: "Noto Sans TC", '微軟正黑體', sans-serif !important;
 }
+
+.top-10{
+    top: 10%;
+}
+
+.errorAlert {
+    color: red;
+    font-weight: 600;
+}
+
+
 
 .cartDeleteBtn {
     position: absolute;
@@ -39,6 +51,8 @@ body {
     align-items: center;
 }
 
+//navbar
+
 .myNavbar{
     background:linear-gradient(180deg, rgba(0,0,0,1) 15%, rgba(0, 0, 0, 0) 45%);
     color: white;
@@ -56,6 +70,33 @@ body {
     background-color: black;
 }
 
-.top-10{
-    top: 10%;
+
+.home_banner {
+    min-height: 100vh;
+  }
+@media (max-width: 767.98px) {
+    .home_banner {
+      min-height: auto;
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+
+.myHover{
+    transition: 0.3s linear;
+
+    &:hover{
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+        transform: scale(1.1);
+        background-color: rgba(212, 145, 0, 0.596);
+    }
 }
+
+.footerLogo:hover{
+    transform: scale(1.5);
+}
+
+.productsList{
+    text-decoration: none;
+}
+

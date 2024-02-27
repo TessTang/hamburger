@@ -4,37 +4,32 @@ import { CartData } from "../../store/cartStore";
 import axios from "axios";
 
 
-export default function OrderSuccess(){
-    const {id} = useParams();
-    const [orderData, setOrderData] = useState([]);
-    const { numberComma} = useContext(CartData);
+export default function OrderSuccess() {
+  const { id } = useParams();
+  const [orderData, setOrderData] = useState([]);
+  const { numberComma } = useContext(CartData);
 
 
-    const getOrder = async (id) => {
-        try {
-            const res = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/order/${id}`);
-           console.log(res)
-            setOrderData(res.data.order);
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }    
-    useEffect(() => {
-        getOrder(id)
-    }, [id])
+  const getOrder = async (id) => {
+    try {
+      const res = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/order/${id}`);
+      console.log(res)
+      setOrderData(res.data.order);
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getOrder(id)
+  }, [id])
 
 
-    return (<>
+  return (<>
+    <div className="container-fluid bg-secondary px-0 mt-2">
+      <img className="img-fluid" src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" alt="banners" />
+    </div>
     <div className='container full-height'>
-      <div
-        style={{
-          minHeight: '400px',
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1480399129128-2066acb5009e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80)',
-          backgroundPosition: 'center center',
-        }}
-      ></div>
       <div className='mt-5 mb-7'>
         <div className='row'>
           <div className='col-md-6'>
@@ -56,7 +51,7 @@ export default function OrderSuccess(){
               </div>
               <div className='card-body px-4 py-0'>
                 <ul className='list-group list-group-flush'>
-                  {Object.values(orderData.products|| {})?.map((item) => {
+                  {Object.values(orderData.products || {})?.map((item) => {
                     return (
                       <li className='list-group-item px-0' key={item.id}>
                         <div className='d-flex mt-2'>
@@ -75,7 +70,7 @@ export default function OrderSuccess(){
                               <p className='text-muted mb-0'>
                                 <small>NT${item.product.price}</small>
                               </p>
-                              <p className='mb-0'>NT${item.final_total? numberComma(item.final_total):0}</p>
+                              <p className='mb-0'>NT${item.final_total ? numberComma(item.final_total) : 0}</p>
                             </div>
                           </div>
                         </div>
@@ -85,7 +80,7 @@ export default function OrderSuccess(){
                   <li className='list-group-item px-0 pb-0'>
                     <div className='d-flex justify-content-between mt-2'>
                       <p className='mb-0 h4 fw-bold'>總計</p>
-                      <p className='mb-0 h4 fw-bold'>NT${orderData.total? numberComma(orderData.total):0}</p>
+                      <p className='mb-0 h4 fw-bold'>NT${orderData.total ? numberComma(orderData.total) : 0}</p>
                     </div>
                   </li>
                 </ul>
@@ -95,6 +90,5 @@ export default function OrderSuccess(){
         </div>
       </div>
     </div>
-    
-    </>)
+  </>)
 }

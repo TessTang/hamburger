@@ -11,6 +11,9 @@ import ProductDetail from './pages/front/ProductDetail';
 import Cart from './pages/front/Cart';
 import CheckOut from './pages/front/CheckOut';
 import OrderSuccess from './pages/front/OrderSuccess';
+import Member from './pages/front/Member';
+import MemberProfile from './pages/front/member/MemberProfile';
+import MemberOrders from './pages/front/member/MemberOrders';
 
 function App() {
 
@@ -19,15 +22,20 @@ function App() {
    <Routes>
    <Route path='/' element={<FrontLayout/>}>
    <Route index element={<Home/>} />
-   <Route path='products' element={<Products/>} />
+   <Route path='products' element={<Products/>}/>
    <Route path='product/:id' element={<ProductDetail/>} />
    <Route path='cart' element={<Cart/>} />
    <Route path='ordersuccess/:id' element={<OrderSuccess/>} />
    <Route path='checkout' element={<CheckOut/>} />
+   <Route path='login' element={<Login />} />
+   <Route path='member' element={<Member />}>
+   <Route path='memberprofile' element={<MemberProfile/>} />
+    <Route path='memberorders' element={<MemberOrders/>} />
    </Route>
-    <Route path='/login' element={<Login />} />
+   </Route>
+
     <Route path='/admin' element={<Dashboard />}>
-      <Route path='products' element={<AdminProducts/>} />
+      <Route index path='products' element={<AdminProducts/>} />
       <Route path='coupons' element={<AdminCoupons/>} />
       <Route path='orders' element={<AdminOrders/>} />
     </Route>
