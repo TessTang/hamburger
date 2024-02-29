@@ -1,7 +1,7 @@
 import { useContext, useState, } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { CartData } from "../../store/cartStore";
+import { CartData } from "../../store/frontStore";
 import axios from "axios";
 
 export default function CheckOut() {

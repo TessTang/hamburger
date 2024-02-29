@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { auth } from "../utils/firebase";
+import { auth, db  } from "../utils/firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import {successAlert} from "../store/frontStore"
 
 export default function SignUp({loginError, setLoginError}) {
 
@@ -15,15 +16,26 @@ export default function SignUp({loginError, setLoginError}) {
     const handleData = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
-    // console.log(firebase)
 
     const submit = (e) => {
-        console.log(data);
         createUserWithEmailAndPassword(auth, data.username, data.password)
-            .then((userCredential) => {
-                console.log('成功');
-                console.log(userCredential.user);
-                navigate('../')
+            .then(async(userCredential) => {
+                try{
+                    await setDoc(doc(db, "users", userCredential.user.uid), {
+                        'displayName':'',
+                        'realName':'',
+                        'email': userCredential.user.email,
+                        'phoneNumber': 0,
+                        'address':'',
+                        'orders':[],
+                        'manerger':false
+                      });
+                      successAlert('註冊成功');
+                      navigate('/member/memberaddprofile')
+                }
+              catch(err){
+                console.error("匯入Error: ", err);
+              }
             })
             .catch((error) => {
                 console.log(error.code)

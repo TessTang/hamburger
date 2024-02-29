@@ -1,4 +1,4 @@
-import { CartData } from "../../store/cartStore";
+import { CartData } from "../../store/frontStore";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";

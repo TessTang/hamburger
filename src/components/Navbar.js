@@ -1,6 +1,6 @@
 import { useContext, useState, useCallback, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { CartData } from "../store/cartStore";
+import { CartData } from "../store/frontStore";
 
 export default function Navbar() {
 
@@ -46,7 +46,7 @@ export default function Navbar() {
                 </NavLink>
 
                 {user.manager ?
-                    <NavLink className="nav-item nav-link position-relative" to='./admin'>
+                    <NavLink className="nav-item nav-link position-relative" to='./admin/products'>
                         <button className="btn btn-dark">控制台</button>
                     </NavLink>
                     :<NavLink className="nav-item nav-link position-relative" to='./login'>

@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useContext, useMemo, useCallback } from "react";
 import axios from "axios";
-import {CartData} from "../../store/cartStore";
+import {CartData, successAlert} from "../../store/frontStore";
 
 export default function ProductDetail() {
     const {id} = useParams();
@@ -48,7 +48,7 @@ export default function ProductDetail() {
                 const otherProduct = filterOther(otherProductList);
                 setProduct(product);
                 setOtherProducts(otherProduct);
-                setQuantity([product, ...otherProduct].map(val => { return { product_id: val.id, qty: 1 } }))
+                setQuantity([product, ...otherProduct].map(val => { return { product_id: val.id, qty: 1 } }));
             }
             catch (error) {
                 console.log(error)
@@ -61,6 +61,7 @@ export default function ProductDetail() {
         try {
             console.log(quantity);
            await axios.post(`/v2/api/${process.env.REACT_APP_API_PATH}/cart`, {data: quantity.find((val) =>  val.product_id === id)});
+           successAlert('已加入購物車')
            getCart();
            setQuantity((pre)=>{return pre.map(item => item.product_id === id ? { ...item, qty: 1 } : item)})
         }

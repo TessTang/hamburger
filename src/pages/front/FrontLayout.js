@@ -2,11 +2,12 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
-import { CartData } from "../../store/cartStore"
+import { CartData } from "../../store/frontStore"
 import Loading from "../../components/Loading";
 import { auth } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
+let a = 1;
 export default function FrontLayout() {
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState([]);
@@ -23,15 +24,18 @@ export default function FrontLayout() {
         }
     }
 
+    console.log(a++, 'user', user)
     //check登入與管理
     useEffect(() => {
         getCart();
-        if (document.cookie.split('; ')
-            .find((row) => row.startsWith('hexToken='))) {
+        if (document.cookie.split(';')
+        .find((row) => row.startsWith('hexToken='))
+        ?.split('=')[1] !== "") {
             setUser({ manager: true, user: 'manager' })
             return
         }
         onAuthStateChanged(auth, (currentUser) => {
+            console.log('currentUser', currentUser)
             currentUser && setUser({ manager: false, user: currentUser })
         })
     }, [])

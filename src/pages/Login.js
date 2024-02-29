@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import SignUp from "../components/SignUp";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { CartData } from "../store/cartStore";
+import { CartData, successAlert } from "../store/frontStore";
 
 export default function Login() {
 
@@ -24,7 +24,7 @@ export default function Login() {
     //check if login
     useEffect(()=>{
     if(user.user){
-        navigate('/member')
+        navigate('/member/memberprofile')
     }
     })
 
@@ -42,9 +42,11 @@ export default function Login() {
             } else {
                 signInWithEmailAndPassword(auth ,data.username, data.password)
                 .then(() => {
+                    successAlert('登入成功')
                     navigate('../')
                 })
                 .catch((error) => {
+                    console.log(error)
                     switch (error.code) {
                         case 'auth/invalid-email' :
                            return setLoginError('信箱格式不正確');
@@ -52,6 +54,8 @@ export default function Login() {
                            return setLoginError('密碼錯誤');
                         case 'auth/invalid-credential' :
                            return setLoginError('密碼錯誤');
+                        case 'auth/missing-password' :
+                           return setLoginError('請輸入密碼');
                         case 'auth/user-not-found' :
                            return setLoginError('用戶不存在');
                         default:setLoginError('登入失敗')

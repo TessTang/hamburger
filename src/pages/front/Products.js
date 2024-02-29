@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Pagenation from "../../components/Pagenation";
-import { CartData } from "../../store/cartStore";
+import { CartData } from "../../store/frontStore";
 import ListGroup from 'react-bootstrap/ListGroup';
 
 export default function Products() {

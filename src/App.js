@@ -11,9 +11,10 @@ import ProductDetail from './pages/front/ProductDetail';
 import Cart from './pages/front/Cart';
 import CheckOut from './pages/front/CheckOut';
 import OrderSuccess from './pages/front/OrderSuccess';
-import Member from './pages/front/Member';
+import Member from './pages/front/member/Member';
 import MemberProfile from './pages/front/member/MemberProfile';
 import MemberOrders from './pages/front/member/MemberOrders';
+import MemberAddProfile from './pages/front/member/MemberAddProfile';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
    <Route path='login' element={<Login />} />
    <Route path='member' element={<Member />}>
    <Route path='memberprofile' element={<MemberProfile/>} />
+   <Route path='memberaddprofile' element={<MemberAddProfile/>} />
     <Route path='memberorders' element={<MemberOrders/>} />
    </Route>
    </Route>
