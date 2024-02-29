@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from 'react';
 import { CartData } from '../../../store/frontStore';
 export default function MemberAddProfile() {
 
-const {user} = useContext(CartData)
-console.log(user)
+// const {user} = useContext(CartData)
+// console.log(user)
     const [data, setData] = useState({
         'displayName':'',
         'realName':'',
@@ -16,7 +16,6 @@ console.log(user)
     }
 
     const submit = async (e) => {
-
        console.log(data)
     }
 

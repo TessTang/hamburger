@@ -30,7 +30,7 @@ export default function FrontLayout() {
         getCart();
         if (document.cookie.split(';')
         .find((row) => row.startsWith('hexToken='))
-        ?.split('=')[1] !== "") {
+        ?.split('=')[1]) {
             setUser({ manager: true, user: 'manager' })
             return
         }
