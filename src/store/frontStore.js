@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import Swal from 'sweetalert2';
 
-export const CartData = createContext({});
+export const FrontData = createContext({});
 
 export const successAlert = (text)=>{
     Swal.fire({

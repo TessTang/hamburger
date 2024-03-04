@@ -2,12 +2,12 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
-import { CartData } from "../../store/frontStore"
+import { FrontData } from "../../store/frontStore"
 import Loading from "../../components/Loading";
-import { auth } from "../../utils/firebase";
+import { auth, db } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
-let a = 1;
 export default function FrontLayout() {
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState([]);
@@ -24,7 +24,19 @@ export default function FrontLayout() {
         }
     }
 
-    console.log(a++, 'user', user)
+    const checkUserData = async(data)=>{
+        if(data){
+            const docSnap = await getDoc(doc(db, "users", data.uid));
+            if (docSnap.exists()) {
+                setUser({ manager: false, user: docSnap.data() })
+            } else {
+                console.log("No such document!");
+            };
+        }else{
+            return
+        }
+    }
+
     //check登入與管理
     useEffect(() => {
         getCart();
@@ -35,9 +47,24 @@ export default function FrontLayout() {
             return
         }
         onAuthStateChanged(auth, (currentUser) => {
-            console.log('currentUser', currentUser)
-            currentUser && setUser({ manager: false, user: currentUser })
+            if(currentUser){
+            checkUserData(currentUser)
+                }else{
+                    return
+                }
         })
+        // onAuthStateChanged(auth, async(currentUser) => {
+        //         if(currentUser){
+        //             const docSnap = await getDoc(doc(db, "users", currentUser.uid));
+        //             if (docSnap.exists()) {
+        //                 setUser({ manager: false, user: docSnap.data() })
+        //             } else {
+        //                 console.log("No such document!");
+        //             };
+        //         }else{
+        //             return
+        //         }
+        // })
     }, [])
 
     //數字千分位
@@ -46,7 +73,7 @@ export default function FrontLayout() {
         return Math.ceil(num.toString().replace(comma, ','))
     }
 
-    return <CartData.Provider value={{ cart, setCart, getCart, numberComma, setIsLoading, user, setUser }}>
+    return <FrontData.Provider value={{ cart, setCart, getCart, numberComma, setIsLoading, user, setUser, checkUserData }}>
         {isLoading && <Loading />}
         <div className="position-relative">
             <Navbar />
@@ -71,5 +98,5 @@ export default function FrontLayout() {
                 </div>
             </div>
         </div>
-    </CartData.Provider>
+    </FrontData.Provider>
 }

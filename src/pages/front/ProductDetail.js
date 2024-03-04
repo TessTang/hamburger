@@ -1,12 +1,12 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useContext, useMemo, useCallback } from "react";
 import axios from "axios";
-import {CartData, successAlert} from "../../store/frontStore";
+import {FrontData, successAlert} from "../../store/frontStore";
 
 export default function ProductDetail() {
     const {id} = useParams();
 
-    const {getCart} = useContext(CartData);
+    const {getCart} = useContext(FrontData);
     const [product, setProduct] = useState({});
     const [otherProducts, setOtherProducts] = useState([]);
     const [quantity, setQuantity] = useState([]);

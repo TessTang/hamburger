@@ -1,30 +1,27 @@
-import { useContext, useState, } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { CartData } from "../../store/frontStore";
+import { FrontData } from "../../store/frontStore";
 import axios from "axios";
 
 export default function CheckOut() {
     const navigate = useNavigate();
-    const { cart, numberComma, setCart } = useContext(CartData);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { cart, numberComma, setCart, user } = useContext(FrontData);
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
-    const onSubmit = (order) => {
-        const data = {
+    const onSubmit = (userData) => {
+        axios.post(`/v2/api/${process.env.REACT_APP_API_PATH}/order`, {
             "data": {
                 "user": {
-                    "name": order.name,
-                    "email": order.email,
-                    "tel": order.tel,
-                    "address": order.address
+                    "name": userData.name,
+                    "email": userData.email,
+                    "tel": userData.tel,
+                    "address": userData.address
                 },
-                "message": order.message
+                "message": userData.message
             }
-        }
-
-        axios.post(`/v2/api/${process.env.REACT_APP_API_PATH}/order`, data)
-            .then(res => {
-                console.log(res);
+        })
+            .then((res) => {
                 setCart({})
                 navigate(`/ordersuccess/${res.data.orderId}`)
             }
@@ -35,6 +32,13 @@ export default function CheckOut() {
     };
     const [payment, setPayment] = useState('');
 
+    useEffect(() => {
+        setValue('name', user.user?.realName);
+        setValue('email', user.user?.email);
+        setValue('tel', user.user?.phoneNumber);
+        setValue('address', user.user?.address);
+        setValue('message', '');
+      }, [user])
 
     return (<>
         <div className="container-fluid bg-secondary px-0 mt-2">
@@ -83,15 +87,15 @@ export default function CheckOut() {
                     </div>
                 </div>
                 <div className="col-md-6">
-                    <form action="" onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <p>聯絡資訊</p>
                         <div className="mb-0">
                             <label htmlFor="ContactMail" className="text-muted mb-0">Email</label>
                             <input type="email"
                                 className="form-control "
                                 id="ContactMail"
-                                aria-describedby="emailHelp"
-                                placeholder="example@gmail.com"
+                                placeholder="123@gmail.com"
+                                name="email"
                                 {...register('email', { required: { value: true, message: '請填寫喔!' }, pattern: { value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, message: 'e-mail格式錯誤' } })}
                             />
                             <p className="errorAlert">{errors.email?.message}</p>

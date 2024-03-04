@@ -1,17 +1,19 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { auth } from "../../../utils/firebase";
 import { signOut } from "firebase/auth";
-import { CartData } from "../../../store/frontStore";
+import { FrontData } from "../../../store/frontStore";
 import { useContext, useEffect } from "react";
 
 export default function Member() {
     const navigate = useNavigate(null);
-    const { user, setUser } = useContext(CartData);
+    const { user, setUser } = useContext(FrontData);
 
     useEffect(() => {
         console.log(user)
         if (!user.user) {
             navigate('../')
+        } else if( user.user.realName === ''){
+            navigate('/member/memberaddprofile')
         }
     }, [user])
 
@@ -22,10 +24,6 @@ export default function Member() {
         <div className="d-flex" style={{ minHeight: 'calc(100vh - 56px)' }}>
             <div className="bg-light" style={{ width: '200px' }}>
                 <ul className="list-group list-group-flush">
-                    <Link className="list-group-item list-group-item-action py-3" to="/member/memberaddprofile">
-                        <i className="bi bi-cup-fill me-2" />
-                        新增會員資料
-                    </Link>
                     <Link className="list-group-item list-group-item-action py-3" to="/member/memberprofile">
                         <i className="bi bi-cup-fill me-2" />
                         會員資料

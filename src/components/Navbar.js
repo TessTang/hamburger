@@ -1,10 +1,10 @@
 import { useContext, useState, useCallback, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { CartData } from "../store/frontStore";
+import { FrontData } from "../store/frontStore";
 
 export default function Navbar() {
 
-    const { cart, user } = useContext(CartData);
+    const { cart, user } = useContext(FrontData);
 
     const [roll, setRoll] = useState(true);
 

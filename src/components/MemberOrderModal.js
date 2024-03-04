@@ -1,0 +1,77 @@
+import { FrontData } from "../store/frontStore";
+import { useContext } from "react";
+
+export default function MemberOrderModal({ tempOrder, closeOrderModal }) {
+    const {numberComma} = useContext(FrontData)
+
+    return (
+        <div
+            className='modal fade'
+            id="memberOrderModal"
+            tabIndex='-1'
+            aria-labelledby='exampleModalLabel'
+            data-bs-backdrop="static"
+            aria-hidden='true'
+        >
+            <div className='modal-dialog modal-lg'>
+                <div className='modal-content'>
+                    <div className='modal-header'>
+                        <h1 className='modal-title fs-5' id='exampleModalLabel'>
+                            訂單資訊
+                        </h1>
+                        <button
+                            type='button'
+                            className='btn-close'
+                            aria-label='Close'
+                        onClick={closeOrderModal}
+                        />
+                    </div>
+                    <div className='modal-body'>
+                        <div className="row p-2 border-bottom">
+                            <div className="col-2 border-end text-center">訂單號</div>
+                            <div className="col-10">{tempOrder.id}</div>
+                        </div>
+                        <div className="row p-2 border-bottom">
+                            <div className="col-2 border-end text-center">訂單日</div>
+                            <div className="col-10">2024/03/01</div>
+                        </div>
+                        <div className="row p-2 border-bottom">
+                            <div className="col-2 border-end text-center">總金額</div>
+                            <div className="col-10">NTD$ {tempOrder.total && numberComma(tempOrder.total)}</div>
+                            {/* <div className="col-10">NTD$ {tempOrder.total}</div> */}
+                        </div>
+                        <div className="row p-2 border-bottom">
+                            <div className="col-2 border-end text-center">訂購資訊</div>
+                            <div className="col-10">
+                                <p>姓名 : {tempOrder.user?.name}</p>
+                                <p>地址 : {tempOrder.user?.address}</p>
+                                <p>電話 : {tempOrder.user?.tel}</p>
+                                <p>e-mail: {tempOrder.user?.email}</p>
+                            </div>
+                        </div>
+                        <div className="row p-2 border-bottom">
+                            <div className="col-2 border-end text-center">訂購內容</div>
+                            <ul className="col-10 list-group">
+
+                                {tempOrder.products && Object.values(tempOrder.products).map(item=>{
+                                    return   <li className="list-group-item d-flex" key={item.product_id}>
+                                    <div className="col-5">{item.product.title}</div>
+                                    <div className="col-3">x {item.qty}</div>
+                                </li>
+                                })}
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div className='modal-footer'>
+                        <button type='button' className='btn btn-secondary' onClick={closeOrderModal}>
+                            關閉
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    );
+}

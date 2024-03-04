@@ -14,8 +14,6 @@ body {
     font-weight: 600;
 }
 
-
-
 .cartDeleteBtn {
     position: absolute;
     top: 10px;
@@ -56,7 +54,7 @@ body {
 .myNavbar{
     background:linear-gradient(180deg, rgba(0,0,0,1) 15%, rgba(0, 0, 0, 0) 45%);
     color: white;
-    transition: all 0.3s linear;
+    transition: all 0.2s linear;
     .navbarSection{
         display: flex;
         flex-direction: row;

@@ -1,11 +1,11 @@
-import { CartData } from "../../store/frontStore";
+import { FrontData } from "../../store/frontStore";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
 export default function Cart() {
 
-    const { cart, getCart, numberComma } = useContext(CartData);
+    const { cart, getCart, numberComma } = useContext(FrontData);
     const [message, setMessage] = useState({ 'type': '', 'message': '' })
 
     //增減數量
@@ -28,8 +28,6 @@ export default function Cart() {
             })
         }
     }
-
-    console.log(cart)
 
     //更改數量
     const putQty = async (id, data) => {
@@ -73,8 +71,6 @@ export default function Cart() {
             const response = await axios.post(`/v2/api/${process.env.REACT_APP_API_PATH}/coupon`, data);
             setMessage({ 'type': 'success', 'message': response.data.message });
             getCart();
-            console.log(response)
-
         } catch (error) {
             setMessage({ 'type': 'error', 'message': error.response.data.message })
         }
@@ -151,7 +147,9 @@ export default function Cart() {
                                         <td className="text-end border-0 px-0 pt-4">NT${cart.total}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" className="border-0 px-0 pt-0 pb-4 font-weight-normal">折價券</th>
+                                        <th scope="row" className="border-0 px-0 pt-0 pb-4 font-weight-normal">
+                                            {cart.total>cart.final_total ?'已套用優惠券':'折價券' }
+                                            </th>
                                         <td className="text-end border-0 px-0 pt-0 pb-4">NT${cart.total - Math.ceil(cart.final_total)}</td>
                                     </tr>
                                     <tr>

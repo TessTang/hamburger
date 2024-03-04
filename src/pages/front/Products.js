@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Pagenation from "../../components/Pagenation";
-import { CartData } from "../../store/frontStore";
+import { FrontData } from "../../store/frontStore";
 import ListGroup from 'react-bootstrap/ListGroup';
 
 export default function Products() {
@@ -10,7 +10,7 @@ export default function Products() {
     const [productCategory, setProductCategory] = useState("all")
     const [products, setProducts] = useState([]);
     const [pagination, setPagination] = useState([]);
-    const { setIsLoading } = useContext(CartData);
+    const { setIsLoading } = useContext(FrontData);
 
 
     const container = {

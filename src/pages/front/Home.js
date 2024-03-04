@@ -41,7 +41,7 @@ export default function Home() {
                 <h4 className="text-center mt-3 fw-semibold">猜你喜歡</h4>
                 <div className="row mt-5">
                     {product?.map((item)=>{
-                        return (  <div key={item.id} className="col-md-4 mt-md-4">
+                        return (  <Link to={`/product/${item.id}`} key={item.id} className="col-md-4 mt-md-4 text-decoration-none">
                         <div className="card border-0 mb-4 h-100 p-2 myHover">
                             <img
                                 src={item.imageUrl}
@@ -57,7 +57,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
 
                         )
                     })}

@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 import SignUp from "../components/SignUp";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { CartData, successAlert } from "../store/frontStore";
+import { FrontData, successAlert } from "../store/frontStore";
 
 export default function Login() {
 
     const navigate = useNavigate();
 
-    const { user } = useContext(CartData);
+    const { user } = useContext(FrontData);
 
     const [loginError, setLoginError] = useState('')
 

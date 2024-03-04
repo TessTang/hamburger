@@ -1,20 +1,26 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { CartData } from "../../store/frontStore";
+import { FrontData } from "../../store/frontStore";
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { db } from '../../utils/firebase';
 import axios from "axios";
 
 
 export default function OrderSuccess() {
   const { id } = useParams();
   const [orderData, setOrderData] = useState([]);
-  const { numberComma } = useContext(CartData);
+  const { numberComma, user, checkUserData } = useContext(FrontData);
 
 
   const getOrder = async (id) => {
     try {
       const res = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/order/${id}`);
-      console.log(res)
+          await updateDoc(doc(db, "users", user.user.uid), {
+              orders: arrayUnion(res.data.order)
+          });
+      console.log(res, '匯入', res.data.order)
       setOrderData(res.data.order);
+      checkUserData(user.user);
     }
     catch (error) {
       console.log(error)
