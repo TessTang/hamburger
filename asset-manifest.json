@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/TessTang/hamburger/tree/firestore/static/css/main.440e116c.css",
-    "main.js": "/TessTang/hamburger/tree/firestore/static/js/main.47184f10.js",
-    "static/js/453.980ea594.chunk.js": "/TessTang/hamburger/tree/firestore/static/js/453.980ea594.chunk.js",
-    "static/media/bootstrap-icons.woff?": "/TessTang/hamburger/tree/firestore/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
-    "static/media/bootstrap-icons.woff2?": "/TessTang/hamburger/tree/firestore/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
-    "static/media/banner.jpg": "/TessTang/hamburger/tree/firestore/static/media/banner.f9c63569549cc3b219d5.jpg",
-    "static/media/logo.png": "/TessTang/hamburger/tree/firestore/static/media/logo.fa56f8afd6bfffdd2432.png",
-    "index.html": "/TessTang/hamburger/tree/firestore/index.html",
-    "main.440e116c.css.map": "/TessTang/hamburger/tree/firestore/static/css/main.440e116c.css.map",
-    "main.47184f10.js.map": "/TessTang/hamburger/tree/firestore/static/js/main.47184f10.js.map",
-    "453.980ea594.chunk.js.map": "/TessTang/hamburger/tree/firestore/static/js/453.980ea594.chunk.js.map"
+    "main.css": "/TessTang/hamburger/static/css/main.6520699a.css",
+    "main.js": "/TessTang/hamburger/static/js/main.83a158d6.js",
+    "static/js/453.980ea594.chunk.js": "/TessTang/hamburger/static/js/453.980ea594.chunk.js",
+    "static/media/bootstrap-icons.woff?": "/TessTang/hamburger/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/bootstrap-icons.woff2?": "/TessTang/hamburger/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+    "static/media/banner.jpg": "/TessTang/hamburger/static/media/banner.f9c63569549cc3b219d5.jpg",
+    "static/media/logo.png": "/TessTang/hamburger/static/media/logo.fa56f8afd6bfffdd2432.png",
+    "index.html": "/TessTang/hamburger/index.html",
+    "main.6520699a.css.map": "/TessTang/hamburger/static/css/main.6520699a.css.map",
+    "main.83a158d6.js.map": "/TessTang/hamburger/static/js/main.83a158d6.js.map",
+    "453.980ea594.chunk.js.map": "/TessTang/hamburger/static/js/453.980ea594.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.440e116c.css",
-    "static/js/main.47184f10.js"
+    "static/css/main.6520699a.css",
+    "static/js/main.83a158d6.js"
   ]
 }
