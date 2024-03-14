@@ -1,8 +1,4 @@
-import { FrontData } from "../store/frontStore";
-import { useContext } from "react";
-
-export default function MemberOrderModal({ tempOrder, closeOrderModal }) {
-    const {numberComma} = useContext(FrontData)
+export default function MemberOrderModal({ tempOrder, closeOrderModal, changeDate }) {
 
     return (
         <div
@@ -33,28 +29,28 @@ export default function MemberOrderModal({ tempOrder, closeOrderModal }) {
                         </div>
                         <div className="row p-2 border-bottom">
                             <div className="col-2 border-end text-center">訂單日</div>
-                            <div className="col-10">2024/03/01</div>
+                            <div className="col-10">{changeDate(tempOrder.create_at)}</div>
                         </div>
                         <div className="row p-2 border-bottom">
                             <div className="col-2 border-end text-center">總金額</div>
-                            <div className="col-10">NTD$ {tempOrder.total && numberComma(tempOrder.total)}</div>
+                            <div className="col-10">NTD$ {tempOrder.order?.final_total.toLocaleString()}</div>
                             {/* <div className="col-10">NTD$ {tempOrder.total}</div> */}
                         </div>
                         <div className="row p-2 border-bottom">
                             <div className="col-2 border-end text-center">訂購資訊</div>
                             <div className="col-10">
-                                <p>姓名 : {tempOrder.user?.name}</p>
-                                <p>地址 : {tempOrder.user?.address}</p>
-                                <p>電話 : {tempOrder.user?.tel}</p>
-                                <p>e-mail: {tempOrder.user?.email}</p>
+                                <p>姓名 : {tempOrder.orderContact?.name}</p>
+                                <p>地址 : {tempOrder.orderContact?.address}</p>
+                                <p>電話 : {tempOrder.orderContact?.tel}</p>
+                                <p>e-mail: {tempOrder.orderContact?.email}</p>
                             </div>
                         </div>
                         <div className="row p-2 border-bottom">
                             <div className="col-2 border-end text-center">訂購內容</div>
                             <ul className="col-10 list-group">
 
-                                {tempOrder.products && Object.values(tempOrder.products).map(item=>{
-                                    return   <li className="list-group-item d-flex" key={item.product_id}>
+                                {tempOrder.order && tempOrder.order.carts.map(item=>{
+                                    return   <li className="list-group-item d-flex" key={item.product.id}>
                                     <div className="col-5">{item.product.title}</div>
                                     <div className="col-3">x {item.qty}</div>
                                 </li>

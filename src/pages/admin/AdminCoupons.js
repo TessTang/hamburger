@@ -4,9 +4,12 @@ import CouponsModal from "../../components/CouponsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
 import { Modal } from "bootstrap";
+import { db } from "../../utils/firebase";
+import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 
 export default function AdminCoupons() {
     const [coupons, setCoupons] = useState([]);
+    const [allCoupons, setAllCoupons] = useState([]);
     const [pagination, setPagination] = useState([]);
     const [type, setType] = useState('create');
     const [tempCoupon, setTempCoupon] = useState({});
@@ -18,18 +21,43 @@ export default function AdminCoupons() {
         couponModal.current = new Modal('#couponModal');
         deleteModal.current = new Modal('#deleteModal');
 
-        getCoupons()
+        getCoupons();
     }, [])
+
+
+    useEffect(()=>{
+        getPage();
+    }, [allCoupons])
+
 
     const getCoupons = async (page = 1) => {
         try {
-            const couponRes = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupons?page=${page}`);
-            setCoupons(couponRes.data.coupons);
-            setPagination(couponRes.data.pagination)
+        const queryProducts = await getDocs(collection(db, "coupons"));
+        const productsArray = queryProducts.docs.map(doc => ({ ...doc.data() }));
+        setAllCoupons(productsArray);
         }
         catch (error) {
             console.log(error)
         }
+    }
+
+    const getPage = (page = 1)=>{
+        const itemsPerPage = 10; // 每頁顯示的資料數量
+        const totalPage = Math.ceil(allCoupons.length / itemsPerPage);
+        const getCouponsForPage = (page) => {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            return allCoupons.slice(startIndex, endIndex);
+        }
+
+        setPagination({
+            "total_pages": totalPage,
+            "current_page": page,
+            "has_pre": page > 1,
+            "has_next": page < totalPage,
+            "category": ""
+          })
+          setCoupons(getCouponsForPage(page));
     }
 
     //creat and edit coupon
@@ -56,8 +84,9 @@ export default function AdminCoupons() {
     }
 
     const deleteCoupons = async () => {
+
         try {
-            await axios.delete(`/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon/${tempCoupon.id}`);
+            await deleteDoc(doc(db, "coupons", tempCoupon.code));
             getCoupons();
             closeDeleteCoupon();
         }
@@ -85,7 +114,7 @@ export default function AdminCoupons() {
             <thead>
                 <tr>
                     <th scope="col">標題</th>
-                    <th scope="col">折扣(%)</th>
+                    <th scope="col">折扣(元)</th>
                     <th scope="col">到期日</th>
                     <th scope="col">優惠碼</th>
                     <th scope="col">啟用狀態</th>
@@ -95,9 +124,9 @@ export default function AdminCoupons() {
             <tbody>
                 {coupons.map((coupon) => {
                     return (
-                        <tr key={coupon.id}>
+                        <tr key={coupon.code}>
                             <td>{coupon.title}</td>
-                            <td>{coupon.percent}</td>
+                            <td>{coupon.deduct}</td>
                             <td>{`${new Date(coupon.due_date).getFullYear()}/${(new Date(coupon.due_date).getMonth() + 1).toString().padStart(2, '0')}/${new Date(coupon.due_date).getDate().toString().padStart(2, '0')}`
                             }</td>
                             <td>{coupon.code}</td>

@@ -3,33 +3,43 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FrontData } from "../../store/frontStore";
 import axios from "axios";
+import { collection, doc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { db } from "../../utils/firebase";
 
 export default function CheckOut() {
     const navigate = useNavigate();
-    const { cart, numberComma, setCart, user } = useContext(FrontData);
+    const { cart, setCart, user, checkUserData, getCart } = useContext(FrontData);
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
-    const onSubmit = (userData) => {
-        axios.post(`/v2/api/${process.env.REACT_APP_API_PATH}/order`, {
-            "data": {
-                "user": {
-                    "name": userData.name,
-                    "email": userData.email,
-                    "tel": userData.tel,
-                    "address": userData.address
-                },
-                "message": userData.message
-            }
+    const onSubmit = async (userData) => {
+        const newOrder = doc(collection(db, "orders"));
+        await setDoc(newOrder, {
+            'is_paid': false,
+            'create_at': new Date().getTime(),
+            'id': newOrder.id,
+            'order': { ...cart },
+            "orderContact": {
+                "name": userData.name,
+                "email": userData.email,
+                "tel": userData.tel,
+                "address": userData.address
+            },
+            'user': user.user?.uid || 'nonMember',
+            "payBy": userData.pay,
+            "message": userData.message
         })
-            .then((res) => {
-                setCart({})
-                navigate(`/ordersuccess/${res.data.orderId}`)
-            }
-            )
-            .catch(error =>
-                console.log(error))
 
-    };
+        await updateDoc(doc(db, "users", user.user.uid), {
+            ...user.user,
+            orders: [...user.user.orders, newOrder.id]
+        })
+        checkUserData(user.user)
+
+        await deleteDoc(doc(db, "carts", user.user.uid));
+        getCart();
+        navigate(`/ordersuccess/${newOrder.id}`)
+    }
+
     const [payment, setPayment] = useState('');
 
     useEffect(() => {
@@ -38,7 +48,7 @@ export default function CheckOut() {
         setValue('tel', user.user?.phoneNumber);
         setValue('address', user.user?.address);
         setValue('message', '');
-      }, [user])
+    }, [user])
 
     return (<>
         <div className="container-fluid bg-secondary px-0 mt-2">
@@ -55,12 +65,12 @@ export default function CheckOut() {
                     <div className="border p-4 mb-4">
                         {cart.carts?.map((item) => {
                             return (
-                                <div className="d-flex mt-2" key={item.id}>
+                                <div className="d-flex mt-2" key={item.product.id}>
                                     <img src={item.product.imageUrl} alt={item.product.title} className="me-2" style={{ width: '48px', height: '48px', objectFit: 'cover' }} />
                                     <div className="w-100">
                                         <div className="d-flex justify-content-between">
                                             <p className="mb-0 fw-bold">{item.product.title}</p>
-                                            <p className="mb-0">NT${numberComma(item.final_total)}</p>
+                                            <p className="mb-0">NT${item.total.toLocaleString()}</p>
                                         </div>
                                         <p className="mb-0 fw-bold">x{item.qty}</p>
                                     </div>
@@ -71,18 +81,23 @@ export default function CheckOut() {
                         <table className="table mt-4 border-top border-bottom text-muted">
                             <tbody>
                                 <tr>
-                                    <th scope="row" className="border-0 px-0 pt-4 font-weight-normal">Subtotal</th>
-                                    <td className="text-end border-0 px-0 pt-4">NT${cart.final_total ? numberComma(cart.final_total) : '0'}</td>
+                                    <th scope="row" className="border-0 px-0 pt-4 font-weight-normal">小計</th>
+                                    <td className="text-end border-0 px-0 pt-4">NT${cart.total?.toLocaleString()}</td>
                                 </tr>
+                                {cart.coupon?.deduct && <tr>
+                                    <th scope="row" className="border-0 px-0 pt-4 font-weight-normal">優惠券折抵</th>
+                                    <td className="text-end border-0 px-0 pt-4">NT${cart.coupon.deduct}</td>
+                                </tr>}
+
                                 <tr>
-                                    <th scope="row" className="border-0 px-0 pt-0 pb-4 font-weight-normal">Payment</th>
+                                    <th scope="row" className="border-0 px-0 pt-0 pb-4 font-weight-normal">付款方式</th>
                                     <td className="text-end border-0 px-0 pt-0 pb-4">{payment}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <div className="d-flex justify-content-between mt-4">
-                            <p className="mb-0 h4 fw-bold">Total</p>
-                            <p className="mb-0 h4 fw-bold">NT${cart.final_total ? numberComma(cart.final_total) : '0'}</p>
+                            <p className="mb-0 h4 fw-bold">總金額</p>
+                            <p className="mb-0 h4 fw-bold">NT${cart.final_total ? cart.final_total?.toLocaleString() : '0'}</p>
                         </div>
                     </div>
                 </div>

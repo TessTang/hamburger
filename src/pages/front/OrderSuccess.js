@@ -4,29 +4,28 @@ import { FrontData } from "../../store/frontStore";
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../utils/firebase';
 import axios from "axios";
+import { getDoc } from "firebase/firestore";
 
 
 export default function OrderSuccess() {
   const { id } = useParams();
   const [orderData, setOrderData] = useState([]);
-  const { numberComma, user, checkUserData } = useContext(FrontData);
+  const { user, checkUserData } = useContext(FrontData);
 
-
-  const getOrder = async (id) => {
-    try {
-      const res = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/order/${id}`);
-          await updateDoc(doc(db, "users", user.user.uid), {
-              orders: arrayUnion(res.data.order)
-          });
-      console.log(res, '匯入', res.data.order)
-      setOrderData(res.data.order);
-      checkUserData(user.user);
-    }
-    catch (error) {
-      console.log(error)
-    }
-  }
   useEffect(() => {
+    const getOrder = async (id) => {
+      try {
+        const order = await getDoc(doc(db, "orders", id));
+        if (order.exists()) {
+          setOrderData(order.data());
+        } else {
+            console.log("No such document!");
+        };
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
     getOrder(id)
   }, [id])
 
@@ -57,13 +56,13 @@ export default function OrderSuccess() {
               </div>
               <div className='card-body px-4 py-0'>
                 <ul className='list-group list-group-flush'>
-                  {Object.values(orderData.products || {})?.map((item) => {
+                  {orderData.order?.carts.map((item) => {
                     return (
-                      <li className='list-group-item px-0' key={item.id}>
+                      <li className='list-group-item px-0' key={item.product.id}>
                         <div className='d-flex mt-2'>
                           <img
                             src={item.product.imageUrl}
-                            alt=''
+                            alt={item.product.title}
                             className='me-2'
                             style={{ width: '80px', height: '50px' }}
                           />
@@ -76,17 +75,24 @@ export default function OrderSuccess() {
                               <p className='text-muted mb-0'>
                                 <small>NT${item.product.price}</small>
                               </p>
-                              <p className='mb-0'>NT${item.final_total ? numberComma(item.final_total) : 0}</p>
+                              <p className='mb-0'>NT${item.total.toLocaleString()}</p>
                             </div>
                           </div>
                         </div>
                       </li>
                     );
                   })}
+                  {orderData.order?.coupon?.deduct &&  <li className='list-group-item px-0 pb-0'>
+                    <div className='d-flex justify-content-between mt-2'>
+                      <p className='mb-0 fw-bold'>優惠券</p>
+                      <p className='mb-0 fw-bold'>NT${orderData.order?.coupon.deduct}</p>
+                    </div>
+                  </li>}
+               
                   <li className='list-group-item px-0 pb-0'>
                     <div className='d-flex justify-content-between mt-2'>
                       <p className='mb-0 h4 fw-bold'>總計</p>
-                      <p className='mb-0 h4 fw-bold'>NT${orderData.total ? numberComma(orderData.total) : 0}</p>
+                      <p className='mb-0 h4 fw-bold'>NT${orderData.order?.final_total.toLocaleString()}</p>
                     </div>
                   </li>
                 </ul>

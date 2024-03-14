@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../utils/firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { successAlert } from "../store/frontStore"
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
+import { messageAlert } from "../store/frontStore"
 
-export default function SignUp({ loginError, setLoginError }) {
+export default function SignUp({ loginError, setLoginError, setFireStore, googleSign }) {
 
     const navigate = useNavigate();
     const [data, setData] = useState({
@@ -17,26 +17,25 @@ export default function SignUp({ loginError, setLoginError }) {
         setData({ ...data, [e.target.name]: e.target.value });
     }
 
-
-    const setFireStore = async (userData) => {
-        try {
-            await setDoc(doc(db, "users", userData.uid), {
-                'displayName': userData.displayName? userData.displayName: '',
-                'realName': '',
-                'email': userData.email,
-                'phoneNumber': '',
-                'address': '',
-                'orders': [],
-                'manerger': false,
-                'uid': userData.uid
-            });
-            successAlert('註冊成功');
-            navigate('/member/memberaddprofile')
-        }
-        catch (err) {
-            console.error("匯入Error: ", err);
-        }
-    }
+    // const setFireStore = async (userData) => {
+    //     try {
+    //         await setDoc(doc(db, "users", userData.uid), {
+    //             'displayName': userData.displayName? userData.displayName: '',
+    //             'realName': '',
+    //             'email': userData.email,
+    //             'phoneNumber': '',
+    //             'address': '',
+    //             'orders': [],
+    //             'manerger': false,
+    //             'uid': userData.uid
+    //         });
+    //         messageAlert('success','註冊成功');
+    //         navigate('/member/memberaddprofile')
+    //     }
+    //     catch (err) {
+    //         console.error("匯入Error: ", err);
+    //     }
+    // }
 
     const submit = (e) => {
         createUserWithEmailAndPassword(auth, data.username, data.password)
@@ -58,28 +57,16 @@ export default function SignUp({ loginError, setLoginError }) {
             });
     }
 
-    const googleSignUp = async()=>{
-        try {
-            const provider = new GoogleAuthProvider();
-            const result = await signInWithPopup(auth, provider);
-            setFireStore(result.user)
-            console.log('signupresult', result)
-        } catch (error) {
-            console.log('googlesignuperror', error)
-        }
-    }
-
-
+   
 
     return (
         <>
-
             <div className="text-center">
                 <button
-                onClick={googleSignUp}
+                onClick={googleSign}
                 className="btn btn-success border p-2">
                     <i className="bi bi-google me-2" />
-                    使用Google帳號註冊
+                    使用Google帳號登入
                     </button>
             </div>
             <hr />

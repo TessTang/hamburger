@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import ProductsModal from "../../components/ProductsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
 import { Modal } from "bootstrap";
 
+import { db } from "../../utils/firebase";
+import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
+
 export default function AdminProducts() {
     const [products, setProducts] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
     const [pagination, setPagination] = useState([]);
     const [type, setType] = useState('create');
     const [tempProduct, setTempProduct] = useState({});
@@ -14,19 +17,43 @@ export default function AdminProducts() {
     const productModal = useRef(null);
     const deleteModal = useRef(null);
 
+    //1.拿到全部的資料
+    //2.轉換成可以轉換pagenation與每頁對應資料  換頁時get對應頁面的funciton
+
+    const getPage = (page = 1)=>{
+        const itemsPerPage = 10; // 每頁顯示的資料數量
+        const totalPage = Math.ceil(allProducts.length / itemsPerPage);
+        const getProductsForPage = (page) => {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            return allProducts.slice(startIndex, endIndex);
+        }
+
+        setPagination({
+            "total_pages": totalPage,
+            "current_page": page,
+            "has_pre": page > 1,
+            "has_next": page < totalPage,
+            "category": ""
+          })
+        setProducts(getProductsForPage(page));
+    }
+
     useEffect(() => {
         productModal.current = new Modal('#productModal');
         deleteModal.current = new Modal('#deleteModal');
-
         getProducts()
     }, [])
 
+    useEffect(()=>{
+        getPage();
+    }, [allProducts])
+
     const getProducts = async (page = 1) => {
         try {
-            const productRes = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/admin/products?page=${page}`);
-            console.log('get',productRes);
-            setProducts(productRes.data.products);
-            setPagination(productRes.data.pagination)
+        const queryProducts = await getDocs(collection(db, "products"));
+        const productsArray = queryProducts.docs.map(doc => ({ ...doc.data() }));
+        setAllProducts(productsArray);
         }
         catch (error) {
             console.log(error)
@@ -57,8 +84,7 @@ export default function AdminProducts() {
 
     const deleteProducts = async () => {
         try {
-            console.log(products, tempProduct)
-            await axios.delete(`/v2/api/${process.env.REACT_APP_API_PATH}/admin/product/${tempProduct.id}`);
+            await deleteDoc(doc(db, "products", tempProduct.id));
             getProducts();
             closeDeleteProduct();
         }
@@ -124,6 +150,6 @@ export default function AdminProducts() {
             </tbody>
         </table>
 
-      <Pagenation pagination={pagination} changePage={getProducts}/>
+      <Pagenation pagination={pagination} changePage={getPage}/>
     </div>)
 }

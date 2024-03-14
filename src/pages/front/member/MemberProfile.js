@@ -1,11 +1,18 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { FrontData } from '../../../store/frontStore';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function MemberProfile() {
 
     const { user } = useContext(FrontData);
-
+    const navigate = useNavigate(null);
+    useEffect(()=>{
+        if( user.user?.realName === ''){
+            navigate('/member/memberaddprofile')
+        }
+    }, [user])
+   
     return (<>
         <div className="d-flex">
             <h3>會員資料</h3>

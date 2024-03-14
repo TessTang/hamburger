@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { MessageContext, handleSuccessMessage, handleErrorMessage } from "../store/messageStore"
+import { MessageContext, handleSuccessMessage, handleErrorMessage } from "../store/messageStore";
+import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
+import { db } from "../utils/firebase";
 
 export default function CouponsModal({ closeAddCoupon, getCoupons, type, tempCoupon }) {
     const [date, setDate] = useState(new Date());
@@ -9,7 +11,7 @@ export default function CouponsModal({ closeAddCoupon, getCoupons, type, tempCou
     const [tempData, setTempData] = useState({
         "title": "",
         "is_enabled": 1,
-        "percent": 80,
+        "deduct": 80,
         "due_date": new Date(),
         "code": "testCode"
     })
@@ -19,12 +21,13 @@ export default function CouponsModal({ closeAddCoupon, getCoupons, type, tempCou
             setTempData({
                 "title": "",
                 "is_enabled": 1,
-                "percent": 80,
+                "deduct": 80,
                 "due_date": new Date(),
                 "code": ""
             })
             setDate(new Date());
         } else if (type === "edit") {
+            console.log(tempData)
             setTempData(tempCoupon);
             setDate(new Date(tempCoupon.due_date))
         }
@@ -47,32 +50,63 @@ export default function CouponsModal({ closeAddCoupon, getCoupons, type, tempCou
             })
         }
     }
-    const submit = async () => {
-        try {
-            let api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon`;
-            let method = 'post';
-            if (type === 'edit') {
-                api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon/${tempCoupon.id}`;
-                method = 'put';
-            }
 
-            const res = await axios[method](api,
-                {
-                    data: {
-                        ...tempData,
-                        due_date: date.getTime(), // 轉換成 unix timestamp
-                    },
-                }
-            );
-            handleSuccessMessage(dispatch, res);
-            getCoupons();
-            closeAddCoupon();
+    //create=>寫入資料庫 edit=>update資料庫
+    const submit = async () => {
+        if (type === "create") {
+            try {
+                await setDoc(doc(db, "coupons", tempData.code), {...tempData,  due_date: date.getTime()})
+                handleSuccessMessage(dispatch, '新增成功');
+            }
+            catch (err) {
+                handleErrorMessage(dispatch, '新增失敗');
+                console.log('新增失敗', err)
+            }
+        } else if (type === "edit") {
+            try {
+                console.log(tempData)
+                await updateDoc(doc(db, "coupons", tempData.code), {...tempData,  due_date: date.getTime()});
+                handleSuccessMessage(dispatch, '更改成功');
+            }
+            catch (err) {
+                handleErrorMessage(dispatch, '更改失敗');
+                console.log('更改失敗', err)
+            }
         }
-        catch (error) {
-            handleErrorMessage(dispatch, error);
-            console.log(error)
-        }
+
+        closeAddCoupon();
+        getCoupons();
     }
+
+
+
+    // const submit = async () => {
+    //     try {
+    //         let api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon`;
+    //         let method = 'post';
+    //         if (type === 'edit') {
+    //             api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon/${tempCoupon.id}`;
+    //             method = 'put';
+    //         }
+
+    //         const res = await axios[method](api,
+    //             {
+    //                 data: {
+    //                     ...tempData,
+    //                     due_date: date.getTime(), // 轉換成 unix timestamp
+    //                 },
+    //             }
+    //         );
+    //         handleSuccessMessage(dispatch, res);
+    //         getCoupons();
+    //         closeAddCoupon();
+    //     }
+
+    //     catch (error) {
+    //         handleErrorMessage(dispatch, error);
+    //         console.log(error)
+    //     }
+    // }
 
     return (
         <div
@@ -108,16 +142,16 @@ export default function CouponsModal({ closeAddCoupon, getCoupons, type, tempCou
                         </div>
                         <div className='row'>
                             <div className='col-md-6 mb-2'>
-                                <label className='w-100' htmlFor='percent'>
-                                    折扣（%）
+                                <label className='w-100' htmlFor='deduct'>
+                                    折扣(元)
                                     <input
                                         type='text'
-                                        name='percent'
-                                        id='percent'
-                                        placeholder='請輸入折扣（%）'
+                                        name='deduct'
+                                        id='deduct'
+                                        placeholder='請輸入折扣'
                                         className='form-control mt-1'
                                         onChange={handleChange}
-                                        value={tempData.percent}
+                                        value={tempData.deduct}
                                     />
                                 </label>
                             </div>

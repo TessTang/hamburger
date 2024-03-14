@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useContext} from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import Pagenation from "../../components/Pagenation";
 import { FrontData } from "../../store/frontStore";
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -10,16 +9,14 @@ export default function Products() {
     const [productCategory, setProductCategory] = useState("all")
     const [products, setProducts] = useState([]);
     const [pagination, setPagination] = useState([]);
-    const { setIsLoading } = useContext(FrontData);
-
+    const { isLoading, allProducts } = useContext(FrontData);
 
     const container = {
         hidden: { opacity: 0 },
         show: {
             opacity: 1,
             transition: {
-                // 每个子元素的延迟时间会逐个递增0.5秒，也就是每个的启动时间都会比前一个有0.5s的延迟
-                staggerChildren: 0.5
+                staggerChildren: 3
             }
         }
     }
@@ -30,22 +27,28 @@ export default function Products() {
     }
 
     useEffect(() => {
-        getProducts()
-    }, [productCategory])
+        getPage()
+    }, [productCategory, isLoading])
 
-    const getProducts = useCallback(async (page = 1) => {
-        try {
-            setIsLoading(true);
-            const productRes = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/products?page=${page}${productCategory === "all" ? "" : `&category=${productCategory}`}`);
-            console.log('get', productRes);
-            setProducts(productRes.data.products);
-            setPagination(productRes.data.pagination)
-            setIsLoading(false);
+    const getPage = (page = 1)=>{
+        const productList = productCategory === 'all' ? allProducts: allProducts.filter(item=>item.category === productCategory)
+        const itemsPerPage = 10; // 每頁顯示的資料數量
+        const totalPage = Math.ceil(productList.length / itemsPerPage);
+        const getProductsForPage = (page) => {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+           return productList.slice(startIndex, endIndex)
         }
-        catch (error) {
-            console.log(error)
-        }
-    }, [productCategory])
+
+        setPagination({
+            "total_pages": totalPage,
+            "current_page": page,
+            "has_pre": page > 1,
+            "has_next": page < totalPage,
+            "category": ""
+          })
+        setProducts(getProductsForPage(page));
+    }
 
     return (<>
         <div className="container-fluid bg-secondary px-0 mt-2">
@@ -112,7 +115,7 @@ export default function Products() {
                         })}
 
                     </div>
-                    <Pagenation pagination={pagination} changePage={getProducts} />
+                    <Pagenation pagination={pagination} changePage={getPage} />
                 </div>
             </div>
         </div>

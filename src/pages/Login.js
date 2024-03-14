@@ -4,9 +4,11 @@ import Tabs from 'react-bootstrap/Tabs';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SignUp from "../components/SignUp";
-import { auth } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { FrontData, successAlert } from "../store/frontStore";
+import { FrontData, messageAlert } from "../store/frontStore";
+import { doc, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
 
 export default function Login() {
 
@@ -42,7 +44,7 @@ export default function Login() {
             } else {
                 signInWithEmailAndPassword(auth ,data.username, data.password)
                 .then(() => {
-                    successAlert('登入成功')
+                    messageAlert('success','登入成功')
                     navigate('../')
                 })
                 .catch((error) => {
@@ -67,14 +69,60 @@ export default function Login() {
         }
     }
 
+    const setFireStore = async (userData) => {
+        try {
+            await setDoc(doc(db, "users", userData.uid), {
+                'displayName': userData.displayName? userData.displayName: '',
+                'realName': '',
+                'email': userData.email,
+                'phoneNumber': '',
+                'address': '',
+                'orders': [],
+                'manerger': false,
+                'uid': userData.uid
+            });
+            messageAlert('success','註冊成功');
+            navigate('/member/memberaddprofile')
+        }
+        catch (err) {
+            console.error("匯入Error: ", err);
+        }
+    }
+
+    const googleSign = async()=>{
+        try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            const {isNewUser} = getAdditionalUserInfo(result);
+            if(isNewUser){
+                setFireStore(result.user)
+            }else{
+                messageAlert('success','登入成功');
+                navigate('/products')
+            }         
+        } catch (error) {
+            console.log('googlesignuperror', error)
+        }
+    }
+
     return (
         <> <div className="container-fluid bg-secondary px-0 mt-2">
             <img className="img-fluid" src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" alt="banners" />
         </div>
 
             <div className="container py-5 full-height d-flex flex-column align-items-center">
+                
                 <Tabs defaultActiveKey="signin" className="mb-3 fs-3" onClick={()=>{setLoginError('');setData({})}}>
                     <Tab eventKey="signin" title="登入">
+                    <div className="text-center">
+                <button
+                onClick={googleSign}
+                className="btn btn-success border p-2">
+                    <i className="bi bi-google me-2" />
+                    使用Google帳號登入
+                    </button>
+            </div>
+            <hr />
                         <div >
                             <div className={`alert alert-danger ${loginError ? 'd-block' : 'd-none'}`} role="alert">
                                 {loginError}
@@ -91,10 +139,11 @@ export default function Login() {
                         </div>
                     </Tab>
                     <Tab eventKey="signup" title="註冊">
-                        <SignUp loginError={loginError} setLoginError={setLoginError}/>
+                        <SignUp loginError={loginError} setLoginError={setLoginError} setFireStore={setFireStore} googleSign={googleSign}/>
                     </Tab>
 
                 </Tabs>
+
 
             </div>
         </>)

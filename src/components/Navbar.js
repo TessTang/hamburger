@@ -5,9 +5,8 @@ import { FrontData } from "../store/frontStore";
 export default function Navbar() {
 
     const { cart, user } = useContext(FrontData);
-
     const [roll, setRoll] = useState(true);
-
+    console.log('nav', cart)
     const handleNavigation = useCallback(
         e => {
             const window = e.currentTarget;
@@ -41,7 +40,7 @@ export default function Navbar() {
                 <NavLink className="nav-item nav-link position-relative" to='/cart'>
                     <i className="bi bi-bag-fill fs-5" />
                     <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
-                        {cart.carts?.length}
+                        {cart?.carts && cart.carts.length}
                     </span>
                 </NavLink>
 
@@ -50,7 +49,7 @@ export default function Navbar() {
                         <button className="btn btn-dark">控制台</button>
                     </NavLink>
                     :<NavLink className="nav-item nav-link position-relative" to='./login'>
-                        {user.user ? <i className="bi bi-person-circle fs-5" /> : '註冊/登入'}
+                        {user.user ?  <i className="bi bi-person-circle fs-5" /> : '註冊/登入'}
                     </NavLink>
                 }
 

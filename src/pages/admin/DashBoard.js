@@ -33,6 +33,7 @@ export default function Dashboard() {
                 await axios.post('/v2/api/user/check')
             }
             catch (error) {
+                console.log(error)
                 if (!error.response.data.success) {
                     navigate('/login')
                 }

@@ -1,44 +1,67 @@
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
 import { FrontData } from "../../store/frontStore"
 import Loading from "../../components/Loading";
 import { auth, db } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 
 export default function FrontLayout() {
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState([]);
     const [user, setUser] = useState({ manager: false, user: null });
+    const [allProducts, setAllProducts] = useState([]);
+
+    //1.check login?
+    //2.if login => take cart data
     const getCart = async () => {
-        setIsLoading(true)
-        try {
-            const res = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/cart`);
-            setCart(res.data.data);
-            setIsLoading(false)
-        }
-        catch (error) {
-            console.log(error)
+        setIsLoading(true);
+        if(user.user){
+            try {
+                const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
+                setCart(cartDoc.data()||[])
+                setIsLoading(false)
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
     }
 
+    //1.check login?
+    //2.if login => set user
     const checkUserData = async(data)=>{
         if(data){
             const docSnap = await getDoc(doc(db, "users", data.uid));
             if (docSnap.exists()) {
                 setUser({ manager: false, user: docSnap.data() })
             } else {
-                console.log("No such document!");
+                console.log("No users data");
             };
         }else{
             return
         }
     }
 
+    //getProduct data
+    const getProducts = async (page = 1) => {
+        try {
+            setIsLoading(true);
+            const queryProducts = await getDocs(collection(db, "products"));
+            const productsArray = queryProducts.docs.map(doc => ({ ...doc.data() }));
+            setAllProducts(productsArray);
+            setIsLoading(false);
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     //check登入與管理
     useEffect(() => {
+        getProducts()
         getCart();
         if (document.cookie.split(';')
         .find((row) => row.startsWith('hexToken='))
@@ -53,27 +76,10 @@ export default function FrontLayout() {
                     return
                 }
         })
-        // onAuthStateChanged(auth, async(currentUser) => {
-        //         if(currentUser){
-        //             const docSnap = await getDoc(doc(db, "users", currentUser.uid));
-        //             if (docSnap.exists()) {
-        //                 setUser({ manager: false, user: docSnap.data() })
-        //             } else {
-        //                 console.log("No such document!");
-        //             };
-        //         }else{
-        //             return
-        //         }
-        // })
+        
     }, [])
 
-    //數字千分位
-    function numberComma(num) {
-        let comma = /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g
-        return Math.ceil(num.toString().replace(comma, ','))
-    }
-
-    return <FrontData.Provider value={{ cart, setCart, getCart, numberComma, setIsLoading, user, setUser, checkUserData }}>
+    return <FrontData.Provider value={{ isLoading,allProducts,cart, setCart, getCart, setIsLoading, user, setUser, checkUserData }}>
         {isLoading && <Loading />}
         <div className="position-relative">
             <Navbar />

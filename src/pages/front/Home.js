@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FrontData } from "../../store/frontStore";
 
 export default function Home() {
 
-
+    const {allProducts} = useContext(FrontData)
     const [product, setProduct] = useState([]);
 
     //取得完整產品列表，並列出隨機三樣
     useEffect(() => {
         const getProduct = async () => {
             try {
-                const productRes = await axios.get(`/v2/api/${process.env.REACT_APP_API_PATH}/products/all`);
+                const recomendProduct = [...allProducts]
                 const other = []
                 for (let i = 1; i <= 3; i++) {
-                    const randomIndex = Math.floor(Math.random() * productRes.data.products.length);
-                    other.push(productRes.data.products[randomIndex])
-                    productRes.data.products.splice(randomIndex, 1)
+                    const randomIndex = Math.floor(Math.random() * recomendProduct.length);
+                    other.push(recomendProduct[randomIndex])
+                    recomendProduct.splice(randomIndex, 1)
                 }
                 setProduct(other);
             }
@@ -24,8 +24,10 @@ export default function Home() {
                 console.log(error)
             }
         }
-        getProduct();
-    }, [])
+        if (allProducts.length > 0) {
+            getProduct();
+        }
+    }, [allProducts])
 
 
     return (
@@ -40,7 +42,7 @@ export default function Home() {
             <div className="container">
                 <h4 className="text-center mt-3 fw-semibold">猜你喜歡</h4>
                 <div className="row mt-5">
-                    {product?.map((item)=>{
+                    {product.map((item)=>{
                         return (  <Link to={`/product/${item.id}`} key={item.id} className="col-md-4 mt-md-4 text-decoration-none">
                         <div className="card border-0 mb-4 h-100 p-2 myHover">
                             <img
@@ -79,8 +81,8 @@ export default function Home() {
                         <img src="https://images.unsplash.com/photo-1580828343064-fde4fc206bc6?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="discount" className="img-fluid" />
                     </div>
                     <div className="col-md-4 m-auto text-center">
-                    <h4 className="mt-4">超值特惠</h4>
-                        <p className="text-muted">只要輸入折扣碼code85，即享85折優惠!</p>
+                    <h4 className="mt-4">超值特惠-Hamberger送您吃!</h4>
+                        <p className="text-muted">只要輸入hamburger100，即享100元優惠!</p>
                         </div>
                 </div>
             </div>

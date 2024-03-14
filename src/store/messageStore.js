@@ -31,7 +31,7 @@ export function handleSuccessMessage(dispatch, res) {
         payload: {
             type: 'success',
             title: '儲存成功',
-            text: res.data.message
+            text: res
         }
     });
     setTimeout(() => {

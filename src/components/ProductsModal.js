@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
-import { MessageContext, handleSuccessMessage, handleErrorMessage } from "../store/messageStore"
+import { MessageContext, handleSuccessMessage, handleErrorMessage } from "../store/messageStore";
+import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
+import { db } from "../utils/firebase";
 
-export default function ProductsModal({ closeAddProduct, getProducts, type, tempProduct}) {
+export default function ProductsModal({ closeAddProduct, getProducts, type, tempProduct }) {
     const [, dispatch] = useContext(MessageContext)
 
     const [tempData, setTempData] = useState({
@@ -17,8 +18,8 @@ export default function ProductsModal({ closeAddProduct, getProducts, type, temp
         "imageUrl": "",
     })
 
-    useEffect(()=>{
-        if(type === "create"){
+    useEffect(() => {
+        if (type === "create") {
             setTempData({
                 "title": "",
                 "category": "dessert",
@@ -30,12 +31,12 @@ export default function ProductsModal({ closeAddProduct, getProducts, type, temp
                 "is_enabled": 0,
                 "imageUrl": "",
             })
-        } else if(type === "edit"){
+        } else if (type === "edit") {
             setTempData(tempProduct)
         }
 
     }, [type, tempProduct])
-    
+
     const handleChange = (e) => {
         const { name, value, checked } = e.target;
         if (['origin_price', 'price'].includes(name)) {
@@ -52,30 +53,32 @@ export default function ProductsModal({ closeAddProduct, getProducts, type, temp
             })
         }
     }
-
+    
+    //create=>寫入資料庫 edit=>update資料庫
     const submit = async () => {
-        try {
-
-            let api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/product`;
-            let method = 'post';
-            if(type === 'edit'){
-                api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/product/${tempProduct.id}`;
-                method = 'put';
+        if (type === "create") {
+            try {
+                const newProduct = doc(collection(db, "products"));
+                await setDoc(newProduct, {
+                    ...tempData, id: newProduct.id
+                })
+                handleSuccessMessage(dispatch, '新增成功');
             }
-            
-            const res = await axios[method](api,
-                {
-                    data: tempData
-                }
-            );
-            handleSuccessMessage(dispatch, res);
-            getProducts();
-            closeAddProduct();
+            catch (err) {
+                handleErrorMessage(dispatch, '新增失敗');
+            }
+        } else if (type === "edit") {
+            try {
+                await updateDoc(doc(db, "products", tempData.id), tempData);
+                handleSuccessMessage(dispatch, '更改成功');
+            }
+            catch (err) {
+                handleErrorMessage(dispatch, '更改失敗');
+            }
         }
-        catch (error) {
-            handleErrorMessage(dispatch, error);
-            console.log(error)
-        }
+
+        closeAddProduct();
+        getProducts();
     }
 
     return (
@@ -91,7 +94,7 @@ export default function ProductsModal({ closeAddProduct, getProducts, type, temp
                 <div className='modal-content'>
                     <div className='modal-header'>
                         <h1 className='modal-title fs-5' id='exampleModalLabel'>
-                            {type === 'creat'? '建立新商品':`編輯 ${tempData.title}`}
+                            {type === 'create' ? '建立新商品' : `編輯 ${tempData.title}`}
                         </h1>
                         <button
                             type='button'
