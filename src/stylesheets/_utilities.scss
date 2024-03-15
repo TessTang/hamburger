@@ -2,99 +2,101 @@
 
 //all
 body {
-    font-family: "Noto Sans TC", '微軟正黑體', sans-serif !important;
+  font-family: "Noto Sans TC", "微軟正黑體", sans-serif !important;
 }
 
-.top-10{
-    top: 10%;
+.top-10 {
+  top: 10%;
 }
 
 .errorAlert {
-    color: red;
-    font-weight: 600;
+  color: red;
+  font-weight: 600;
 }
 
 .cartDeleteBtn {
-    position: absolute;
-    top: 10px;
-    right: 5px;
-    width: 25px;
-    height: 25px;
-    padding: 0 !important;
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  width: 25px;
+  height: 25px;
+  padding: 0 !important;
 
-    i {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 12px;
-    }
+  i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+  }
 }
 
 .full-height {
-    min-height: calc(100vh - 253px - 78px);
+  min-height: calc(100vh - 253px - 78px);
 }
 
-.loadingPage{
-    background-color: rgba(224, 224, 134, 0.247);
-    backdrop-filter: blur(2px);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 99;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.loadingPage {
+  background-color: rgba(224, 224, 134, 0.247);
+  backdrop-filter: blur(2px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 //navbar
 
-.myNavbar{
-    background:linear-gradient(180deg, rgba(0,0,0,1) 15%, rgba(0, 0, 0, 0) 45%);
-    color: white;
-    transition: all 0.2s linear;
-    .navbarSection{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-size: 1.2rem;
-        background-color: transparent;
-    }
+.myNavbar {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 15%,
+    rgba(0, 0, 0, 0) 45%
+  );
+  color: white;
+  transition: all 0.2s linear;
+  .navbarSection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 1.2rem;
+    background-color: transparent;
+  }
 }
 
-.scroll{
-    background-color: black;
+.scroll {
+  background-color: black;
 }
-
 
 .home_banner {
-    min-height: 100vh;
-  }
+  min-height: 100vh;
+}
 @media (max-width: 767.98px) {
-    .home_banner {
-      min-height: auto;
-      padding-top: 5rem;
-      padding-bottom: 5rem;
-    }
+  .home_banner {
+    min-height: auto;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
   }
-
-.myHover{
-    transition: 0.3s linear;
-
-    &:hover{
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-        transform: scale(1.1);
-        background-color: rgba(212, 145, 0, 0.596);
-    }
 }
 
-.footerLogo:hover{
-    transform: scale(1.5);
+.myHover {
+  transition: 0.3s linear;
+
+  &:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    transform: scale(1.1);
+    background-color: rgba(212, 145, 0, 0.596);
+  }
 }
 
-.productsList{
-    text-decoration: none;
+.footerLogo:hover {
+  transform: scale(1.5);
 }
 
+.productsList {
+  text-decoration: none;
+}
