@@ -1,6 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FrontData } from "../../store/frontStore";
+import {
+  useScroll,
+  motion,
+  useTransform,
+  useMotionValue
+} from 'framer-motion';
+
+
 
 export default function Home() {
   const { allProducts } = useContext(FrontData);
@@ -29,16 +37,46 @@ export default function Home() {
     }
   }, [allProducts]);
 
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 300], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 300], [0, -100]);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      console.log(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [])
+
+  const [scrolling, setScrolling] = useState(false);
+
+  const handleWheel = (e) => {
+    setScrolling(true);
+    console.log('我在滾動')
+    // 做你想做的事情，例如觸發動畫等
+  };
+
+
   return (
     <>
-      <div
+      <div onWheel={handleWheel}
         className="container-fluid d-flex flex-column bg-secondary justify-content-center align-items-center home_banner"
-        style={{
-          backgroundImage:
-            "url('https://nunforest.com/fast-foody/burger/upload/slider/1.jpg')",
-          backgroundRepeat: "no-repeat",
-        }}
+        // style={{
+        //   backgroundImage:
+        //     "url('https://nunforest.com/fast-foody/burger/upload/slider/1.jpg')",
+        //   backgroundRepeat: "no-repeat",
+        // }}
       >
+              <motion.div className="box" style={{ y: y1, x: -50 }} />
+      <motion.div
+        className="box"
+        style={{ y: y2, x: 50, background: 'salmon' }}
+      />
         <div className="col-md-4 text-center bg-light bg-opacity-50 rounded-2 px-3 py-5">
           <h2 className="fs-1 fw-bolder">Hamburger</h2>
           <p className="text-muted mb-0 fs-5 mt-4">

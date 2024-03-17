@@ -12,7 +12,7 @@ export default function FrontLayout() {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ manager: false, user: null });
   const [allProducts, setAllProducts] = useState([]);
-console.log(user)
+
   //1.check login?
   //2.if login => take cart data
   const getCart = async () => {
@@ -60,21 +60,10 @@ console.log(user)
 
   //check登入與管理
   useEffect(() => {
-    console.log('我進行了')
     getProducts();
     getCart();
-    // if (
-    //   document.cookie
-    //     .split(";")
-    //     .find((row) => row.startsWith("hexToken="))
-    //     ?.split("=")[1]
-    // ) {
-    //   setUser({ manager: true, user: "manager" });
-    //   return;
-    // }
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        console.log('currentUser', currentUser);
         checkUserData(currentUser);
       } else {
         return;
