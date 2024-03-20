@@ -8,11 +8,15 @@ import {
   useMotionValue
 } from 'framer-motion';
 
+import Screen from './Screen';
+import { ScrollTriggerProvider } from './ScrollTriggerProvider';
 
+const SHOW_MARKERS = false;
 
 export default function Home() {
   const { allProducts } = useContext(FrontData);
   const [product, setProduct] = useState([]);
+
 
   //取得完整產品列表，並列出隨機三樣
   useEffect(() => {
@@ -64,6 +68,16 @@ export default function Home() {
 
   return (
     <>
+     <ScrollTriggerProvider debug={SHOW_MARKERS}>
+    <Screen
+      title="⏬ Start scrolling ⏬"
+      colorStart="#333399"
+      colorEnd="#663399"
+      fadeIn={false}
+      y1={y1}
+      y2={y2}
+    />
+  </ScrollTriggerProvider>
       <div onWheel={handleWheel}
         className="container-fluid d-flex flex-column bg-secondary justify-content-center align-items-center home_banner"
         // style={{
