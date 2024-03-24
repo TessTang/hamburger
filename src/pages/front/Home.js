@@ -1,17 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FrontData } from "../../store/frontStore";
-import {
-  useScroll,
-  motion,
-  useTransform,
-  useMotionValue
-} from 'framer-motion';
-
-import Screen from './Screen';
 import { ScrollTriggerProvider } from './ScrollTriggerProvider';
-
-const SHOW_MARKERS = false;
+import Screen from './Screen';
 
 export default function Home() {
   const { allProducts } = useContext(FrontData);
@@ -41,67 +32,14 @@ export default function Home() {
     }
   }, [allProducts]);
 
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 300], [0, 200]);
-  const y2 = useTransform(scrollY, [0, 300], [0, -100]);
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      console.log(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [])
-
-  const [scrolling, setScrolling] = useState(false);
-
-  const handleWheel = (e) => {
-    setScrolling(true);
-    console.log('我在滾動')
-    // 做你想做的事情，例如觸發動畫等
-  };
-
-
   return (
     <>
-     <ScrollTriggerProvider debug={SHOW_MARKERS}>
-    <Screen
-      title="⏬ Start scrolling ⏬"
-      colorStart="#333399"
-      colorEnd="#663399"
-      fadeIn={false}
-      y1={y1}
-      y2={y2}
-    />
-  </ScrollTriggerProvider>
-      <div onWheel={handleWheel}
-        className="container-fluid d-flex flex-column bg-secondary justify-content-center align-items-center home_banner"
-        // style={{
-        //   backgroundImage:
-        //     "url('https://nunforest.com/fast-foody/burger/upload/slider/1.jpg')",
-        //   backgroundRepeat: "no-repeat",
-        // }}
-      >
-              <motion.div className="box" style={{ y: y1, x: -50 }} />
-      <motion.div
-        className="box"
-        style={{ y: y2, x: 50, background: 'salmon' }}
-      />
-        <div className="col-md-4 text-center bg-light bg-opacity-50 rounded-2 px-3 py-5">
-          <h2 className="fs-1 fw-bolder">Hamburger</h2>
-          <p className="text-muted mb-0 fs-5 mt-4">
-            {" "}
-            1984年，Hamburger帶著美式熱情基因而來，數十個年頭，一點一滴融入台灣在地文化。亙古不變的服務理念、與時俱進的服務精神，以「美食」、「數位」、「服務」的三大升級持續向前邁進！陪伴顧客走過每一段別具滋味的片刻時光，共享每一刻美好瞬間。這樣的滋味，真好！
-          </p>
-          <Link to="/products" className="btn btn-dark mt-4 ">
-            立即選購
-          </Link>
-        </div>
-      </div>
+      {/* 首頁第一區塊 */}
+      <ScrollTriggerProvider>
+        <Screen />
+      </ScrollTriggerProvider>
+
+      {/* 隨機推薦三款產品 */}
       <div className="container">
         <h4 className="text-center mt-3 fw-semibold">猜你喜歡</h4>
         <div className="row mt-5">
@@ -132,6 +70,7 @@ export default function Home() {
           })}
         </div>
       </div>
+      {/* 最新消息區塊 */}
       <div className="container my-7">
         <h4 className="text-center my-4 fw-semibold">最新消息</h4>
         <div className="row myHover">
@@ -159,7 +98,7 @@ export default function Home() {
           </div>
           <div className="col-md-4 m-auto text-center">
             <h4 className="mt-4">超值特惠-Hamberger送您吃!</h4>
-            <p className="text-muted">只要輸入hamburger100，即享100元優惠!</p>
+            <p className="text-muted">只要輸入hamburger100，即享100元優惠!(消費需高於NTD$300)</p>
           </div>
         </div>
       </div>

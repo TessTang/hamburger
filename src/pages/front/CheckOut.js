@@ -8,7 +8,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { FrontData } from "../../store/frontStore";
+import { FrontData, linePayRequest } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
 
 export default function CheckOut() {
@@ -24,8 +24,8 @@ export default function CheckOut() {
   //將購物車資料寫入orders中
   //此order id寫入user資料內
   //刪除此購物車資料
-  //轉向訂單成功頁面
-  
+  //若LINEPAY轉向LINEPAY頁面，貨到付款直接轉向訂單成功頁面
+
   const onSubmit = async (userData) => {
     const newOrder = doc(collection(db, "orders"));
     await setDoc(newOrder, {
@@ -34,14 +34,14 @@ export default function CheckOut() {
       create_at: new Date().getTime(),
       id: newOrder.id,
       order: { ...cart },
-      status:0,
+      status: 0,
       orderContact: {
         name: userData.name,
         email: userData.email,
         tel: userData.tel,
         address: userData.address,
       },
-      user: user.user?.uid || "nonMember",
+      user: user.user?.uid,
       payBy: userData.pay,
       message: userData.message,
     });
@@ -53,8 +53,14 @@ export default function CheckOut() {
     checkUserData(user.user);
 
     await deleteDoc(doc(db, "carts", user.user.uid));
-    getCart();
-    navigate(`/ordersuccess/${newOrder.id}`);
+
+    if (userData.pay === "linePay") {
+      linePayRequest(cart, newOrder.id, user.user.uid, `http://localhost:3000/ordersuccess/${newOrder.id}`)
+      getCart();
+    } else {
+      getCart();
+      navigate(`/ordersuccess/${newOrder.id}`);
+    }
   };
 
   const [payment, setPayment] = useState("");

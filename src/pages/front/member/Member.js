@@ -6,16 +6,18 @@ import { useContext, useEffect } from "react";
 
 export default function Member() {
   const navigate = useNavigate(null);
-  const { user, setUser } = useContext(FrontData);
+  const { user, setUser, setCart, userIsChecked } = useContext(FrontData);
 
+  //未登入進入網址=>跳回首頁  無填寫過資料=>新增資料頁面
   useEffect(() => {
-    console.log(user);
-    if (!user.user) {
-      navigate("../");
-    } else if (user.user.realName === "") {
-      navigate("/member/memberaddprofile");
+    if(userIsChecked){
+      if (!user.user) {
+        navigate("../");
+      } else if (user.user.realName === "") {
+        navigate("/member/memberaddprofile");
+      }
     }
-  }, [user]);
+  }, [user, userIsChecked]);
 
   return (
     <>
@@ -48,6 +50,7 @@ export default function Member() {
               onClick={() => {
                 signOut(auth);
                 setUser({});
+                setCart([]);
                 navigate("../");
               }}
             >

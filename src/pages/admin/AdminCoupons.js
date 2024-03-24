@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { Modal } from "bootstrap";
+import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 import CouponsModal from "../../components/CouponsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
-import { Modal } from "bootstrap";
 import { db } from "../../utils/firebase";
-import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 
 export default function AdminCoupons() {
   const [coupons, setCoupons] = useState([]);
@@ -17,17 +16,7 @@ export default function AdminCoupons() {
   const couponModal = useRef(null);
   const deleteModal = useRef(null);
 
-  useEffect(() => {
-    couponModal.current = new Modal("#couponModal");
-    deleteModal.current = new Modal("#deleteModal");
-
-    getCoupons();
-  }, []);
-
-  useEffect(() => {
-    getPage();
-  }, [allCoupons]);
-
+  //獲取全部coupon資料
   const getCoupons = async (page = 1) => {
     try {
       const queryProducts = await getDocs(collection(db, "coupons"));
@@ -40,6 +29,7 @@ export default function AdminCoupons() {
     }
   };
 
+  //獲取每頁coupon
   const getPage = (page = 1) => {
     const itemsPerPage = 10; // 每頁顯示的資料數量
     const totalPage = Math.ceil(allCoupons.length / itemsPerPage);
@@ -91,6 +81,20 @@ export default function AdminCoupons() {
       console.log(error);
     }
   };
+
+  //第一次進入網頁拿取資料
+  useEffect(() => {
+    couponModal.current = new Modal("#couponModal");
+    deleteModal.current = new Modal("#deleteModal");
+
+    getCoupons();
+  }, []);
+
+  //拿到所有coupon資料後進行getPage
+  useEffect(() => {
+    getPage();
+  }, [allCoupons])
+
 
   return (
     <div className="p-3">

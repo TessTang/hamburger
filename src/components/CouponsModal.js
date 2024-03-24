@@ -36,7 +36,6 @@ export default function CouponsModal({
       });
       setDate(new Date());
     } else if (type === "edit") {
-      console.log(tempData);
       setTempData(tempCoupon);
       setDate(new Date(tempCoupon.due_date));
     }
@@ -74,7 +73,6 @@ export default function CouponsModal({
       }
     } else if (type === "edit") {
       try {
-        console.log(tempData);
         await updateDoc(doc(db, "coupons", tempData.code), {
           ...tempData,
           due_date: date.getTime(),

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 export default function MemberProfile() {
   const { user } = useContext(FrontData);
   const navigate = useNavigate(null);
+
+  //若會員資料還沒有填寫過，就先進新增資料頁面
   useEffect(() => {
     if (user.user?.realName === "") {
       navigate("/member/memberaddprofile");

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes  } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/admin/DashBoard";
 import AdminProducts from "./pages/admin/AdminProducts";
@@ -15,11 +15,17 @@ import Member from "./pages/front/member/Member";
 import MemberProfile from "./pages/front/member/MemberProfile";
 import MemberOrders from "./pages/front/member/MemberOrders";
 import MemberAddProfile from "./pages/front/member/MemberAddProfile";
+import NotFound from "./pages/front/NotFound";
 
 function App() {
   return (
     <div className="App">
       <Routes>
+        <Route path="/admin" element={<Dashboard />}>
+          <Route index path="products" element={<AdminProducts />} />
+          <Route path="coupons" element={<AdminCoupons />} />
+          <Route path="orders" element={<AdminOrders />} />
+        </Route>
         <Route path="/" element={<FrontLayout />}>
           <Route index element={<Home />} />
           <Route path="products" element={<Products />} />
@@ -33,12 +39,7 @@ function App() {
             <Route path="memberaddprofile" element={<MemberAddProfile />} />
             <Route path="memberorders" element={<MemberOrders />} />
           </Route>
-        </Route>
-
-        <Route path="/admin" element={<Dashboard />}>
-          <Route index path="products" element={<AdminProducts />} />
-          <Route path="coupons" element={<AdminCoupons />} />
-          <Route path="orders" element={<AdminOrders />} />
+          <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>
     </div>

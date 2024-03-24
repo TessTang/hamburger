@@ -6,7 +6,8 @@ import { FrontData } from "../../../store/frontStore";
 import { db } from "../../../utils/firebase";
 
 export default function MemberAddProfile() {
-  const { user, checkUserData } = useContext(FrontData);
+  const { user } = useContext(FrontData);
+  const navigate = useNavigate(null);
   const [data, setData] = useState({
     displayName: user.user?.displayName,
     realName: user.user?.realName,
@@ -17,7 +18,6 @@ export default function MemberAddProfile() {
   const handleData = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate(null);
 
   const {
     register,
@@ -25,11 +25,12 @@ export default function MemberAddProfile() {
     formState: { errors },
   } = useForm();
 
+  //送出後將資料寫入資料庫，並轉回profile頁面
   const onSubmit = async () => {
     try {
       await updateDoc(doc(db, "users", user.user.uid), data);
-      checkUserData(user.user);
       navigate("/member/memberprofile");
+      window.location.reload();
     } catch (err) {
       console.error("匯入Error: ", err);
     }

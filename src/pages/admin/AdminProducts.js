@@ -42,12 +42,10 @@ export default function AdminProducts() {
   useEffect(() => {
     productModal.current = new Modal("#productModal");
     deleteModal.current = new Modal("#deleteModal");
-    console.log('getProduct')
     getProducts();
   }, []);
 
   useEffect(() => {
-    console.log('getpage')
     getPage();
   }, [allProducts]);
 

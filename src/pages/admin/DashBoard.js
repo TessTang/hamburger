@@ -1,9 +1,9 @@
-import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useEffect, useReducer } from "react";
-import Message from "../../components/Message";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
+import Message from "../../components/Message";
 import { auth, db } from "../../utils/firebase";
-import { getDoc,doc } from "firebase/firestore";
 import {
   MessageContext,
   initState,
@@ -14,21 +14,21 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const reducer = useReducer(messageReducer, initState);
 
-const checkUserData = async (data) => {
+  const checkUserData = async (data) => {
     const docSnap = await getDoc(doc(db, "users", data.uid));
     if (docSnap.exists()) {
       docSnap.data().manager || navigate("../");
     } else {
       console.log("No users data");
     }
-};
+  };
 
+  //確認現在登入者，若不是manager要轉回首頁
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         checkUserData(currentUser)
       } else {
-        console.log('沒有');
         navigate("../");
         return;
       }

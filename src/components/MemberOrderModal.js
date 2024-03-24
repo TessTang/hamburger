@@ -1,8 +1,17 @@
+import axios from "axios";
+import {linePayRequest} from "../store/frontStore"
+
 export default function MemberOrderModal({
   tempOrder,
   closeOrderModal,
   changeDate,
 }) {
+ 
+const submitLine = ()=>{
+  linePayRequest(tempOrder.order, tempOrder.id, tempOrder.user, 'http://localhost:3000/member/memberorders')
+  
+}
+
   return (
     <div
       className="modal fade"
@@ -37,16 +46,21 @@ export default function MemberOrderModal({
             <div className="row p-2 border-bottom">
               <div className="col-2 border-end text-center">總金額</div>
               <div className="col-10">
-                NTD$ {tempOrder.order?.final_total.toLocaleString()}
+                NTD$ {tempOrder.order?.final_total?.toLocaleString()}
               </div>
             </div>
             <div className="row p-2 border-bottom">
               <div className="col-2 border-end text-center">付款方式</div>
               <div className="col-10">
-                 <span className="pe-1">{tempOrder.payBy}</span>
+                 <span className="pe-1">{tempOrder.payBy === 'onDelivery'? "貨到付款":"LinePay"}</span>
                  {tempOrder.is_paid? 
                  <span className="text-success fw-bolder">已付款</span>
-                 :<span className="text-danger fw-bolder">未付款</span>}
+                 :<p>
+                  <span className="text-danger fw-bolder">未付款</span>
+                  {tempOrder.payBy==="linePay" &&<button className="btn btn-dark ms-3" onClick={submitLine}>我要付款</button>}
+                  </p> 
+                  }
+                 
               </div>
             </div>
             <div className="row p-2 border-bottom">

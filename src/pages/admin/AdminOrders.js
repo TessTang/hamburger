@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import OrdersModal from "../../components/OrdersModal";
 import Pagenation from "../../components/Pagenation";
 import { Modal } from "bootstrap";
 import { db } from "../../utils/firebase";
-import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
+import { getDocs, collection } from "firebase/firestore";
 
 export default function AdminProducts() {
   const [orders, setOrders] = useState([]);
@@ -13,17 +12,6 @@ export default function AdminProducts() {
   const [allOrders, setAllOrders] = useState([])
 
   const orderModal = useRef(null);
-
-
-  useEffect(() => {
-    orderModal.current = new Modal("#orderModal");
-
-    getOrders();
-  }, []);
-
-  useEffect(() => {
-    getPage()
-  }, [allOrders]);
 
   const getPage = (page = 1) => {
     const itemsPerPage = 10; // 每頁顯示的資料數量
@@ -43,9 +31,6 @@ export default function AdminProducts() {
     });
     setOrders(getProductsForPage(page));
   };
-
-
-
   const getOrders = async (page = 1) => {
     try {
       const queryOrders = await getDocs(collection(db, "orders"));
@@ -56,16 +41,6 @@ export default function AdminProducts() {
     } catch (error) {
       console.log(error);
     }
-    // try {
-    //   const orderRes = await axios.get(
-    //     `/v2/api/${process.env.REACT_APP_API_PATH}/admin/orders?page=${page}`,
-    //   );
-    //   // console.log('get', orderRes);
-    //   setOrders(orderRes.data.orders);
-    //   setPagination(orderRes.data.pagination);
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   //creat and edit product
@@ -78,6 +53,16 @@ export default function AdminProducts() {
     setTempOrder({});
     orderModal.current.hide();
   };
+
+  useEffect(() => {
+    orderModal.current = new Modal("#orderModal");
+    getOrders();
+  }, []);
+
+  useEffect(() => {
+    getPage()
+  }, [allOrders]);
+
 
   return (
     <div className="p-3">
@@ -120,11 +105,11 @@ export default function AdminProducts() {
                 }</td>
                 <td>
                   {order.paid_date
-                    ? <span className="text-success fw-bold">{ 
+                    ? <span className="text-success fw-bold">{
                       new Date(order.paid_date).toLocaleString("zh-TW", {
                         hour: '2-digit', minute: '2-digit', month: 'narrow', day: '2-digit',
-                    hour12: false,
-                  })}</span>
+                        hour12: false,
+                      })}</span>
                     : "未付款"}
                 </td>
 

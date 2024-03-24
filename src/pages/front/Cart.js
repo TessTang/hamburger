@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { FrontData } from "../../store/frontStore";
+import { FrontData, messageAlert } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
-import { messageAlert } from "../../store/frontStore";
 
 export default function Cart() {
   const { cart, getCart, user } = useContext(FrontData);
@@ -52,6 +51,16 @@ export default function Cart() {
     }
   };
 
+ //將增減數量加入資料庫並獲得更新資料
+ const putQty = async (data) => {
+  try {
+    await updateDoc(doc(db, "carts", user.user.uid), data);
+    getCart();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   //進入頁面確認購物車是否為空，空的話跳回產品頁面
   useEffect(() => {
     if (cart.length === 0) {
@@ -60,16 +69,7 @@ export default function Cart() {
     }
   }, [cart]);
 
-  //更改數量
-  const putQty = async (data) => {
-    try {
-      await updateDoc(doc(db, "carts", user.user.uid), data);
-      getCart();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+ 
   //刪除
   const deleteCart = async (id) => {
     const thisItem = cart.carts.findIndex(
@@ -96,14 +96,17 @@ export default function Cart() {
   //輸入coupon
   //1.確認是否有此coupon
   //2.確認coupon是否過期
-  //3.將coupon加入購物車資料
-  const [data, setData] = useState({});
+  //3.確認coupon最低可使用金額
 
+  const [data, setData] = useState({});
   const submitCoupon = async () => {
     try {
       const couponData = await getDoc(doc(db, "coupons", data.code));
       if (couponData.exists()) {
         if (couponData.data().due_date > data.date.getTime()) {
+          if(cart.final_total < couponData.data().minimum){
+            return  setMessage({ type: "error", message: `消費金額須大於NTD$ ${couponData.data().minimum}` });
+          }
           try {
             await updateDoc(doc(db, "carts", user.user.uid), {
               ...cart,
@@ -138,6 +141,7 @@ export default function Cart() {
           alt="banners"
         />
       </div>
+      {/* LEFT SECTION */}
       <div className="container full-height">
         <div className="mt-3">
           <h3 className="mt-3 mb-4">購物車</h3>
@@ -265,6 +269,8 @@ export default function Cart() {
                 {message.message}
               </p>
             </div>
+
+            {/* RIGHT SECTION */}
             <div className="col-md-4">
               <div className="border p-4 mb-4">
                 <h4 className="fw-bold">訂單資訊</h4>

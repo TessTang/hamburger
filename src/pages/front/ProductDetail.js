@@ -1,9 +1,8 @@
-import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useContext, useCallback } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { FrontData, messageAlert } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
-import { useNavigate } from "react-router-dom";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -12,7 +11,7 @@ export default function ProductDetail() {
   const [otherProducts, setOtherProducts] = useState([]);
   const [quantity, setQuantity] = useState([]);
   const navigate = useNavigate(null);
-  
+
   //偵測頁面上所有產品更動數量
   const changeQty = useCallback(
     (i, type) => {
@@ -73,10 +72,10 @@ export default function ProductDetail() {
     );
   }, [id, allProducts]);
 
-//加入購物車
-//1.若尚未有購物車就建立一筆購物車資料
-//2.若有購物車且內無此產品就加入此資料
-//3.若有購物車且已有產品就更新數量
+  //加入購物車
+  //1.若尚未有購物車就建立一筆購物車資料
+  //2.若有購物車且內無此產品就加入此資料
+  //3.若有購物車且已有產品就更新數量
   const submit = async (id) => {
     const itemPrice =
       quantity.find((val) => {
@@ -95,7 +94,6 @@ export default function ProductDetail() {
     } else {
       try {
         if (cart.length === 0) {
-          console.log("執行創建");
           await setDoc(doc(db, "carts", user.user.uid), {
             carts: [
               {

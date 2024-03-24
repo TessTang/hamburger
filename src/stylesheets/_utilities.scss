@@ -101,11 +101,13 @@ body {
   text-decoration: none;
 }
 
+// .screen{
+//   background-image: url('https://images.unsplash.com/photo-1682687220509-61b8a906ca19?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+// }
+
 .box{
-  width: 150px;
-  height: 150px;
-  border-radius: 1em;
-  background-color: #f9f07e;
-  margin-left: auto;
-  margin-right: auto;
+  position: relative;
+  min-width: 100px;
+  max-width: 300px;
+  margin-bottom: 25px;
 }

@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import ListGroup from "react-bootstrap/ListGroup";
 import Pagenation from "../../components/Pagenation";
 import { FrontData } from "../../store/frontStore";
-import ListGroup from "react-bootstrap/ListGroup";
 
 export default function Products() {
   const [productCategory, setProductCategory] = useState("all");
@@ -10,6 +10,7 @@ export default function Products() {
   const [pagination, setPagination] = useState([]);
   const { isLoading, allProducts } = useContext(FrontData);
 
+  //一進入就抓取產品資料，更改產品分類重新抓取
   useEffect(() => {
     getPage();
   }, [productCategory, isLoading]);

@@ -1,35 +1,21 @@
-import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { auth, db } from "../../utils/firebase";
 import Navbar from "../../components/Navbar";
 import { FrontData } from "../../store/frontStore";
 import Loading from "../../components/Loading";
-import { auth, db } from "../../utils/firebase";
+
 
 export default function FrontLayout() {
   const [isLoading, setIsLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ manager: false, user: null });
+  const [userIsChecked, setUserIsChecked] = useState(false)
   const [allProducts, setAllProducts] = useState([]);
 
-  //1.check login?
-  //2.if login => take cart data
-  const getCart = async () => {
-    setIsLoading(true);
-    if (user.user) {
-      try {
-        const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
-        setCart(cartDoc.data() || []);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  //1.check login?
-  //2.if login => set user
+  //確認是否登入，有登入setUser資料
   const checkUserData = async (data) => {
     if (data) {
       const docSnap = await getDoc(doc(db, "users", data.uid));
@@ -38,9 +24,24 @@ export default function FrontLayout() {
       } else {
         console.log("No users data");
       }
+      setUserIsChecked(true)
     } else {
       return;
     }
+  };
+
+  //若登入了就取得購物車資料
+  const getCart = async () => {
+    setIsLoading(true);
+    if (user.user) {
+      try {
+        const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
+        setCart(cartDoc.data() || []);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setIsLoading(false);
   };
 
   //getProduct data
@@ -61,7 +62,6 @@ export default function FrontLayout() {
   //check登入與管理
   useEffect(() => {
     getProducts();
-    getCart();
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         checkUserData(currentUser);
@@ -70,6 +70,12 @@ export default function FrontLayout() {
       }
     });
   }, []);
+
+  //有user資料後取得購物車資料
+  useEffect(() => {
+    getCart()
+  }, [user])
+
 
   return (
     <FrontData.Provider
@@ -83,6 +89,7 @@ export default function FrontLayout() {
         user,
         setUser,
         checkUserData,
+        userIsChecked
       }}
     >
       {isLoading && <Loading />}
@@ -90,6 +97,8 @@ export default function FrontLayout() {
         <Navbar />
       </div>
       <Outlet />
+
+      {/* Footer */}
       <div className="bg-dark py-5">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between text-white mb-4">
