@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useScrollTrigger } from './ScrollTriggerProvider';
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useScrollTrigger } from "./ScrollTriggerProvider";
 
 const Screen = () => {
-
   const [hamHeight, setHamHeight] = useState(0);
 
   const { scrollY } = useScroll();
@@ -18,19 +17,20 @@ const Screen = () => {
 
   const mt1Ref = useRef(null);
   useEffect(() => {
-    setHamHeight(mt1Ref.current.clientHeight)
-  }, [])
-  
+    setHamHeight(mt1Ref.current.clientHeight);
+  }, []);
+
   const progress = useScrollTrigger();
-  const colorStart = '#0000000';
-  const colorEnd = '#BBE2EC';
+  const colorStart = "#0000000";
+  const colorEnd = "#BBE2EC";
 
   const bg = useTransform(progress, [0, 1], [colorStart, colorEnd]);
 
   return (
-
-    <motion.div className="screen d-flex align-items-center justify-content-around" style={{ height: '100vh', backgroundColor: bg }}>
-
+    <motion.div
+      className="screen d-flex align-items-center justify-content-around"
+      style={{ height: "100vh", backgroundColor: bg }}
+    >
       <div className="col-md-4 text-center bg-light bg-opacity-50 rounded-2 px-3 py-5 h-75">
         <h2 className="fs-1 fw-bolder">Hamburger</h2>
         <p className="text-muted mb-0 fs-5 mt-4">
@@ -40,31 +40,58 @@ const Screen = () => {
           立即選購
         </Link>
       </div>
-      <div className='mt-1' ref={mt1Ref}>
-        <motion.div className="box" style={{ x: 0, y: y1, zIndex: "1" }} >
-          <img src={require('../../assets/hamburger01_top.png')} alt="ja" style={{ width: "100%" }} />
+      <div className="mt-1" ref={mt1Ref}>
+        <motion.div className="box" style={{ x: 0, y: y1, zIndex: "1" }}>
+          <img
+            src={require("../../assets/hamburger01_top.png")}
+            alt="ja"
+            style={{ width: "100%" }}
+          />
         </motion.div>
-        <motion.div className="box" style={{ x: 0, y: y2, zIndex: "5" }} >
-          <img src={require('../../assets/hamburger_vege01.png')} alt="ja" style={{ width: "100%" }} />
+        <motion.div className="box" style={{ x: 0, y: y2, zIndex: "5" }}>
+          <img
+            src={require("../../assets/hamburger_vege01.png")}
+            alt="ja"
+            style={{ width: "100%" }}
+          />
         </motion.div>
-        <motion.div className="box" style={{ x: 0, y: y3, zIndex: "4" }} >
-          <img src={require('../../assets/hamburger_tomato.png')} alt="ja" style={{ width: "100%" }} />
+        <motion.div className="box" style={{ x: 0, y: y3, zIndex: "4" }}>
+          <img
+            src={require("../../assets/hamburger_tomato.png")}
+            alt="ja"
+            style={{ width: "100%" }}
+          />
         </motion.div>
-        <motion.div className="box" style={{ x: 0, y: y4, zIndex: "3" }} >
-          <img src={require('../../assets/hamburger_cheese02.png')} alt="ja" style={{ width: "100%" }} />
+        <motion.div className="box" style={{ x: 0, y: y4, zIndex: "3" }}>
+          <img
+            src={require("../../assets/hamburger_cheese02.png")}
+            alt="ja"
+            style={{ width: "100%" }}
+          />
         </motion.div>
-        <motion.div className="box" style={{ x: 0, y: y5, zIndex: "2" }} >
-          <img src={require('../../assets/hamburger_egg.png')} alt="ja" style={{ width: "100%" }} />
+        <motion.div className="box" style={{ x: 0, y: y5, zIndex: "2" }}>
+          <img
+            src={require("../../assets/hamburger_egg.png")}
+            alt="ja"
+            style={{ width: "100%" }}
+          />
         </motion.div>
-        <motion.div className="box" style={{ x: 0, y: y6, zIndex: "1" }} >
-          <img src={require('../../assets/hamburger_beef.png')} alt="ja" style={{ width: "100%" }} />
+        <motion.div className="box" style={{ x: 0, y: y6, zIndex: "1" }}>
+          <img
+            src={require("../../assets/hamburger_beef.png")}
+            alt="ja"
+            style={{ width: "100%" }}
+          />
         </motion.div>
-        <motion.div className="box" style={{ x: 0, y: y7 }} >
-          <img src={require('../../assets/hamburger01_bottom.png')} alt="ja" style={{ width: "100%" }} />
+        <motion.div className="box" style={{ x: 0, y: y7 }}>
+          <img
+            src={require("../../assets/hamburger01_bottom.png")}
+            alt="ja"
+            style={{ width: "100%" }}
+          />
         </motion.div>
       </div>
     </motion.div>
-
   );
 };
 

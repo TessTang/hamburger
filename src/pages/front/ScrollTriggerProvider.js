@@ -1,24 +1,21 @@
-import { createContext, useContext, useLayoutEffect, useRef } from 'react';
-import { useMotionValue } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import clamp from 'lodash/clamp';
+import { createContext, useContext, useLayoutEffect, useRef } from "react";
+import { useMotionValue } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import clamp from "lodash/clamp";
 
 const ScrollTriggerContext = createContext(null);
 
 const useScrollTrigger = () => useContext(ScrollTriggerContext);
 
 const DEFAULT_OPTIONS = {
-  end: '+=100%',
+  end: "+=100%",
   pin: true,
   scrub: true,
-  start: 'top top',
+  start: "top top",
 };
 
-const ScrollTriggerProvider = ({
-  children,
-  options = {},
-}) => {
+const ScrollTriggerProvider = ({ children, options = {} }) => {
   const refScrollTrigger = useRef(null);
   const refTimeline = useRef();
 
@@ -49,7 +46,9 @@ const ScrollTriggerProvider = ({
 
   return (
     <div ref={refScrollTrigger} style={{ background: "black" }}>
-      <ScrollTriggerContext.Provider value={progress}>{children}</ScrollTriggerContext.Provider>
+      <ScrollTriggerContext.Provider value={progress}>
+        {children}
+      </ScrollTriggerContext.Provider>
     </div>
   );
 };

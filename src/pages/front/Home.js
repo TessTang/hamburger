@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FrontData } from "../../store/frontStore";
-import { ScrollTriggerProvider } from './ScrollTriggerProvider';
-import Screen from './Screen';
+import { ScrollTriggerProvider } from "./ScrollTriggerProvider";
+import Screen from "./Screen";
 
 export default function Home() {
   const { allProducts } = useContext(FrontData);
   const [product, setProduct] = useState([]);
-
 
   //取得完整產品列表，並列出隨機三樣
   useEffect(() => {
@@ -98,7 +97,9 @@ export default function Home() {
           </div>
           <div className="col-md-4 m-auto text-center">
             <h4 className="mt-4">超值特惠-Hamberger送您吃!</h4>
-            <p className="text-muted">只要輸入hamburger100，即享100元優惠!(消費需高於NTD$300)</p>
+            <p className="text-muted">
+              只要輸入hamburger100，即享100元優惠!(消費需高於NTD$300)
+            </p>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useLocation  } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import {checkLinePayPayment} from "../../store/frontStore"
+import { checkLinePayPayment } from "../../store/frontStore";
 
 export default function OrderSuccess() {
   const { id } = useParams();
@@ -10,14 +10,14 @@ export default function OrderSuccess() {
   const [orderDataLoaded, setOrderDataLoaded] = useState(false);
   const [dataOver, setDataOver] = useState(false);
   const location = useLocation();
-  
+
   //取得訂單資料
   const getOrder = async (id) => {
     try {
       const order = await getDoc(doc(db, "orders", id));
       if (order.exists()) {
         setOrderData(order.data());
-        setOrderDataLoaded(true)
+        setOrderDataLoaded(true);
       } else {
         console.log("No such document!");
       }
@@ -31,15 +31,15 @@ export default function OrderSuccess() {
     getOrder(id);
   }, [id, dataOver]);
 
-  //是否linepay? 否=>不動  是=>確認使否已付款  已付款=>顯示已付款&更正資料庫資料 
+  //是否linepay? 否=>不動  是=>確認使否已付款  已付款=>顯示已付款&更正資料庫資料
   //先確認是否資料庫已更改
-  useEffect(()=>{
-      if(orderData.payBy === "linePay"){
-        if(location.search){
-          checkLinePayPayment(location,orderData, setDataOver);
-    }
+  useEffect(() => {
+    if (orderData.payBy === "linePay") {
+      if (location.search) {
+        checkLinePayPayment(location, orderData, setDataOver);
       }
-  }, [orderDataLoaded,location, id])
+    }
+  }, [orderDataLoaded, location, id]);
 
   return (
     <>
@@ -55,7 +55,9 @@ export default function OrderSuccess() {
           <div className="row">
             <div className="col-md-6">
               <h2>餐點選購成功</h2>
-              {orderData?.is_paid && <h4 className="text-success">已付款完成</h4> }
+              {orderData?.is_paid && (
+                <h4 className="text-success">已付款完成</h4>
+              )}
               <p className="text-muted">
                 親愛的顧客，感謝您在本平台訂餐。我們非常感激您對我們的信任和支持，讓我們有機會為您提供美味的餐點和優質的服務。
               </p>

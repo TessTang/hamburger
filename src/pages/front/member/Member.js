@@ -10,7 +10,7 @@ export default function Member() {
 
   //未登入進入網址=>跳回首頁  無填寫過資料=>新增資料頁面
   useEffect(() => {
-    if(userIsChecked){
+    if (userIsChecked) {
       if (!user.user) {
         navigate("../");
       } else if (user.user.realName === "") {

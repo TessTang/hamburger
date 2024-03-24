@@ -1,4 +1,4 @@
-import { Route, Routes  } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/admin/DashBoard";
 import AdminProducts from "./pages/admin/AdminProducts";
@@ -39,7 +39,7 @@ function App() {
             <Route path="memberaddprofile" element={<MemberAddProfile />} />
             <Route path="memberorders" element={<MemberOrders />} />
           </Route>
-          <Route path="*" element={<NotFound/>}/>
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </div>

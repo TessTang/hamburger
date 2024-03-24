@@ -47,28 +47,28 @@ export default function Login() {
       //   document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
       //   navigate("/admin/products");
       // } else {
-        signInWithEmailAndPassword(auth, data.username, data.password)
-          .then(() => {
-            messageAlert("success", "登入成功");
-            navigate("../");
-          })
-          .catch((error) => {
-            console.log(error);
-            switch (error.code) {
-              case "auth/invalid-email":
-                return setLoginError("信箱格式不正確");
-              case "auth/weak-password":
-                return setLoginError("密碼錯誤");
-              case "auth/invalid-credential":
-                return setLoginError("密碼錯誤");
-              case "auth/missing-password":
-                return setLoginError("請輸入密碼");
-              case "auth/user-not-found":
-                return setLoginError("用戶不存在");
-              default:
-                setLoginError("登入失敗");
-            }
-          });
+      signInWithEmailAndPassword(auth, data.username, data.password)
+        .then(() => {
+          messageAlert("success", "登入成功");
+          navigate("../");
+        })
+        .catch((error) => {
+          console.log(error);
+          switch (error.code) {
+            case "auth/invalid-email":
+              return setLoginError("信箱格式不正確");
+            case "auth/weak-password":
+              return setLoginError("密碼錯誤");
+            case "auth/invalid-credential":
+              return setLoginError("密碼錯誤");
+            case "auth/missing-password":
+              return setLoginError("請輸入密碼");
+            case "auth/user-not-found":
+              return setLoginError("用戶不存在");
+            default:
+              setLoginError("登入失敗");
+          }
+        });
       // }
     } catch (error) {
       setLoginError(error.response.data.message);

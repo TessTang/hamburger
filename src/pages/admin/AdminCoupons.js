@@ -93,8 +93,7 @@ export default function AdminCoupons() {
   //拿到所有coupon資料後進行getPage
   useEffect(() => {
     getPage();
-  }, [allCoupons])
-
+  }, [allCoupons]);
 
   return (
     <div className="p-3">

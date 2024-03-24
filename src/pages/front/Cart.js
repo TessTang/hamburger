@@ -51,15 +51,15 @@ export default function Cart() {
     }
   };
 
- //將增減數量加入資料庫並獲得更新資料
- const putQty = async (data) => {
-  try {
-    await updateDoc(doc(db, "carts", user.user.uid), data);
-    getCart();
-  } catch (error) {
-    console.log(error);
-  }
-};
+  //將增減數量加入資料庫並獲得更新資料
+  const putQty = async (data) => {
+    try {
+      await updateDoc(doc(db, "carts", user.user.uid), data);
+      getCart();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //進入頁面確認購物車是否為空，空的話跳回產品頁面
   useEffect(() => {
@@ -69,7 +69,6 @@ export default function Cart() {
     }
   }, [cart]);
 
- 
   //刪除
   const deleteCart = async (id) => {
     const thisItem = cart.carts.findIndex(
@@ -104,8 +103,11 @@ export default function Cart() {
       const couponData = await getDoc(doc(db, "coupons", data.code));
       if (couponData.exists()) {
         if (couponData.data().due_date > data.date.getTime()) {
-          if(cart.final_total < couponData.data().minimum){
-            return  setMessage({ type: "error", message: `消費金額須大於NTD$ ${couponData.data().minimum}` });
+          if (cart.final_total < couponData.data().minimum) {
+            return setMessage({
+              type: "error",
+              message: `消費金額須大於NTD$ ${couponData.data().minimum}`,
+            });
           }
           try {
             await updateDoc(doc(db, "carts", user.user.uid), {

@@ -13,12 +13,12 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
-  <BrowserRouter>
-  {/* <HashRouter> */}
+  // <BrowserRouter>
+    <HashRouter> 
     <ScrollToTop />
     <App />
- {/* </HashRouter>, */}
-  </BrowserRouter>
+  </HashRouter>
+  // </BrowserRouter>,
   // </React.StrictMode>
 );
 

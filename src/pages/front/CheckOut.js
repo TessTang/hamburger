@@ -55,7 +55,12 @@ export default function CheckOut() {
     await deleteDoc(doc(db, "carts", user.user.uid));
 
     if (userData.pay === "linePay") {
-      linePayRequest(cart, newOrder.id, user.user.uid, `http://localhost:3000/ordersuccess/${newOrder.id}`)
+      linePayRequest(
+        cart,
+        newOrder.id,
+        user.user.uid,
+        `http://localhost:3000/ordersuccess/${newOrder.id}`,
+      );
       getCart();
     } else {
       getCart();
