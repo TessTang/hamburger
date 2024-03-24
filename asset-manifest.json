@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/TessTang/hamburger/static/css/main.645b4b6f.css",
-    "main.js": "/TessTang/hamburger/static/js/main.5c5c339c.js",
-    "static/js/453.980ea594.chunk.js": "/TessTang/hamburger/static/js/453.980ea594.chunk.js",
-    "static/media/bootstrap-icons.woff?": "/TessTang/hamburger/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
-    "static/media/hamburger_beef.png": "/TessTang/hamburger/static/media/hamburger_beef.4b86e377d1497fff9ef6.png",
-    "static/media/bootstrap-icons.woff2?": "/TessTang/hamburger/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
-    "static/media/banner.jpg": "/TessTang/hamburger/static/media/banner.f9c63569549cc3b219d5.jpg",
-    "static/media/hamburger01_bottom.png": "/TessTang/hamburger/static/media/hamburger01_bottom.06c5b250ba629140c1d7.png",
-    "static/media/hamburger01_top.png": "/TessTang/hamburger/static/media/hamburger01_top.f90eaf4892d0b9e9c0fa.png",
-    "static/media/hamburger_vege01.png": "/TessTang/hamburger/static/media/hamburger_vege01.6c8fe99e399c7cb7905f.png",
-    "static/media/hamburger_egg.png": "/TessTang/hamburger/static/media/hamburger_egg.d5d01032d63c7ae80b13.png",
-    "static/media/hamburger_tomato.png": "/TessTang/hamburger/static/media/hamburger_tomato.e2a9017207c9ca873aa5.png",
-    "static/media/hamburger_cheese02.png": "/TessTang/hamburger/static/media/hamburger_cheese02.fe8828c75e05234c4176.png",
-    "static/media/logo.png": "/TessTang/hamburger/static/media/logo.fa56f8afd6bfffdd2432.png",
-    "index.html": "/TessTang/hamburger/index.html",
-    "main.645b4b6f.css.map": "/TessTang/hamburger/static/css/main.645b4b6f.css.map",
-    "main.5c5c339c.js.map": "/TessTang/hamburger/static/js/main.5c5c339c.js.map",
-    "453.980ea594.chunk.js.map": "/TessTang/hamburger/static/js/453.980ea594.chunk.js.map"
+    "main.css": "/hamburger/static/css/main.047644c3.css",
+    "main.js": "/hamburger/static/js/main.21a010bd.js",
+    "static/js/453.980ea594.chunk.js": "/hamburger/static/js/453.980ea594.chunk.js",
+    "static/media/bootstrap-icons.woff?": "/hamburger/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/hamburger_beef.png": "/hamburger/static/media/hamburger_beef.4b86e377d1497fff9ef6.png",
+    "static/media/bootstrap-icons.woff2?": "/hamburger/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+    "static/media/banner.jpg": "/hamburger/static/media/banner.f9c63569549cc3b219d5.jpg",
+    "static/media/hamburger01_bottom.png": "/hamburger/static/media/hamburger01_bottom.06c5b250ba629140c1d7.png",
+    "static/media/hamburger01_top.png": "/hamburger/static/media/hamburger01_top.f90eaf4892d0b9e9c0fa.png",
+    "static/media/hamburger_vege01.png": "/hamburger/static/media/hamburger_vege01.6c8fe99e399c7cb7905f.png",
+    "static/media/hamburger_egg.png": "/hamburger/static/media/hamburger_egg.d5d01032d63c7ae80b13.png",
+    "static/media/hamburger_tomato.png": "/hamburger/static/media/hamburger_tomato.e2a9017207c9ca873aa5.png",
+    "static/media/hamburger_cheese02.png": "/hamburger/static/media/hamburger_cheese02.fe8828c75e05234c4176.png",
+    "static/media/logo.png": "/hamburger/static/media/logo.fa56f8afd6bfffdd2432.png",
+    "index.html": "/hamburger/index.html",
+    "main.047644c3.css.map": "/hamburger/static/css/main.047644c3.css.map",
+    "main.21a010bd.js.map": "/hamburger/static/js/main.21a010bd.js.map",
+    "453.980ea594.chunk.js.map": "/hamburger/static/js/453.980ea594.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.645b4b6f.css",
-    "static/js/main.5c5c339c.js"
+    "static/css/main.047644c3.css",
+    "static/js/main.21a010bd.js"
   ]
 }
