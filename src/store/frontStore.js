@@ -54,8 +54,8 @@ export const linePayRequest = (data, id, user, url) => {
       });
     };
     try {
+      messageAlert("success", "稍等一下，正在為確認LinePay資訊", 10000);
       const getOrder = await axios.post(
-
         // `http://localhost:2407/createOrder/${id}`,
         `https://hamburger-node-js.onrender.com/createOrder/${id}`,
         {
@@ -75,7 +75,6 @@ export const linePayRequest = (data, id, user, url) => {
           },
         },
       );
-      messageAlert("success", "稍等一下，正在為確認LinePay資訊", 10000);
       if (getOrder.data.returnCode === "0000") {
         messageAlert("success", "正在為您跳轉LinePay頁面", 1000);
         window.location.replace(getOrder.data.info.paymentUrl.web);
