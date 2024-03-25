@@ -11,7 +11,7 @@ export default function MemberOrderModal({
       tempOrder.order,
       tempOrder.id,
       tempOrder.user,
-      "http://localhost:3000/member/memberorders",
+      "https://tesstang.github.io/hamburger/#/member/memberorders",
     );
   };
 

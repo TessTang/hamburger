@@ -59,7 +59,7 @@ export default function CheckOut() {
         cart,
         newOrder.id,
         user.user.uid,
-        `http://localhost:3000/ordersuccess/${newOrder.id}`,
+        `https://tesstang.github.io/hamburger/#/ordersuccess/${newOrder.id}`,
       );
       getCart();
     } else {
