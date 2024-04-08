@@ -21,8 +21,8 @@ export default function MemberAddProfile() {
   useEffect(() => {
     setValue("displayName", user.user?.displayName);
     setValue("realName", user.user?.realName);
-    setValue("address", user.user?.phoneNumber);
-    setValue("phoneNumber", user.user?.address);
+    setValue("address", user.user?.address);
+    setValue("phoneNumber", user.user?.phoneNumber);
   }, [user]);
 
   //送出後將資料寫入資料庫，並轉回profile頁面
