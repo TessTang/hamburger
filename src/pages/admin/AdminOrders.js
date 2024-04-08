@@ -9,7 +9,7 @@ export default function AdminProducts() {
   const [orders, setOrders] = useState([]);
   const [pagination, setPagination] = useState([]);
   const [tempOrder, setTempOrder] = useState({});
-  const [allOrders, setAllOrders] = useState([])
+  const [allOrders, setAllOrders] = useState([]);
 
   const orderModal = useRef(null);
 
@@ -60,9 +60,8 @@ export default function AdminProducts() {
   }, []);
 
   useEffect(() => {
-    getPage()
+    getPage();
   }, [allOrders]);
-
 
   return (
     <div className="p-3">
@@ -88,29 +87,36 @@ export default function AdminProducts() {
             return (
               <tr key={order.id}>
                 <td>{order.id}</td>
-                <td>{(() => {
-                  switch (order.status) {
-                    case 0:
-                      return "未確認";
-                    case 1:
-                      return "已確認";
-                    case 2:
-                      return "外送中";
-                    case 3:
-                      return "已送達";
-                    default:
-                      return "";
-                  }
-                })()
-                }</td>
                 <td>
-                  {order.paid_date
-                    ? <span className="text-success fw-bold">{
-                      new Date(order.paid_date).toLocaleString("zh-TW", {
-                        hour: '2-digit', minute: '2-digit', month: 'narrow', day: '2-digit',
+                  {(() => {
+                    switch (order.status) {
+                      case 0:
+                        return "未確認";
+                      case 1:
+                        return "已確認";
+                      case 2:
+                        return "外送中";
+                      case 3:
+                        return "已送達";
+                      default:
+                        return "";
+                    }
+                  })()}
+                </td>
+                <td>
+                  {order.paid_date ? (
+                    <span className="text-success fw-bold">
+                      {new Date(order.paid_date).toLocaleString("zh-TW", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        month: "narrow",
+                        day: "2-digit",
                         hour12: false,
-                      })}</span>
-                    : "未付款"}
+                      })}
+                    </span>
+                  ) : (
+                    "未付款"
+                  )}
                 </td>
 
                 <td>{order.message}</td>

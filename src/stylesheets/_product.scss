@@ -1,0 +1,26 @@
+.card-text {
+  color: rgb(9, 78, 0);
+  font-size: 1.5rem;
+  font-weight: bolder;
+  span {
+    font-size: 1rem;
+  }
+}
+
+.product_sort {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 10px;
+  span {
+    font-weight: bolder;
+  }
+
+  .price_Sort {
+    cursor: pointer;
+    &:hover {
+      scale: 1.05;
+    }
+  }
+}

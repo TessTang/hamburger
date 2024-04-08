@@ -1,12 +1,20 @@
+import { useContext, useState, useRef, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import { FrontData } from "../../../store/frontStore";
-import { useContext, useState, useRef, useEffect, useMemo } from "react";
-import MemberOrderModal from "../../../components/MemberOrderModal";
-import { Modal } from "bootstrap";
-import { getDocs, doc, collection, where, query, getDoc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
 import { useLocation } from "react-router";
+import { Modal } from "bootstrap";
+import {
+  getDocs,
+  doc,
+  collection,
+  where,
+  query,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../../../utils/firebase";
+import { FrontData } from "../../../store/frontStore";
 import { checkLinePayPayment } from "../../../store/frontStore";
+import MemberOrderModal from "../../../components/MemberOrderModal";
+import Button from "../../../components/Button";
 
 export default function MemberOrders() {
   const { user } = useContext(FrontData);
@@ -62,7 +70,7 @@ export default function MemberOrders() {
       const orderId = searchParams.get("orderId");
       (async () => {
         const docSnap = await getDoc(doc(db, "orders", orderId));
-        checkLinePayPayment(location, docSnap.data(), setDataOver)
+        checkLinePayPayment(location, docSnap.data(), setDataOver);
       })();
     }
     const handleResize = () => {
@@ -72,7 +80,7 @@ export default function MemberOrders() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [location])
+  }, [location]);
 
   //拿取會員對應訂單資料
   useEffect(() => {
@@ -99,7 +107,7 @@ export default function MemberOrders() {
                 orders[index] = orderData;
               }
             });
-          };
+          }
           setUserOrder(orders.reverse());
         } catch (error) {
           console.log(error);
@@ -137,37 +145,44 @@ export default function MemberOrders() {
                   <td>{idx + 1}</td>
                   <td>{item.id}</td>
                   {!isMobile && <td>{changeDate(item.create_at)}</td>}
-                  {!isMobile && <td>{(() => {
-                    switch (item.status) {
-                      case 0:
-                        return "未確認";
-                      case 1:
-                        return "已確認";
-                      case 2:
-                        return "外送中";
-                      case 3:
-                        return "已送達";
-                      default:
-                        return "";
-                    }
-                  })()}</td>}
-                  {!isMobile && <td>{
-                    item.is_paid ? <span className="text-success fw-bolder">已付款</span> :
-                      <span className="text-danger fw-bolder">未付款</span>
-                  }</td>}
+                  {!isMobile && (
+                    <td>
+                      {(() => {
+                        switch (item.status) {
+                          case 0:
+                            return "未確認";
+                          case 1:
+                            return "已確認";
+                          case 2:
+                            return "外送中";
+                          case 3:
+                            return "已送達";
+                          default:
+                            return "";
+                        }
+                      })()}
+                    </td>
+                  )}
+                  {!isMobile && (
+                    <td>
+                      {item.is_paid ? (
+                        <span className="text-success fw-bolder">已付款</span>
+                      ) : (
+                        <span className="text-danger fw-bolder">未付款</span>
+                      )}
+                    </td>
+                  )}
                   {!isMobile && (
                     <td>{item.order.final_total?.toLocaleString()}</td>
                   )}
                   <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-sm"
-                      onClick={() => {
+                    <Button
+                      text="查看"
+                      myClass="text-dark"
+                      click={() => {
                         openOrderModal(item);
                       }}
-                    >
-                      查看
-                    </button>
+                    />
                   </td>
                 </tr>
               );

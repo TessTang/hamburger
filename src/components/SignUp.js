@@ -1,15 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth, db } from "../utils/firebase";
-import { doc, setDoc } from "firebase/firestore";
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  getAdditionalUserInfo,
-} from "firebase/auth";
-import { messageAlert } from "../store/frontStore";
+import { auth } from "../utils/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import Button from "./Button";
 
 export default function SignUp({
   loginError,
@@ -17,7 +9,6 @@ export default function SignUp({
   setFireStore,
   googleSign,
 }) {
-  const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -26,26 +17,6 @@ export default function SignUp({
   const handleData = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-
-  // const setFireStore = async (userData) => {
-  //     try {
-  //         await setDoc(doc(db, "users", userData.uid), {
-  //             'displayName': userData.displayName? userData.displayName: '',
-  //             'realName': '',
-  //             'email': userData.email,
-  //             'phoneNumber': '',
-  //             'address': '',
-  //             'orders': [],
-  //             'manerger': false,
-  //             'uid': userData.uid
-  //         });
-  //         messageAlert('success','註冊成功');
-  //         navigate('/member/memberaddprofile')
-  //     }
-  //     catch (err) {
-  //         console.error("匯入Error: ", err);
-  //     }
-  // }
 
   const submit = (e) => {
     createUserWithEmailAndPassword(auth, data.username, data.password)
@@ -70,10 +41,12 @@ export default function SignUp({
   return (
     <>
       <div className="text-center">
-        <button onClick={googleSign} className="btn btn-success border p-2">
-          <i className="bi bi-google me-2" />
-          使用Google帳號登入
-        </button>
+        <Button
+          text="使用Google帳號登入"
+          click={googleSign}
+          myClass="p-2"
+          bg="success"
+        />
       </div>
       <hr />
       <div
@@ -108,9 +81,7 @@ export default function SignUp({
           />
         </label>
       </div>
-      <button type="button" className="btn btn-primary" onClick={submit}>
-        註冊
-      </button>
+      <Button text="註冊" click={submit} myClass="p-2" bg="primary" />
     </>
   );
 }

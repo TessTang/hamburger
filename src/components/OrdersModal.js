@@ -1,15 +1,13 @@
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import { doc, updateDoc } from "firebase/firestore";
 import {
   MessageContext,
   handleSuccessMessage,
   handleErrorMessage,
 } from "../store/messageStore";
-import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {
-
   const [, dispatch] = useContext(MessageContext);
 
   const [tempData, setTempData] = useState({
@@ -41,12 +39,15 @@ export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {
 
   const submit = async () => {
     try {
-      await updateDoc(doc(db, "orders", tempData.id), {...tempData, paid_date: new Date().getTime()});
-      handleSuccessMessage(dispatch, '更改成功');
+      await updateDoc(doc(db, "orders", tempData.id), {
+        ...tempData,
+        paid_date: new Date().getTime(),
+      });
+      handleSuccessMessage(dispatch, "更改成功");
       getOrders();
       closeAddProduct();
     } catch (error) {
-      handleErrorMessage(dispatch, '更改失敗');
+      handleErrorMessage(dispatch, "更改失敗");
       console.log(error);
     }
   };
@@ -149,7 +150,9 @@ export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {
                 <tfoot>
                   <tr>
                     <td className="border-0 text-end">總金額</td>
-                    <td className="border-0">${tempOrder.order.final_total.toLocaleString()}</td>
+                    <td className="border-0">
+                      ${tempOrder.order.final_total.toLocaleString()}
+                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -168,11 +171,19 @@ export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {
                     checked={!!tempData.is_paid}
                     onChange={handleChange}
                   />
-                  付款狀態 ({tempData.is_paid ? `${ 
-                      new Date(tempData.paid_date||new Date().getTime()).toLocaleString("zh-TW", {
-                        hour: '2-digit', minute: '2-digit', month: 'narrow', day: '2-digit',
-                    hour12: false,
-                  })}已付款` : "未付款"})
+                  付款狀態 (
+                  {tempData.is_paid
+                    ? `${new Date(
+                        tempData.paid_date || new Date().getTime(),
+                      ).toLocaleString("zh-TW", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        month: "narrow",
+                        day: "2-digit",
+                        hour12: false,
+                      })}已付款`
+                    : "未付款"}
+                  )
                 </label>
               </div>
               <div className="mb-4">

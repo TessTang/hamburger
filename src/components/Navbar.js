@@ -23,11 +23,7 @@ export default function Navbar() {
 
   return (
     <nav className={`row navbar fixed-top myNavbar p-2 ${roll || "scroll"}`}>
-      <div className="navbarSection col-3" />
-      <div className="navbarSection col-6 justify-content-between">
-        <NavLink className="nav-item nav-link" to="/">
-          首頁
-        </NavLink>
+      <div className="navbarSection col-7 col-md-8 justify-content-between">
         <NavLink className="navbar-brand navbarLogo me-0" to="/">
           <img
             src={require("../assets/logo.png")}
@@ -36,11 +32,17 @@ export default function Navbar() {
             alt="logo"
           />
         </NavLink>
+        <NavLink className="nav-item nav-link" to="/">
+          首頁
+        </NavLink>
         <NavLink className="nav-item nav-link" to="/products">
           產品
         </NavLink>
+        <NavLink className="nav-item nav-link" to="/blogs">
+          專欄
+        </NavLink>
       </div>
-      <div className="navbarSection col-3 justify-content-end gap-4">
+      <div className="navbarSection col-5 col-md-4 justify-content-center gap-4 justify-content-md-end">
         <NavLink className="nav-item nav-link position-relative" to="/cart">
           <i className="bi bi-bag-fill fs-5" />
           <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
@@ -57,11 +59,7 @@ export default function Navbar() {
           </NavLink>
         ) : (
           <NavLink className="nav-item nav-link position-relative" to="./login">
-            {user.user ? (
-              <i className="bi bi-person-circle fs-5" />
-            ) : (
-              "註冊/登入"
-            )}
+            {user.user ? <i className="bi bi-person-circle fs-5" /> : "登入"}
           </NavLink>
         )}
       </div>

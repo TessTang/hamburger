@@ -1,0 +1,600 @@
+// Breakpoints
+$layout-breakpoint-large: 1920px;
+$layout-breakpoint-medium: 1440px;
+$layout-breakpoint-small: 960px;
+$layout-breakpoint-xsmall: 480px;
+
+// Colors
+$background: #f0eff1;
+$white: rgb(255, 255, 255);
+$black: #24242a;
+
+//banner
+.banner {
+  height: 100%;
+  position: relative;
+  padding-top: 40px;
+  overflow: hidden;
+
+  .banner-row {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+      position: absolute;
+      left: 3%;
+      top: 10%;
+    }
+
+    &:nth-child(2) {
+      position: absolute;
+      top: 40%;
+    }
+
+    &:last-child {
+      position: absolute;
+      top: 70%;
+      right: 10%;
+    }
+
+    @media (max-width: $layout-breakpoint-medium) {
+      &:first-child {
+        margin-top: 15px;
+      }
+    }
+
+    &.center {
+      justify-content: center;
+      text-align: center;
+
+      .row-letter {
+        left: 0;
+      }
+    }
+
+    &.right {
+      justify-content: flex-end;
+    }
+
+    .row-title,
+    .row-letter {
+      font-size: 10rem;
+      font-weight: 900;
+      position: relative;
+      letter-spacing: -0.3rem;
+      display: inline-block;
+      white-space: nowrap;
+
+      @media (max-width: $layout-breakpoint-xsmall) {
+        font-size: 4rem;
+      }
+    }
+
+    .row-col {
+      width: 50%;
+
+      @media (max-width: $layout-breakpoint-medium) {
+        width: 70%;
+      }
+
+      @media (max-width: 1240px) {
+        &:last-child {
+          display: none;
+        }
+      }
+
+      @media (max-width: $layout-breakpoint-xsmall) {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .row-message {
+        font-weight: 500;
+        font-size: 1.8rem;
+        line-height: 2.6rem;
+        width: 320px;
+      }
+    }
+  }
+}
+
+.bannerSmallImg {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+$move-initial: calc(-25%);
+$move-final: calc(-50%);
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+
+  &.animate .marquee__inner {
+    animation-play-state: running;
+  }
+
+  .marquee__inner {
+    width: fit-content;
+    display: flex;
+    position: relative;
+    transform: translate3d($move-initial, 0, 0);
+    animation: marquee 5s linear infinite;
+    animation-play-state: paused;
+
+    @media (min-width: $layout-breakpoint-large) {
+      transform: translate3d(calc(-25% + 10vw), 0, 0);
+      animation: marquee-lg 5s linear infinite;
+      animation-play-state: paused;
+    }
+  }
+
+  .row-title {
+    padding: 0 8vw;
+
+    @media (min-width: $layout-breakpoint-large) {
+      padding: 0 10vw;
+    }
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d($move-initial, 0, 0);
+  }
+
+  100% {
+    transform: translate3d($move-final, 0, 0);
+  }
+}
+
+@keyframes marquee-lg {
+  0% {
+    transform: translate3d(calc(-25% + 10vw), 0, 0);
+  }
+
+  100% {
+    transform: translate3d(calc(-50% + 10vw), 0, 0);
+  }
+}
+
+////banner end
+
+.myTitle {
+  position: relative;
+  text-align: center;
+  width: fit-content;
+  margin: 0px auto;
+  font-size: 70px;
+  letter-spacing: 5px;
+  margin-top: -40px;
+  padding: 0 5px;
+  font-weight: 600;
+
+  .wave {
+    height: 50%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    width: 100%;
+    --mask: radial-gradient(2.24rem at 50% 3rem, #000 99%, #0000 101%)
+        calc(50% - 2rem) 0/4rem 100%,
+      radial-gradient(2.24rem at 50% -2rem, #0000 99%, #000 101%) 50% 1rem/4rem
+        100% repeat-x;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+    background-color: #f7a344;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 45px;
+  }
+}
+
+//猜你喜歡 section
+.myCard {
+  border: transparent;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow:
+    4px 4px coral,
+    6px 6px olive,
+    8px 8px dodgerblue;
+
+  .card-img-top_outer {
+    border-radius: 10px;
+    padding: 25px 3px;
+  }
+
+  h4 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+    i {
+      color: yellow;
+    }
+  }
+
+  &:hover {
+    border: 2px solid rgba(0, 0, 0, 0.603);
+
+    .card-img-top_outer > img {
+      transform: scale(1.25) rotate(3deg);
+    }
+  }
+
+  .myCardBody {
+    position: relative;
+    z-index: 2;
+  }
+
+  .productFire {
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+    opacity: 0;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+      transform: skewY();
+    }
+  }
+}
+
+//猜你喜歡 end
+
+// about us left
+.home_aboutus_left {
+  overflow: hidden;
+  text-align: center;
+
+  .home_aboutus_leftIMG {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 3;
+
+    img {
+      height: auto;
+      max-width: 100%;
+    }
+  }
+
+  .home_aboutus_leftBG {
+    position: absolute;
+    top: 3%;
+    left: 10%;
+    z-index: 1;
+    filter: blur(3.431px);
+    transform: rotateZ(-28deg);
+
+    h2 {
+      color: #35343433;
+      font-size: 6rem;
+      font-weight: 800;
+      line-height: 1.5em;
+
+      @media (max-width: 767.98px) {
+        font-size: 5rem;
+      }
+    }
+  }
+}
+
+.home_aboutus_right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  h3 {
+    font-weight: bold;
+    flex-grow: 0.5;
+  }
+
+  > p {
+    flex-grow: 0.5;
+  }
+
+  .iconCard {
+    min-height: 25vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .iconCard_Top {
+    position: relative;
+    flex-grow: 0.3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    div {
+      background-color: #eedbaa;
+      position: absolute;
+      top: 15%;
+      left: 20%;
+      z-index: 1;
+      width: 4rem;
+      height: 4rem;
+    }
+
+    .iconCard_icon {
+      width: 6rem;
+      height: 6rem;
+      position: relative;
+      z-index: 2;
+
+      @media (max-width: 768px) {
+        width: 3.5rem;
+        height: 3.5rem;
+      }
+    }
+  }
+
+  .iconContent {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    margin: 0;
+    white-space: pre-line;
+  }
+}
+
+// about us end
+
+//activity start
+.home_activity_Outer {
+  position: relative;
+  .deco {
+    position: absolute;
+    left: 0;
+    bottom: -10%;
+  }
+}
+
+.home_activity {
+  width: 49%;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 1399px) {
+    width: 100%;
+  }
+
+  .offer-content {
+    position: relative;
+    z-index: 50;
+    padding: 100px 50px;
+
+    h5 {
+      color: #d12525;
+      font-size: 18px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    h3 {
+      color: rgb(255, 255, 255);
+      font-size: 55px;
+      font-weight: 900;
+      text-shadow:
+        -1px -1px 0 #0a0701e5,
+        1px -1px 0 #0a0701e5,
+        -1px 1px 0 #0a0701e5,
+        1px 1px 0 #0a0701e5;
+
+      &:nth-child(2) {
+        font-size: 30px;
+      }
+
+      @media (max-width: 991px) {
+        font-size: 24px;
+      }
+
+      @media (max-width: 1399px) {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      padding: 90px 30px;
+    }
+
+    @media (max-width: 575px) {
+      padding: 100px 10px;
+
+      h3 {
+        font-size: 35px;
+      }
+    }
+  }
+
+  .foodImg {
+    height: 100%;
+    position: absolute;
+    right: 1%;
+    bottom: 5px;
+    z-index: 1;
+    width: 100%;
+
+    .burger-text {
+      position: absolute;
+      top: -20px;
+      right: 0;
+      animation: rounded 4s linear infinite;
+      z-index: 9;
+    }
+
+    > img {
+      position: absolute;
+      bottom: 0;
+      z-index: 99;
+      right: 0;
+    }
+
+    @media (max-width: 575px) {
+      right: -5%;
+
+      img {
+        width: 250px;
+      }
+    }
+  }
+}
+
+@keyframes rounded {
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+//activity end
+
+//promotion start
+
+.promotion {
+  background-image: url("https://modinatheme.com/html/foodking-html/assets/img/banner/kfc-bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  padding-top: 20px;
+  height: 100vh;
+  overflow: hidden;
+
+  @media (max-width: 1200px) {
+    height: auto;
+  }
+
+  .promotion_left {
+    color: rgb(255, 255, 255);
+    font-size: 1.5rem;
+    padding: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    h3 {
+      font-size: 60px;
+      font-weight: 900;
+      letter-spacing: 1rem;
+
+      @media (max-width: 576px) {
+        font-size: 30px;
+      }
+    }
+
+    .clander_outer {
+      width: 75%;
+
+      @media (max-width: 576px) {
+        width: 100%;
+      }
+    }
+  }
+
+  .promotion_right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      max-width: 520px;
+    }
+  }
+}
+
+.calendar {
+  position: relative;
+  width: 20%;
+  max-width: 150px;
+  max-height: 200px;
+  background-color: #fff;
+  border-radius: 0.6em;
+  box-shadow:
+    0 1px 0 #bdbdbd,
+    0 2px 0 #fff,
+    0 3px 0 #bdbdbd,
+    0 4px 0 #fff,
+    0 5px 0 #bdbdbd,
+    0 0 0 1px #bdbdbd;
+  overflow: hidden;
+  text-align: center;
+}
+
+.calendar_time {
+  width: 100%;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+  font-weight: bold;
+  letter-spacing: -0.05em;
+  padding-top: 1.5em;
+  color: #2f2f2f;
+}
+
+.calendar_title {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  padding: 0.4em 0;
+  color: #fff;
+  background-color: #fd9f1b;
+  border-bottom: 1px dashed #f37302;
+  box-shadow: 0 2px 0 #fd9f1b;
+}
+
+//promotion end
+
+//deliver start
+.home_deliver {
+  width: 100%;
+  background-image: url("https://demo2.wpopal.com/fazfood/wp-content/uploads/2023/10/h2_bn-5.jpg");
+  background-size: cover;
+
+  .deliver_down {
+    position: relative;
+    overflow: hidden;
+
+    .driver {
+      position: relative;
+      z-index: 3;
+      animation: ride 7s linear infinite;
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    .backRoadImg {
+      padding-bottom: 30px;
+      filter: blur(3.431px) opacity(70%) saturate(80%);
+      position: absolute;
+      bottom: 13%;
+      z-index: 1;
+      height: 70%;
+    }
+  }
+}
+
+@keyframes ride {
+  0% {
+    transform: translateX(-20%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+

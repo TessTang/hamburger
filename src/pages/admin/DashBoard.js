@@ -27,7 +27,7 @@ export default function Dashboard() {
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        checkUserData(currentUser)
+        checkUserData(currentUser);
       } else {
         navigate("../");
         return;

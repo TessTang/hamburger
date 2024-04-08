@@ -7,12 +7,11 @@ import Navbar from "../../components/Navbar";
 import { FrontData } from "../../store/frontStore";
 import Loading from "../../components/Loading";
 
-
 export default function FrontLayout() {
   const [isLoading, setIsLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ manager: false, user: null });
-  const [userIsChecked, setUserIsChecked] = useState(false)
+  const [userIsChecked, setUserIsChecked] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
 
   //確認是否登入，有登入setUser資料
@@ -24,7 +23,7 @@ export default function FrontLayout() {
       } else {
         console.log("No users data");
       }
-      setUserIsChecked(true)
+      setUserIsChecked(true);
     } else {
       return;
     }
@@ -73,9 +72,8 @@ export default function FrontLayout() {
 
   //有user資料後取得購物車資料
   useEffect(() => {
-    getCart()
-  }, [user])
-
+    getCart();
+  }, [user]);
 
   return (
     <FrontData.Provider
@@ -89,7 +87,7 @@ export default function FrontLayout() {
         user,
         setUser,
         checkUserData,
-        userIsChecked
+        userIsChecked,
       }}
     >
       {isLoading && <Loading />}
@@ -99,7 +97,7 @@ export default function FrontLayout() {
       <Outlet />
 
       {/* Footer */}
-      <div className="bg-dark py-5">
+      <div className="bg-dark py-5 myFooter">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between text-white mb-4">
             <img
