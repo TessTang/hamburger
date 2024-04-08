@@ -1,7 +1,6 @@
+import { useContext, useState, useRef, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import { FrontData } from "../../../store/frontStore";
-import { useContext, useState, useRef, useEffect, useMemo } from "react";
-import MemberOrderModal from "../../../components/MemberOrderModal";
+import { useLocation } from "react-router";
 import { Modal } from "bootstrap";
 import {
   getDocs,
@@ -11,9 +10,12 @@ import {
   query,
   getDoc,
 } from "firebase/firestore";
+
 import { db } from "../../../utils/firebase";
-import { useLocation } from "react-router";
+import { FrontData } from "../../../store/frontStore";
 import { checkLinePayPayment } from "../../../store/frontStore";
+import MemberOrderModal from "../../../components/MemberOrderModal";
+import Button from "../../../components/Button";
 
 export default function MemberOrders() {
   const { user } = useContext(FrontData);
@@ -175,15 +177,13 @@ export default function MemberOrders() {
                     <td>{item.order.final_total?.toLocaleString()}</td>
                   )}
                   <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-sm"
-                      onClick={() => {
+                    <Button
+                      text="查看"
+                      myClass="text-dark"
+                      click={() => {
                         openOrderModal(item);
                       }}
-                    >
-                      查看
-                    </button>
+                    />
                   </td>
                 </tr>
               );

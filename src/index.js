@@ -17,8 +17,8 @@ root.render(
     <HashRouter> 
     <ScrollToTop />
     <App />
-  </HashRouter>
-  // </BrowserRouter>,
+ </HashRouter>,
+  {/* </BrowserRouter> */}
   // </React.StrictMode>
 );
 

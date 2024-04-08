@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
+import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
 import {
   MessageContext,
   handleSuccessMessage,
   handleErrorMessage,
 } from "../store/messageStore";
-import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 export default function ProductsModal({

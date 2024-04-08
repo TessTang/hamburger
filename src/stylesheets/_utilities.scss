@@ -1,8 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 //all
 body {
-  font-family: "Noto Sans TC", "微軟正黑體", sans-serif !important;
+  font-family: "Roboto", "Noto Sans TC", "微軟正黑體", sans-serif !important;
 }
 
 .top-10 {
@@ -12,23 +13,6 @@ body {
 .errorAlert {
   color: red;
   font-weight: 600;
-}
-
-.cartDeleteBtn {
-  position: absolute;
-  top: 10px;
-  right: 5px;
-  width: 25px;
-  height: 25px;
-  padding: 0 !important;
-
-  i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 12px;
-  }
 }
 
 .full-height {
@@ -49,6 +33,76 @@ body {
   align-items: center;
 }
 
+.back_To_Top {
+  position: fixed;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  padding: 5px;
+  z-index: 99;
+  bottom: 5%;
+  right: 5%;
+  border: 2px solid #008000;
+  color: #008000;
+
+  .back_To_TopIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+  }
+
+  &:hover {
+    background-color: #008000;
+    color: white;
+  }
+}
+
+.myHover {
+  transition: 0.2s linear;
+
+  &:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    transform: scale(1.05);
+    background-color: rgba(212, 145, 0, 0.596);
+  }
+}
+
+.section_banner {
+  height: 300px;
+  background-size: cover;
+  background-position: right 35% bottom 45%;
+  @media (max-width: 768px) {
+    height: 200px;
+  }
+}
+
+.screen {
+  position: relative;
+  overflow: hidden;
+}
+
+.box {
+  position: relative;
+  min-width: 100px;
+  max-width: 300px;
+  margin-bottom: 25px;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.productIcon {
+  width: 35px;
+  margin-right: 1rem;
+}
+
+.w-200 {
+  width: 200px;
+}
+
 //navbar
 
 .myNavbar {
@@ -57,8 +111,9 @@ body {
     rgba(0, 0, 0, 1) 15%,
     rgba(0, 0, 0, 0) 45%
   );
-  color: white;
+  color: #ffffff;
   transition: all 0.2s linear;
+
   .navbarSection {
     display: flex;
     flex-direction: row;
@@ -72,42 +127,88 @@ body {
   background-color: black;
 }
 
-.home_banner {
-  min-height: 100vh;
-}
-@media (max-width: 767.98px) {
-  .home_banner {
-    min-height: auto;
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-  }
-}
-
-.myHover {
-  transition: 0.3s linear;
-
-  &:hover {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-    transform: scale(1.1);
-    background-color: rgba(212, 145, 0, 0.596);
-  }
-}
-
+//footer
 .footerLogo:hover {
   transform: scale(1.5);
 }
 
-.productsList {
-  text-decoration: none;
+.myFooter {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.25;
+    background-image: url("https://demo.leebrosus.com/marco-good/wp-content/uploads/2023/05/footer-parallax.png");
+
+    background-size: cover;
+  }
+
+  .container {
+    position: relative;
+    z-index: 3;
+  }
 }
 
-// .screen{
-//   background-image: url('https://images.unsplash.com/photo-1682687220509-61b8a906ca19?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-// }
 
-.box {
+/* CSS */
+.button-56 {
+  align-items: center;
+  background-color: #fee6e3;
+  border: 2px solid #111;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #fff;
+  display: flex;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 24px;
+  max-width: 100%;
+  padding: 3px 5px;
   position: relative;
-  min-width: 100px;
-  max-width: 300px;
-  margin-bottom: 25px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  letter-spacing: 0.3rem;
+}
+
+.button-56:after {
+  background-color: #111;
+  border-radius: 8px;
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  transform: translate(8px, 8px);
+  transition: transform 0.2s ease-out;
+  z-index: -1;
+}
+
+.button-56:hover:after {
+  transform: translate(0, 0);
+}
+
+.button-56:active {
+  background-color: #ffdeda;
+  outline: 0;
+}
+
+.button-56:hover {
+  outline: 0;
+}
+
+@media (min-width: 768px) {
+  .button-56 {
+    padding: 3px 10px;
+  }
 }

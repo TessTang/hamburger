@@ -1,11 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import { doc, updateDoc } from "firebase/firestore";
 import {
   MessageContext,
   handleSuccessMessage,
   handleErrorMessage,
 } from "../store/messageStore";
-import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {

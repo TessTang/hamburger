@@ -97,7 +97,7 @@ export default function FrontLayout() {
       <Outlet />
 
       {/* Footer */}
-      <div className="bg-dark py-5">
+      <div className="bg-dark py-5 myFooter">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between text-white mb-4">
             <img

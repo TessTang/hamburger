@@ -32,7 +32,6 @@ export const messageAlert = (type, text, time = 1000) => {
   }
 };
 
-//若有COUPON時，為了LINEPAY的規則，將其中一個大於COUPON金額的PRODUCT變為數量1 價格原TOTAL-COUPON
 export const linePayRequest = (data, id, user, url) => {
   (async () => {
     const changeLinePrice = () => {
@@ -40,9 +39,9 @@ export const linePayRequest = (data, id, user, url) => {
         const changePrice = data.carts.findIndex((item) => {
           return item.total > data.coupon.deduct;
         });
-        data.carts[changePrice].qty = 1;
         data.carts[changePrice].product.price =
-          (data.carts[changePrice].total - data.coupon.deduct) 
+          (data.carts[changePrice].total - data.coupon.deduct) /
+          data.carts[changePrice].qty;
       }
       return data.carts?.map((item) => {
         return {
@@ -54,10 +53,8 @@ export const linePayRequest = (data, id, user, url) => {
       });
     };
     try {
-      messageAlert("success", "稍等一下，正在為確認LinePay資訊", 10000);
       const getOrder = await axios.post(
-        // `http://localhost:2407/createOrder/${id}`,
-        `https://hamburger-node-js.onrender.com/createOrder/${id}`,
+        `http://localhost:2407/createOrder/${id}`,
         {
           amount: data.final_total,
           currency: "TWD",
@@ -76,8 +73,8 @@ export const linePayRequest = (data, id, user, url) => {
         },
       );
       if (getOrder.data.returnCode === "0000") {
-        messageAlert("success", "正在為您跳轉LinePay頁面", 1000);
         window.location.replace(getOrder.data.info.paymentUrl.web);
+        messageAlert("success", "正在為您跳轉LinePay頁面", 10000);
       } else {
         console.log(getOrder);
       }
@@ -92,8 +89,7 @@ export const checkLinePayPayment = (location, data, setDataOver) => {
   const transactionId = searchParams.get("transactionId");
   const orderId = searchParams.get("orderId");
   (async () => {
-    // const res = await axios.post("http://localhost:2407/linePay/confirm", {
-    const res = await axios.post("https://hamburger-node-js.onrender.com/linePay/confirm", {
+    const res = await axios.post("http://localhost:2407/linePay/confirm", {
       amount: data.order.final_total,
       orderId: orderId,
       transactionId: transactionId,

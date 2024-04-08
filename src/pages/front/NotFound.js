@@ -1,30 +1,25 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
+import Banner from "../../components/Banner";
 
 export default function NotFound() {
   const navaigate = useNavigate(null);
 
-  //三秒後轉回首頁
+  //2.5秒後轉回首頁
   useEffect(() => {
     setTimeout(() => {
       navaigate("./");
-    }, 3000);
+    }, 2500);
   }, [navaigate]);
 
   return (
     <>
-      <div className="container-fluid bg-secondary px-0 mt-2">
-        <img
-          className="img-fluid"
-          src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg"
-          alt="banners"
-        />
-      </div>
+    <Banner bgImg='https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg' />
       <div className="container full-height d-flex justify-content-center align-items-center">
         <motion.div
           animate={{ scale: 1.5 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8 }}
           className="fs-3"
         >
           <img

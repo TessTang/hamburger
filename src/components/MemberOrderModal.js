@@ -1,4 +1,3 @@
-import axios from "axios";
 import { linePayRequest } from "../store/frontStore";
 
 export default function MemberOrderModal({

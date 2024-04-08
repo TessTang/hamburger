@@ -1,8 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { motion } from "framer-motion";
 import { FrontData, messageAlert } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
+import { fadeIn } from "../../utils/variants";
+import Button from "../../components/Button";
+import Banner from "../../components/Banner"
 
 export default function Cart() {
   const { cart, getCart, user } = useContext(FrontData);
@@ -63,9 +67,11 @@ export default function Cart() {
 
   //進入頁面確認購物車是否為空，空的話跳回產品頁面
   useEffect(() => {
-    if (cart.length === 0) {
-      messageAlert("warning", "購物車是空的喔!");
-      navigate("../products");
+    if (user.user) {
+      if (cart.carts.length === 0) {
+        messageAlert("warning", "購物車是空的喔!");
+        navigate("../products");
+      }
     }
   }, [cart]);
 
@@ -136,19 +142,15 @@ export default function Cart() {
 
   return (
     <>
-      <div className="container-fluid bg-secondary px-0 mt-2">
-        <img
-          className="img-fluid"
-          src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg"
-          alt="banners"
-        />
-      </div>
-      {/* LEFT SECTION */}
+    <Banner bgImg='https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg' />
       <div className="container full-height">
-        <div className="mt-3">
-          <h3 className="mt-3 mb-4">購物車</h3>
+        <motion.div initial="hidden" animate="show" className="mt-3">
+          <motion.h3 variants={fadeIn("up", 0.1)} className="mt-3 mb-4 fs-2">
+            購物車
+          </motion.h3>
           <div className="row">
-            <div className="col-md-8">
+            {/* LEFT SECTION */}
+            <motion.div variants={fadeIn("right", 0.2)} className="col-md-8">
               <table className="table text-center">
                 <thead>
                   <tr className="text-center">
@@ -256,13 +258,12 @@ export default function Cart() {
                   placeholder="優惠券"
                 />
                 <div className="input-group-append">
-                  <button
-                    onClick={submitCoupon}
-                    className="btn btn-dark"
-                    type="button"
-                  >
-                    <i className="bi bi-send" />
-                  </button>
+                  <Button
+                    text={<i className="bi bi-send" />}
+                    bg="dark"
+                    myClass="p-2"
+                    click={submitCoupon}
+                  />
                 </div>
               </div>
               <p
@@ -270,10 +271,10 @@ export default function Cart() {
               >
                 {message.message}
               </p>
-            </div>
+            </motion.div>
 
             {/* RIGHT SECTION */}
-            <div className="col-md-4">
+            <motion.div variants={fadeIn("left", 0.2)} className="col-md-4">
               <div className="border p-4 mb-4">
                 <h4 className="fw-bold">訂單資訊</h4>
                 <table className="table text-muted border-bottom">
@@ -311,13 +312,16 @@ export default function Cart() {
                     {cart.final_total ? cart.final_total.toLocaleString() : 0}
                   </p>
                 </div>
-                <Link to={"/checkout"} className="btn btn-dark w-100 mt-4">
-                  確認訂單
-                </Link>
+                <Button
+                  text="確認訂單"
+                  bg="dark"
+                  myClass="w-100 mt-4"
+                  linkto="/checkout"
+                />
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );

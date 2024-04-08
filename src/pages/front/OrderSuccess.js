@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
-import { db } from "../../utils/firebase";
+import { motion } from "framer-motion";
 import { checkLinePayPayment } from "../../store/frontStore";
+import { db } from "../../utils/firebase";
+import { fadeIn } from "../../utils/variants";
+import Button from "../../components/Button";
 
 export default function OrderSuccess() {
   const { id } = useParams();
@@ -52,8 +55,9 @@ export default function OrderSuccess() {
       </div>
       <div className="container full-height">
         <div className="mt-5 mb-7">
-          <div className="row">
-            <div className="col-md-6">
+          <motion.div initial="hidden" animate="show" className="row">
+            {/* left side */}
+            <motion.div variants={fadeIn("right", 0.15)} className="col-md-6">
               <h2>餐點選購成功</h2>
               {orderData?.is_paid && (
                 <h4 className="text-success">已付款完成</h4>
@@ -64,11 +68,15 @@ export default function OrderSuccess() {
               <p className="text-muted">
                 感謝您選擇本平台，祝您用餐愉快，生活愉快！
               </p>
-              <Link to="/" className="btn btn-dark me-2 mb-4">
-                回到首頁
-              </Link>
-            </div>
-            <div className="col-md-6">
+              <Button
+                text="回到首頁"
+                linkto="/"
+                bg="dark"
+                myClass="w-25 me-2 mb-4"
+              />
+            </motion.div>
+            {/* right side */}
+            <motion.div variants={fadeIn("left", 0.15)} className="col-md-6">
               <div className="card rounded-0 py-4">
                 <div className="card-header border-bottom-0 bg-white px-4 py-0">
                   <h2>選購餐點細節</h2>
@@ -128,8 +136,8 @@ export default function OrderSuccess() {
                   </ul>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </>

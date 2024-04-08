@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import {
   MessageContext,
   handleSuccessMessage,
   handleErrorMessage,
 } from "../store/messageStore";
-import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 export default function CouponsModal({
@@ -87,34 +86,6 @@ export default function CouponsModal({
     closeAddCoupon();
     getCoupons();
   };
-
-  // const submit = async () => {
-  //     try {
-  //         let api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon`;
-  //         let method = 'post';
-  //         if (type === 'edit') {
-  //             api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon/${tempCoupon.id}`;
-  //             method = 'put';
-  //         }
-
-  //         const res = await axios[method](api,
-  //             {
-  //                 data: {
-  //                     ...tempData,
-  //                     due_date: date.getTime(), // 轉換成 unix timestamp
-  //                 },
-  //             }
-  //         );
-  //         handleSuccessMessage(dispatch, res);
-  //         getCoupons();
-  //         closeAddCoupon();
-  //     }
-
-  //     catch (error) {
-  //         handleErrorMessage(dispatch, error);
-  //         console.log(error)
-  //     }
-  // }
 
   return (
     <div

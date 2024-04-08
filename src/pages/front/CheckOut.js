@@ -10,9 +10,14 @@ import {
 } from "firebase/firestore";
 import { FrontData, linePayRequest } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
+import { motion } from "framer-motion";
+import { fadeIn } from "../../utils/variants";
+import Banner from "../../components/Banner";
+import Button from "../../components/Button";
 
 export default function CheckOut() {
   const navigate = useNavigate();
+  const [payment, setPayment] = useState("");
   const { cart, user, checkUserData, getCart } = useContext(FrontData);
   const {
     register,
@@ -68,8 +73,6 @@ export default function CheckOut() {
     }
   };
 
-  const [payment, setPayment] = useState("");
-
   useEffect(() => {
     setValue("name", user.user?.realName);
     setValue("email", user.user?.email);
@@ -80,21 +83,21 @@ export default function CheckOut() {
 
   return (
     <>
-      <div className="container-fluid bg-secondary px-0 mt-2">
-        <img
-          className="img-fluid"
-          src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg"
-          alt="banners"
-        />
-      </div>
-      <div className="container">
+      <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
+      <motion.div initial="hidden" animate="show" className="container">
         <div className="row justify-content-center">
           <div className="col-md-10">
-            <h3 className="fw-bold mb-4 pt-3">確認訂單</h3>
+            <motion.h3
+              variants={fadeIn("up", 0.1)}
+              className="fw-bold mb-4 pt-3"
+            >
+              確認訂單
+            </motion.h3>
           </div>
         </div>
         <div className="row flex-row-reverse justify-content-center pb-5">
-          <div className="col-md-4">
+          {/* right side */}
+          <motion.div variants={fadeIn("left", 0.2)} className="col-md-4">
             <div className="border p-4 mb-4">
               {cart.carts?.map((item) => {
                 return (
@@ -168,9 +171,10 @@ export default function CheckOut() {
                 </p>
               </div>
             </div>
-          </div>
-          <div className="col-md-6">
-            <form onSubmit={handleSubmit(onSubmit)}>
+          </motion.div>
+          {/* left side */}
+          <motion.div variants={fadeIn("right", 0.2)} className="col-md-6">
+            <form>
               <p>聯絡資訊</p>
               <div className="mb-0">
                 <label htmlFor="ContactMail" className="text-muted mb-0">
@@ -300,16 +304,14 @@ export default function CheckOut() {
               </div>
               <div className="d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100">
                 <Link to={"/products"} className="text-dark mt-md-0 mt-3">
-                  <i className="bi bi-chevron-left"></i> 回到產品頁面
+                  <i className="bi bi-chevron-left" /> 回到產品頁面
                 </Link>
-                <button type="submit" className="btn btn-dark py-3 px-7">
-                  送出訂單
-                </button>
+                <Button text='送出訂單' myClass='py-3 px-7' bg="dark" click={handleSubmit(onSubmit)} />
               </div>
             </form>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }

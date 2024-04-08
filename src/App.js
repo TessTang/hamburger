@@ -16,6 +16,9 @@ import MemberProfile from "./pages/front/member/MemberProfile";
 import MemberOrders from "./pages/front/member/MemberOrders";
 import MemberAddProfile from "./pages/front/member/MemberAddProfile";
 import NotFound from "./pages/front/NotFound";
+import Blog from "./pages/front/blog/Blog";
+import BlogDetail from "./pages/front/blog/BlogDetail";
+import BlogList from "./pages/front/blog/BlogList";
 
 function App() {
   return (
@@ -28,6 +31,14 @@ function App() {
         </Route>
         <Route path="/" element={<FrontLayout />}>
           <Route index element={<Home />} />
+
+          <Route path="blogs" element={<Blog />}>
+            <Route index element={<BlogList />} />
+            <Route path="tag/:tag" element={<BlogList />} />
+            <Route path="category/:category" element={<BlogList />} />
+            <Route path=":id" element={<BlogDetail />} />
+          </Route>
+
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductDetail />} />
           <Route path="cart" element={<Cart />} />

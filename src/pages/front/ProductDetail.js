@@ -3,6 +3,10 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { FrontData, messageAlert } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
+import Banner from "../../components/Banner";
+import { motion } from "framer-motion";
+import { fadeIn } from "../../utils/variants";
+import Button from "../../components/Button";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -88,7 +92,6 @@ export default function ProductDetail() {
       return val.product_id === id;
     }).qty;
     if (!user.user) {
-      messageAlert("error", "請先註冊/登入");
       navigate("../login");
       return;
     } else {
@@ -159,30 +162,35 @@ export default function ProductDetail() {
     <>
       {product && (
         <>
-          <div className="container-fluid bg-secondary px-0 mt-2">
-            <img
-              className="img-fluid"
-              src="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg"
-              alt="banners"
-            />
-          </div>
-          <div className="container d-flex flex-column flex-sm-row align-items-center mt-4">
-            <div className="col-sm-5 text-center">
+          <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="container d-flex flex-column flex-sm-row align-items-center mt-4"
+          >
+            <motion.div
+              variants={fadeIn("up", 0.15)}
+              className="col-sm-5 text-center"
+            >
               <img
                 className="img-fluid object-fit-cover"
                 style={{ width: "100%" }}
                 src={product.imageUrl}
                 alt={product.title}
               />
-            </div>
-            <div className="col-sm-7 mt-2 mt-sm-0 d-flex flex-column align-items-center">
+            </motion.div>
+            <motion.div
+              variants={fadeIn("up", 0.25)}
+              className="col-sm-7 mt-2 mt-sm-0 d-flex flex-column align-items-center"
+            >
               <div>
                 <h4 className="fw-bolder text-center">{product.title}</h4>
                 <span>{product.description}</span>
               </div>
               <p className="card-text mb-0 mt-3">
                 NT${product.price}{" "}
-                <span className="text-muted ">
+                <span className="text-muted">
                   <del>NT${product.origin_price}</del>
                 </span>
               </p>
@@ -222,33 +230,41 @@ export default function ProductDetail() {
                   </div>
                 </div>
               </div>
-              <button
-                type="button"
-                className="btn btn-dark mt-4"
-                style={{ width: "200px" }}
-                onClick={() => {
+              <Button
+                text="加入購物車"
+                bg="dark"
+                myClass="w-200 mt-4"
+                click={() => {
                   submit(product.id);
                 }}
-              >
-                ADD TO CART
-              </button>
-            </div>
-          </div>
-          <div className="my-5">
+              />
+            </motion.div>
+          </motion.div>
+          <motion.div
+            variants={fadeIn("up", 0.15)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="my-5"
+          >
             <p className="bg-light text-center py-2">成分</p>
             <p className="ps-3" style={{ whiteSpace: "pre-line" }}>
               {product.content}
             </p>
-          </div>
+          </motion.div>
           <hr />
           <h4 className="text-center">其他可參考的品項</h4>
           <div className="d-flex flex-wrap justify-content-center">
-            {otherProducts.map((product) => {
+            {otherProducts.map((product, idx) => {
               return (
-                <div
+                <motion.div
                   key={product.id}
                   className="productsList myHover card text-center m-3 p-1"
                   style={{ maxWidth: "300px" }}
+                  variants={fadeIn("up", 0.25)}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
                 >
                   <img
                     className="card-img-top"
@@ -258,7 +274,7 @@ export default function ProductDetail() {
                   <div className="card-body">
                     <Link
                       to={`/product/${product.id}`}
-                      className="productsList"
+                      className="productsList text-decoration-none"
                     >
                       <p className="fs-4">{product.title}</p>
                       <p>
@@ -306,17 +322,16 @@ export default function ProductDetail() {
                         </div>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      className="btn btn-dark mt-2"
-                      onClick={() => {
+                    <Button
+                      text="加入購物車"
+                      bg="dark"
+                      myClass="mt-2 mx-auto"
+                      click={() => {
                         submit(product.id);
                       }}
-                    >
-                      加入購物車
-                    </button>
+                    />
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
