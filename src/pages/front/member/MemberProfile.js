@@ -22,10 +22,9 @@ export default function MemberProfile() {
       >
         <Button
           text={text}
-          myClass="col-3 col-md-2 py-3 rounded-3 text-dark"
+          myClass="col-3 col-md-2 py-3 rounded-3 text-dark cursor-default"
           bg="light"
         />
-        {/* <Button text={data} myClass='col-8 ps-3 text-dark py-3 ' bg="light" /> */}
         <div className="col-8 ps-3 py-3">{data}</div>
       </div>
     );

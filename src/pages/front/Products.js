@@ -18,7 +18,7 @@ export default function Products() {
   //一進入就抓取產品資料，更改產品分類重新抓取
   useEffect(() => {
     getPage();
-  }, [productCategory, isLoading, sort]);
+  }, [allProducts, productCategory, isLoading, sort]);
 
   //取得全部資料後將資料分頁
   const getPage = (page = 1) => {
@@ -84,6 +84,16 @@ export default function Products() {
     );
   };
 
+  const tttt = {
+    hidden: {
+      clipPath: "polygon(0 0, 100% 0, 6% 6%, 0% 100%)",
+    },
+
+    hover: {
+      clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+    },
+  };
+
   return (
     <>
       <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
@@ -130,6 +140,11 @@ export default function Products() {
                       text="點心"
                       img="https://cdn-icons-png.flaticon.com/128/2497/2497904.png"
                     />
+                    <ListItem
+                      title="salad"
+                      text="沙拉"
+                      img="https://cdn-icons-png.flaticon.com/512/8512/8512332.png"
+                    />
                   </ListGroup>
                 </div>
               </div>
@@ -166,6 +181,55 @@ export default function Products() {
                       className="col-md-6 position-relative"
                       key={product.id}
                       custom={idx}
+                      initial="hidden"
+                      whileHover="hover"
+                    >
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="text-decoration-none card border-0 mb-4 position-relative p-2"
+                      >
+                        <img
+                          src={product.imageUrl}
+                          className="card-img-top"
+                          alt={product.title}
+                        />
+                        <div className="card-body p-0 text-center">
+                          <h4 className="mb-0 mt-3">{product.title}</h4>
+                          <p className="card-text mb-0">NT${product.price}</p>
+                          <p className="text-muted mt-3"></p>
+                        </div>
+                        {/* hover區 */}
+                        <motion.div
+                          className="position-absolute p-2 productBG rounded-2"
+                          transition={{ duration: 0.1 }}
+                          variants={tttt}
+                        >
+                          <img
+                            src={product.imageUrl}
+                            className="card-img-top rounded-0"
+                            alt={product.title}
+                          />
+                          <div className="card-body p-0 text-center">
+                            <h4 className="mb-0 mt-3 fw-bolder">
+                              {product.title}
+                            </h4>
+                            <p className="card-text mb-0">NT${product.price}</p>
+                            <p className="text-muted mt-3"></p>
+                          </div>
+                        </motion.div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+            </div>
+            {/* <div className="row row-cols-xl-3">
+              {products.length !== 0 &&
+                products.map((product, idx) => {
+                  return (
+                    <motion.div
+                      className="col-md-6 position-relative"
+                      key={product.id}
+                      custom={idx}
                       animate={controls}
                       whileHover="hover"
                     >
@@ -183,11 +247,12 @@ export default function Products() {
                           <p className="card-text mb-0">NT${product.price}</p>
                           <p className="text-muted mt-3"></p>
                         </div>
+                       
                       </Link>
                     </motion.div>
                   );
                 })}
-            </div>
+            </div> */}
             <Pagenation pagination={pagination} changePage={getPage} />
           </div>
         </div>

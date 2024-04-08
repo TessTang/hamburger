@@ -21,7 +21,7 @@ export default function FrontLayout() {
       const docSnap = await getDoc(doc(db, "users", data.uid));
       if (docSnap.exists()) {
         setUser({ manager: docSnap.data().manager, user: docSnap.data() });
-        setUserIsChecked(true)
+        setUserIsChecked(true);
       } else {
         console.log("No users data");
       }
@@ -37,7 +37,7 @@ export default function FrontLayout() {
       try {
         const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
         setCart(cartDoc.data() || []);
-        setCartIsChecked(true)
+        setCartIsChecked(true);
       } catch (error) {
         console.log(error);
       }
@@ -70,7 +70,6 @@ export default function FrontLayout() {
         setUserIsChecked(true);
       }
     });
-
   }, []);
 
   //有user資料後取得購物車資料
@@ -91,7 +90,7 @@ export default function FrontLayout() {
         setUser,
         checkUserData,
         userIsChecked,
-        cartIsChecked
+        cartIsChecked,
       }}
     >
       {isLoading && <Loading />}

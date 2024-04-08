@@ -45,7 +45,7 @@ export default function MemberAddProfile() {
         <label htmlFor="memberDisplayName" className="col-2">
           <Button
             text={text}
-            myClass="py-2 rounded-3 text-dark"
+            myClass="py-2 rounded-3 text-dark cursor-default"
             bg="light"
           ></Button>
         </label>

@@ -1,6 +1,11 @@
 import { useEffect, useState, useContext, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFeatherPointed,
+  faBoltLightning,
+} from "@fortawesome/free-solid-svg-icons";
 import { FrontData, messageAlert } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
 import Banner from "../../components/Banner";
@@ -185,7 +190,18 @@ export default function ProductDetail() {
               className="col-sm-7 mt-2 mt-sm-0 d-flex flex-column align-items-center"
             >
               <div>
-                <h4 className="fw-bolder text-center">{product.title}</h4>
+                <h4 className="fw-bolder text-center">
+                  <FontAwesomeIcon
+                    className="detailDeco_feather"
+                    icon={faFeatherPointed}
+                  />
+                  {product.title}
+                  <FontAwesomeIcon
+                    className="detailDeco_feather"
+                    icon={faFeatherPointed}
+                    flip="horizontal"
+                  />
+                </h4>
                 <span>{product.description}</span>
               </div>
               <p className="card-text mb-0 mt-3">
@@ -230,14 +246,20 @@ export default function ProductDetail() {
                   </div>
                 </div>
               </div>
-              <Button
-                text="加入購物車"
-                bg="dark"
-                myClass="w-200 mt-4"
-                click={() => {
-                  submit(product.id);
-                }}
-              />
+              <div className="position-relative">
+                <Button
+                  text="加入購物車"
+                  bg="dark"
+                  myClass="w-200 mt-4"
+                  click={() => {
+                    submit(product.id);
+                  }}
+                />
+                <FontAwesomeIcon
+                  className="detailDeco_lighting"
+                  icon={faBoltLightning}
+                />
+              </div>
             </motion.div>
           </motion.div>
           <motion.div
@@ -264,18 +286,44 @@ export default function ProductDetail() {
                   variants={fadeIn("up", 0.25)}
                   initial="hidden"
                   whileInView="show"
+                  whileHover="hover"
                   viewport={{ once: true }}
                 >
-                  <img
-                    className="card-img-top"
-                    src={product.imageUrl}
-                    alt={product?.title}
-                  />
                   <div className="card-body">
                     <Link
                       to={`/product/${product.id}`}
                       className="productsList text-decoration-none"
                     >
+                      <div className="position-relative">
+                        <motion.img
+                          variants={{
+                            hover: {
+                              top: 0,
+                              left: 0,
+                            },
+                          }}
+                          className="recomend_deco"
+                          style={{ transform: "scaleX(-1)" }}
+                          src="https://demo2.pavothemes.com/poco/wp-content/uploads/2020/08/h1_thunder-1.png"
+                          alt=""
+                        />
+                        <motion.img
+                          variants={{
+                            hover: {
+                              top: 0,
+                              right: 0,
+                            },
+                          }}
+                          className="recomend_decoRight"
+                          src="https://demo2.pavothemes.com/poco/wp-content/uploads/2020/08/h1_thunder-1.png"
+                          alt=""
+                        />
+                        <img
+                          className="card-img-top"
+                          src={product.imageUrl}
+                          alt={product?.title}
+                        />
+                      </div>
                       <p className="fs-4">{product.title}</p>
                       <p>
                         NT${product.price}{" "}

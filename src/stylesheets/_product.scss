@@ -24,3 +24,87 @@
     }
   }
 }
+
+.productBG {
+  inset: 0;
+  background-color: #f5df9e;
+  background-image: url("https://modinatheme.com/html/foodking-html/assets/img/shape/catagory-card-shape.jpg");
+}
+
+.detailDeco_lighting {
+  position: absolute;
+  font-size: 2.5rem;
+  left: 120%;
+  bottom: 120%;
+  rotate: (15deg);
+  color: #ffd43b;
+  animation: lighting 3.5s infinite;
+}
+
+@keyframes lighting {
+  50% {
+    bottom: 0;
+    left: 100%;
+    scale: 1.2;
+  }
+  100% {
+    bottom: 120%;
+    left: 120%;
+  }
+}
+
+.detailDeco_feather {
+  padding: 0 1rem;
+  animation: feather 5s ease-in-out infinite reverse;
+  transition: 0.5s;
+  color: #008000;
+
+  &:hover {
+    rotate: (180deg);
+    scale: 1.1;
+  }
+
+  &:nth-of-type(2) {
+    animation: feather 5s ease-in-out infinite;
+  }
+}
+
+@keyframes feather {
+  0% {
+    transform: scaleX(1);
+  }
+  20% {
+    transform: scaleX(-1);
+  }
+  40% {
+    transform: scaleX(1);
+  }
+  60% {
+    transform: scaleX(-1);
+  }
+  80% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(-1);
+  }
+}
+.recomend_deco {
+  rotate: (-30deg);
+  position: absolute;
+  left: 20%;
+  top: 10%;
+}
+
+.recomend_decoRight {
+  position: absolute;
+  right: 20%;
+  top: 10%;
+}
+
+.productsList {
+  .card-img-top {
+    position: relative;
+    z-index: 2;
+  }
+}

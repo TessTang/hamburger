@@ -51,7 +51,7 @@ export default function Home() {
           <motion.div variants={hoverScale(1.5)} className="rounded-circle" />
           <FontAwesomeIcon icon={icon} className="iconCard_icon text-primary" />
         </div>
-        <Button text={text} myClass="iconContent" />
+        <Button text={text} myClass="iconContent cursor-default" />
       </motion.div>
     );
   };
@@ -119,6 +119,7 @@ export default function Home() {
       </ScrollTriggerProvider>
 
       {/* 隨機推薦三款產品 */}
+
       <div className="container overflow-hidden">
         <SectionTitle text="猜你喜歡" />
         <div className="row my-2">
@@ -250,7 +251,21 @@ export default function Home() {
           variants={fadeIn("up", 0.8)}
           className="promotion_left col-12 col-xl-8"
         >
-          <h3 className="text-warning">限時!!雙重美味</h3>
+          <motion.img
+            animate={{
+              rotate: [-10, 10, -10],
+              transition: {
+                duration: 2,
+                ease: "easeInOut",
+                repeat: Infinity,
+              },
+            }}
+            className="promotion_leftDeco"
+            src="https://cdn-icons-png.flaticon.com/256/478/478008.png"
+            alt=""
+          />
+          <h3 className="text-warning promotion_lefth3">限時!!雙重美味</h3>
+
           <h4 className="fs-2 fs-bold">魚x雞雙享堡</h4>
           <p>
             夏日限定！多汁雞排與清爽鱈魚排的完美組合，一口咬下，感受兩種口感的絕妙融合！

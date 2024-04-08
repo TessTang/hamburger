@@ -207,12 +207,12 @@ $move-final: calc(-50%);
   .card-img-top_outer {
     border-radius: 10px;
     padding: 25px 3px;
+    max-height: 400px;
   }
 
   h4 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-
     i {
       color: yellow;
     }
@@ -222,7 +222,7 @@ $move-final: calc(-50%);
     border: 2px solid rgba(0, 0, 0, 0.603);
 
     .card-img-top_outer > img {
-      transform: scale(1.25) rotate(3deg);
+      transform: scale(1.05) rotate(3deg);
     }
   }
 
@@ -350,10 +350,11 @@ $move-final: calc(-50%);
 //activity start
 .home_activity_Outer {
   position: relative;
+
   .deco {
     position: absolute;
     left: 0;
-    bottom: -10%;
+    bottom: -9%;
   }
 }
 
@@ -482,8 +483,28 @@ $move-final: calc(-50%);
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    position: relative;
 
-    h3 {
+    .promotion_leftDeco {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+
+      @media (max-width: 768px) {
+        position: relative;
+        margin: 0 auto;
+        // top: -20px;
+        // left: 50%;
+        // margin: 0 auto;
+        width: 60px;
+        // transform: translateX(-50%);
+        margin-top: -20px;
+        // margin-bottom: 5px;
+      }
+    }
+
+    .promotion_lefth3 {
       font-size: 60px;
       font-weight: 900;
       letter-spacing: 1rem;

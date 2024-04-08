@@ -6,10 +6,11 @@ import { FrontData, messageAlert } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
 import { fadeIn } from "../../utils/variants";
 import Button from "../../components/Button";
-import Banner from "../../components/Banner"
+import Banner from "../../components/Banner";
 
 export default function Cart() {
-  const { cart, getCart, user, userIsChecked, cartIsChecked } = useContext(FrontData);
+  const { cart, getCart, user, userIsChecked, cartIsChecked } =
+    useContext(FrontData);
   const [message, setMessage] = useState({ type: "", message: "" });
   const navigate = useNavigate(null);
 
@@ -75,8 +76,8 @@ export default function Cart() {
         if (!cart.carts || cart.carts.length === 0) {
           messageAlert("warning", "購物車是空的喔!");
           navigate("../products");
-        } else{
-          return
+        } else {
+          return;
         }
       }
     }
@@ -149,7 +150,7 @@ export default function Cart() {
 
   return (
     <>
-      <Banner bgImg='https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg' />
+      <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
       <div className="container full-height">
         <motion.div initial="hidden" animate="show" className="mt-3">
           <motion.h3 variants={fadeIn("up", 0.1)} className="mt-3 mb-4 fs-2">
