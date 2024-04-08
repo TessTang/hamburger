@@ -120,7 +120,7 @@ export default function MemberAddProfile() {
             {...register("phoneNumber", { required: true })}
             name="phoneNumber"
             id="memberDisplayName"
-            type="tel"
+            type="number"
             className="col-12 col-md-7 rounded-4 p-2"
             maxLength={10}
           />
