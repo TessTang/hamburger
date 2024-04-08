@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { banner, letterAnimation} from "../utils/variants";
+import { banner, letterAnimation } from "../utils/variants";
 
 const HomeBanner = () => {
   const [playMarquee, setPlayMarquee] = useState(false);

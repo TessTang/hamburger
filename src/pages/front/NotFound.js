@@ -15,7 +15,7 @@ export default function NotFound() {
 
   return (
     <>
-    <Banner bgImg='https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg' />
+      <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
       <div className="container full-height d-flex justify-content-center align-items-center">
         <motion.div
           animate={{ scale: 1.5 }}

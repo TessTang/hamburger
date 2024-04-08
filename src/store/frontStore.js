@@ -54,7 +54,7 @@ export const linePayRequest = (data, id, user, url) => {
     };
     try {
       const getOrder = await axios.post(
-        `http://localhost:2407/createOrder/${id}`,
+        `https://hamburger-node-js.onrender.com/createOrder/${id}`,
         {
           amount: data.final_total,
           currency: "TWD",
@@ -89,11 +89,14 @@ export const checkLinePayPayment = (location, data, setDataOver) => {
   const transactionId = searchParams.get("transactionId");
   const orderId = searchParams.get("orderId");
   (async () => {
-    const res = await axios.post("http://localhost:2407/linePay/confirm", {
-      amount: data.order.final_total,
-      orderId: orderId,
-      transactionId: transactionId,
-    });
+    const res = await axios.post(
+      "https://hamburger-node-js.onrender.com/linePay/confirm",
+      {
+        amount: data.order.final_total,
+        orderId: orderId,
+        transactionId: transactionId,
+      },
+    );
     if (res.data.returnCode === "0000") {
       const order = doc(db, "orders", orderId);
       await updateDoc(order, {

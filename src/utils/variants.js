@@ -72,7 +72,6 @@ export const hoverScale = (scale) => {
   };
 };
 
-
 //home banner
 export const marqueeVariants = {
   animate: {
@@ -87,7 +86,6 @@ export const marqueeVariants = {
     },
   },
 };
-
 
 export const banner = {
   animate: {

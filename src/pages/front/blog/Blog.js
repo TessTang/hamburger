@@ -121,7 +121,7 @@ export default function Blog() {
   );
   const rotate2 = useTransform(scrollYProgress, [0, 1], [0, 360]);
 
-    //動畫區end
+  //動畫區end
 
   useEffect(() => {
     setTimeout(() => {
@@ -136,7 +136,6 @@ export default function Blog() {
   useEffect(() => {
     getPage();
   }, [blogIsLoading, tag, category]);
-
 
   return (
     <>

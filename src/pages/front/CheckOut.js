@@ -12,6 +12,7 @@ import { FrontData, linePayRequest } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
 import { motion } from "framer-motion";
 import { fadeIn } from "../../utils/variants";
+import { messageAlert } from "../../store/frontStore";
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
 
@@ -60,6 +61,7 @@ export default function CheckOut() {
     await deleteDoc(doc(db, "carts", user.user.uid));
 
     if (userData.pay === "linePay") {
+      messageAlert("success", "正在為您跳轉LinePay頁面", 30000);
       linePayRequest(
         cart,
         newOrder.id,
@@ -306,7 +308,12 @@ export default function CheckOut() {
                 <Link to={"/products"} className="text-dark mt-md-0 mt-3">
                   <i className="bi bi-chevron-left" /> 回到產品頁面
                 </Link>
-                <Button text='送出訂單' myClass='py-3 px-7' bg="dark" click={handleSubmit(onSubmit)} />
+                <Button
+                  text="送出訂單"
+                  myClass="py-3 px-7"
+                  bg="dark"
+                  click={handleSubmit(onSubmit)}
+                />
               </div>
             </form>
           </motion.div>
