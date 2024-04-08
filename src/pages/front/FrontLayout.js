@@ -12,6 +12,7 @@ export default function FrontLayout() {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ manager: false, user: null });
   const [userIsChecked, setUserIsChecked] = useState(false);
+  const [cartIsChecked, setCartIsChecked] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
 
   //確認是否登入，有登入setUser資料
@@ -20,10 +21,10 @@ export default function FrontLayout() {
       const docSnap = await getDoc(doc(db, "users", data.uid));
       if (docSnap.exists()) {
         setUser({ manager: docSnap.data().manager, user: docSnap.data() });
+        setUserIsChecked(true)
       } else {
         console.log("No users data");
       }
-      setUserIsChecked(true);
     } else {
       return;
     }
@@ -36,6 +37,7 @@ export default function FrontLayout() {
       try {
         const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
         setCart(cartDoc.data() || []);
+        setCartIsChecked(true)
       } catch (error) {
         console.log(error);
       }
@@ -65,9 +67,10 @@ export default function FrontLayout() {
       if (currentUser) {
         checkUserData(currentUser);
       } else {
-        return;
+        setUserIsChecked(true);
       }
     });
+
   }, []);
 
   //有user資料後取得購物車資料
@@ -88,6 +91,7 @@ export default function FrontLayout() {
         setUser,
         checkUserData,
         userIsChecked,
+        cartIsChecked
       }}
     >
       {isLoading && <Loading />}
