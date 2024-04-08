@@ -69,8 +69,8 @@ export default function Cart() {
   useEffect(() => {
     if (userIsChecked) {
       if (!user.user) {
-        messageAlert("warning", "購物車是空的喔!");
-        navigate("../products");
+        messageAlert("warning", "請先登入喔!");
+        navigate("../login");
       } else if (cartIsChecked) {
         if (!cart.carts || cart.carts.length === 0) {
           messageAlert("warning", "購物車是空的喔!");
