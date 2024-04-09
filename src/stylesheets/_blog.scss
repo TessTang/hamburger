@@ -73,12 +73,10 @@
 .blog_deco {
   top: 70%;
   z-index: -1;
-
-  &:nth-last-of-type(2) {
+  &:last-of-type {
     top: 30%;
     right: 5%;
   }
-
   img {
     width: 100%;
     object-fit: cover;

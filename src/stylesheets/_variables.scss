@@ -301,10 +301,10 @@ $cyans: (
 $primary: rgb(135, 148, 22); //$blue !default;
 $secondary: $gray-800; //$gray-600 !default;
 $success: $green !default;
-$info: $cyan !default;
+$info: $cyan-200; //$cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
-$light: $gray-200 !default;
+$light: $gray-300 !default;
 $dark: $gray-900 !default;
 // scss-docs-end theme-color-variables
 

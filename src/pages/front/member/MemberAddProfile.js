@@ -59,9 +59,17 @@ export default function MemberAddProfile() {
   return (
     <>
       {user.user?.realName === "" ? (
-        <h3>新增會員資料</h3>
+        <h3>
+          <i className="bi bi-person-gear" />
+          新增會員資料
+          <i className="bi bi-person-gear" />
+        </h3>
       ) : (
-        <h3>變更會員資料</h3>
+        <h3>
+          <i className="bi bi-person-gear" />
+          變更會員資料
+          <i className="bi bi-person-gear" />
+        </h3>
       )}
       <form
         onSubmit={handleSubmit(onSubmit)}

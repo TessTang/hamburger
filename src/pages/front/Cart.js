@@ -155,7 +155,9 @@ export default function Cart() {
       <div className="container full-height">
         <motion.div initial="hidden" animate="show" className="mt-3">
           <motion.h3 variants={fadeIn("up", 0.1)} className="mt-3 mb-4 fs-2">
+            <i className="bi bi-cart" />
             購物車
+            <i className="bi bi-cart" />
           </motion.h3>
           <div className="row">
             {/* LEFT SECTION */}

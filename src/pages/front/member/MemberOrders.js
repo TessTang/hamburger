@@ -120,7 +120,11 @@ export default function MemberOrders() {
 
   return (
     <>
-      <h3>訂單資料</h3>
+      <h3>
+        <i className="bi bi-journal-check" />
+        訂單資料
+        <i className="bi bi-journal-check" />
+      </h3>
       <MemberOrderModal
         closeOrderModal={closeOrderModal}
         tempOrder={tempOrder}
@@ -128,7 +132,7 @@ export default function MemberOrders() {
       />
       <div className="px-3">
         {user.user?.orders.length ? (
-          <Table striped bordered hover variant="light">
+          <Table striped bordered hover variant="info">
             <thead>
               <tr>
                 <th>#</th>

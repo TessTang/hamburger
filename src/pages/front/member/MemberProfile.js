@@ -33,7 +33,11 @@ export default function MemberProfile() {
   return (
     <>
       <div className="d-flex">
-        <h3 className="fs-3 fw-bolder">會員資料</h3>
+        <h3 className="fs-3 fw-bolder">
+          <i className="bi bi-person-gear" />
+          會員資料
+          <i className="bi bi-person-gear" />
+        </h3>
         <Button
           text="更改"
           myClass="ms-auto me-3"
