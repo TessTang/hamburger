@@ -18,6 +18,7 @@ import Button from "../components/Button";
 import { auth, db } from "../utils/firebase";
 import { fadeIn } from "../utils/variants";
 import { FrontData, messageAlert } from "../store/frontStore";
+import AnimatedPage from "../components/AnimatedPage";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ export default function Login() {
   };
 
   return (
-    <>
+    <AnimatedPage>
       {" "}
       <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
       <motion.div
@@ -192,6 +193,6 @@ export default function Login() {
           alt="deco"
         />
       </motion.div>
-    </>
+    </AnimatedPage>
   );
 }

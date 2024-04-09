@@ -138,7 +138,7 @@ export default function MemberOrders() {
                 <th>#</th>
                 <th>訂單號</th>
                 {!isMobile && <th>訂單日</th>}
-                {!isMobile && <th>訂單狀態</th>}
+                {/* {!isMobile && <th>訂單狀態</th>} */}
                 {!isMobile && <th>付款狀態</th>}
                 {!isMobile && <th>訂單金額</th>}
                 <th>查看詳情</th>
@@ -151,7 +151,7 @@ export default function MemberOrders() {
                     <td>{idx + 1}</td>
                     <td>{item.id}</td>
                     {!isMobile && <td>{changeDate(item.create_at)}</td>}
-                    {!isMobile && (
+                    {/* {!isMobile && (
                       <td>
                         {(() => {
                           switch (item.status) {
@@ -168,7 +168,7 @@ export default function MemberOrders() {
                           }
                         })()}
                       </td>
-                    )}
+                    )} */}
                     {!isMobile && (
                       <td>
                         {item.is_paid ? (

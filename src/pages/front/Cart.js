@@ -7,7 +7,6 @@ import { db } from "../../utils/firebase";
 import { fadeIn } from "../../utils/variants";
 import Button from "../../components/Button";
 import Banner from "../../components/Banner";
-import AnimatedPage from "../../components/AnimatedPage";
 
 export default function Cart() {
   const { cart, getCart, user, userIsChecked, cartIsChecked } =
@@ -150,7 +149,7 @@ export default function Cart() {
   };
 
   return (
-    <AnimatedPage>
+    <>
       <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
       <div className="container full-height">
         <motion.div initial="hidden" animate="show" className="mt-3">
@@ -334,6 +333,6 @@ export default function Cart() {
           </div>
         </motion.div>
       </div>
-    </AnimatedPage>
+    </>
   );
 }

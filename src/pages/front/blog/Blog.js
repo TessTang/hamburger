@@ -8,7 +8,6 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
 import { fadeIn } from "../../../utils/variants";
 import Banner from "../../../components/Banner";
-import AnimatedPage from "../../../components/AnimatedPage";
 
 export default function Blog() {
   const [article, setArticle] = useState([]);
@@ -135,7 +134,7 @@ export default function Blog() {
   }, [blogIsLoading, tag, category]);
 
   return (
-    <AnimatedPage>
+    <>
       <Banner bgImg="https://themeholy.com/wordpress/pizzan/wp-content/uploads/2023/06/breadcumb_bg_2-1.jpg">
         <h3 className="blog_bannerText">
           Blog{" "}
@@ -251,6 +250,6 @@ export default function Blog() {
           alt="blog_deco"
         />
       </motion.div>
-    </AnimatedPage>
+    </>
   );
 }

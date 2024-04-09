@@ -98,8 +98,10 @@ export default function FrontLayout() {
       <div className="position-relative">
         <Navbar />
       </div>
-      {/* <AnimatedPage> <Outlet /></AnimatedPage> */}
-      <Outlet />
+      <AnimatedPage>
+        {" "}
+        <Outlet />
+      </AnimatedPage>
       {/* Footer */}
       <div className="bg-dark py-5 myFooter">
         <div className="container">
