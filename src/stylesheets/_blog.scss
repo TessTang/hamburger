@@ -17,6 +17,7 @@
 .blog_article,
 .blog_article_detail {
   z-index: 2;
+  background-color: transparent;
 
   .cardDate {
     background-color: rgb(255, 212, 13);
@@ -32,9 +33,17 @@
     p {
       text-align: left;
       letter-spacing: 0.3rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    }
+  }
+}
+
+.blog_article {
+  .myCardBody {
+    p {
       overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
   }
 }
@@ -45,8 +54,10 @@
     text-underline-offset: 5px;
     padding-bottom: 5px;
   }
+
   .myCardBody {
     border-bottom: 3px dotted green;
+
     > p {
       line-height: 2;
       text-overflow: clip;
@@ -62,16 +73,26 @@
 .blog_deco {
   top: 70%;
   z-index: -1;
+
   &:nth-last-of-type(2) {
     top: 30%;
-    right: 0;
+    right: 5%;
   }
 
   img {
     width: 100%;
     object-fit: cover;
   }
+
   @media (max-width: 1024px) {
     display: none;
   }
+}
+
+.otherArticle {
+  &:first-of-type {
+    border-right: 3px dotted black;
+  }
+
+  padding: 0 3px;
 }

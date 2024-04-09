@@ -4,6 +4,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../utils/firebase";
 import { FrontData } from "../../../store/frontStore";
 import Button from "../../../components/Button";
+import Banner from "../../../components/Banner";
 
 export default function Member() {
   const navigate = useNavigate(null);
@@ -22,13 +23,7 @@ export default function Member() {
 
   return (
     <>
-      <div className="container-fluid bg-secondary px-0 mt-2">
-        <img
-          className="img-fluid"
-          src={require("../../../assets/banner.jpg")}
-          alt="banners"
-        />
-      </div>
+      <Banner bgImg="https://modernrestaurantmanagement.com/assets/media/2019/06/changyoung-koh-1403529-unsplash-1600x655.jpg" />
       <div className="d-flex" style={{ minHeight: "calc(100vh - 56px)" }}>
         <div className="bg-light col-3 col-md-2">
           <ul className="list-group list-group-flush">
@@ -49,7 +44,7 @@ export default function Member() {
             <Button
               text="登出"
               bg="dark"
-              myClass="mt-5 mx-2"
+              myClass="mt-5 mx-auto w-75"
               click={() => {
                 signOut(auth);
                 setUser({});

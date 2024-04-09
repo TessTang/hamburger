@@ -8,9 +8,9 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
 import { fadeIn } from "../../../utils/variants";
 import Banner from "../../../components/Banner";
+import AnimatedPage from "../../../components/AnimatedPage";
 
 export default function Blog() {
-  const [productCategory, setProductCategory] = useState("none");
   const [article, setArticle] = useState([]);
   const [pagination, setPagination] = useState([]);
   const controls = useAnimationControls();
@@ -89,10 +89,7 @@ export default function Blog() {
       >
         <ListGroup.Item
           as="li"
-          className={`${productCategory === `${title}` && "active"} myHover ${myClass}`}
-          onClick={() => {
-            setProductCategory(`${title}`);
-          }}
+          className={`${category === `${title}` && "active"} myHover ${myClass}`}
         >
           {" "}
           {img && <img src={img} className="productIcon" alt="product_icon" />}
@@ -104,15 +101,14 @@ export default function Blog() {
 
   //動畫區start
   const [scrollY, setScrollY] = useState(0);
-
   const ref = useRef(null);
   const { scrollYProgress } = useScroll();
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, scrollY]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, scrollY - 300]);
   const x1 = useTransform(
     scrollYProgress,
     [0, 0.2, 0.4, 0.6, 1],
-    [0, 40, 0, 40, 0],
+    [0, 60, 10, 80, 0],
   );
   const rotate1 = useTransform(
     scrollYProgress,
@@ -127,7 +123,8 @@ export default function Blog() {
     setTimeout(() => {
       setScrollY(ref.current.scrollHeight);
     }, 100);
-  }, [article]);
+  }, [article, tag, category, id]);
+  // console.log(article);
 
   useEffect(() => {
     getBlog();
@@ -138,7 +135,7 @@ export default function Blog() {
   }, [blogIsLoading, tag, category]);
 
   return (
-    <>
+    <AnimatedPage>
       <Banner bgImg="https://themeholy.com/wordpress/pizzan/wp-content/uploads/2023/06/breadcumb_bg_2-1.jpg">
         <h3 className="blog_bannerText">
           Blog{" "}
@@ -254,6 +251,6 @@ export default function Blog() {
           alt="blog_deco"
         />
       </motion.div>
-    </>
+    </AnimatedPage>
   );
 }

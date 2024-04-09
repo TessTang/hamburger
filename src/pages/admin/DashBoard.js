@@ -63,8 +63,6 @@ export default function Dashboard() {
                   className="btn btn-sm btn-light"
                   onClick={() => {
                     signOut(auth);
-                    navigate("../");
-                    window.location.reload();
                   }}
                 >
                   登出
@@ -97,6 +95,13 @@ export default function Dashboard() {
             >
               <i className="bi bi-receipt me-2" />
               訂單列表
+            </Link>
+            <Link
+              className="list-group-item list-group-item-action py-3"
+              to="/admin/blogs"
+            >
+              <i className="bi bi-receipt me-2" />
+              文章列表
             </Link>
             <Link to="../" className="btn btn-dark mt-5">
               回前台

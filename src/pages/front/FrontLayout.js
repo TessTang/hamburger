@@ -6,6 +6,7 @@ import { auth, db } from "../../utils/firebase";
 import Navbar from "../../components/Navbar";
 import { FrontData } from "../../store/frontStore";
 import Loading from "../../components/Loading";
+import AnimatedPage from "../../components/AnimatedPage";
 
 export default function FrontLayout() {
   const [isLoading, setIsLoading] = useState(false);
@@ -97,8 +98,8 @@ export default function FrontLayout() {
       <div className="position-relative">
         <Navbar />
       </div>
+      {/* <AnimatedPage> <Outlet /></AnimatedPage> */}
       <Outlet />
-
       {/* Footer */}
       <div className="bg-dark py-5 myFooter">
         <div className="container">

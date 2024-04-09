@@ -20,6 +20,7 @@ import {
 } from "../../utils/variants";
 import Screen from "../../components/Screen";
 import Button from "../../components/Button";
+import AnimatedPage from "../../components/AnimatedPage";
 
 export default function Home() {
   const { allProducts } = useContext(FrontData);
@@ -111,7 +112,7 @@ export default function Home() {
   }, [allProducts]);
 
   return (
-    <>
+    <AnimatedPage>
       {/* <HomeBanner /> */}
       {/* 首頁第一區塊 */}
       <ScrollTriggerProvider>
@@ -456,6 +457,6 @@ export default function Home() {
           </div>
         </div>
       </motion.div>
-    </>
+    </AnimatedPage>
   );
 }

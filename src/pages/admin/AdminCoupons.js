@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "bootstrap";
 import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
-import CouponsModal from "../../components/CouponsModal";
+import CouponsModal from "../../components/admin/CouponsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
 import { db } from "../../utils/firebase";

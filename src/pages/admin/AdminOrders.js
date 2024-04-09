@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import OrdersModal from "../../components/OrdersModal";
+import OrdersModal from "../../components/admin/OrdersModal";
 import Pagenation from "../../components/Pagenation";
 import { Modal } from "bootstrap";
 import { db } from "../../utils/firebase";

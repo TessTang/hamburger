@@ -4,8 +4,8 @@ import {
   MessageContext,
   handleSuccessMessage,
   handleErrorMessage,
-} from "../store/messageStore";
-import { db } from "../utils/firebase";
+} from "../../store/messageStore";
+import { db } from "../../utils/firebase";
 
 export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {
   const [, dispatch] = useContext(MessageContext);

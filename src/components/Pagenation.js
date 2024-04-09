@@ -1,3 +1,5 @@
+import { goToTop } from "../components/ScrollToTop";
+
 export default function Pagenation({ pagination, changePage }) {
   return (
     <>
@@ -10,6 +12,7 @@ export default function Pagenation({ pagination, changePage }) {
               aria-label="Previous"
               onClick={(e) => {
                 e.preventDefault();
+                goToTop();
                 changePage(pagination.current_page - 1);
               }}
             >
@@ -22,6 +25,7 @@ export default function Pagenation({ pagination, changePage }) {
                 className={`page-link ${i + 1 === pagination.current_page && "active"}`}
                 href="/"
                 onClick={(e) => {
+                  goToTop();
                   e.preventDefault();
                   changePage(i + 1);
                 }}
@@ -36,6 +40,7 @@ export default function Pagenation({ pagination, changePage }) {
               href="/"
               aria-label="Next"
               onClick={(e) => {
+                goToTop();
                 e.preventDefault();
                 changePage(pagination.current_page + 1);
               }}

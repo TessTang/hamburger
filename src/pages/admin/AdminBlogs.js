@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import ProductsModal from "../../components/admin/ProductsModal";
+import BlogsModal from "../../components/admin/BlogsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
 import { Modal } from "bootstrap";
@@ -7,14 +7,14 @@ import { Modal } from "bootstrap";
 import { db } from "../../utils/firebase";
 import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 
-export default function AdminProducts() {
-  const [products, setProducts] = useState([]);
-  const [allProducts, setAllProducts] = useState([]);
+export default function AdminBlogs() {
+  const [blogs, setBlogs] = useState([]);
+  const [allBlogs, setAllBlogs] = useState([]);
   const [pagination, setPagination] = useState([]);
   const [type, setType] = useState("create");
-  const [tempProduct, setTempProduct] = useState({});
+  const [tempBlog, setTempBlog] = useState({});
 
-  const productModal = useRef(null);
+  const blogModal = useRef(null);
   const deleteModal = useRef(null);
 
   //1.拿到全部的資料
@@ -22,11 +22,11 @@ export default function AdminProducts() {
 
   const getPage = (page = 1) => {
     const itemsPerPage = 10; // 每頁顯示的資料數量
-    const totalPage = Math.ceil(allProducts.length / itemsPerPage);
-    const getProductsForPage = (page) => {
+    const totalPage = Math.ceil(allBlogs.length / itemsPerPage);
+    const getBlogsForPage = (page) => {
       const startIndex = (page - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      return allProducts.slice(startIndex, endIndex);
+      return allBlogs.slice(startIndex, endIndex);
     };
 
     setPagination({
@@ -36,87 +36,100 @@ export default function AdminProducts() {
       has_next: page < totalPage,
       category: "",
     });
-    setProducts(getProductsForPage(page));
+    setBlogs(getBlogsForPage(page));
   };
 
   useEffect(() => {
-    productModal.current = new Modal("#productModal");
+    blogModal.current = new Modal("#blogModal");
     deleteModal.current = new Modal("#deleteModal");
-    getProducts();
+    getBlogs();
   }, []);
 
   useEffect(() => {
     getPage();
-  }, [allProducts]);
+  }, [allBlogs]);
 
-  const getProducts = async (page = 1) => {
+  const getBlogs = async (page = 1) => {
     try {
-      const queryProducts = await getDocs(collection(db, "products"));
-      const productsArray = queryProducts.docs.map((doc) => ({
-        ...doc.data(),
-      }));
-      setAllProducts(productsArray);
+      const queryBlogs = await getDocs(collection(db, "blogs"));
+      const blogsArray = queryBlogs.docs
+        .map((doc) => ({
+          ...doc.data(),
+        }))
+        .sort((a, b) => {
+          return b.date - a.date;
+        });
+
+      setAllBlogs(blogsArray);
     } catch (error) {
       console.log(error);
     }
   };
 
-  //creat and edit product
-  const openAddProduct = (type, tempProduct) => {
+  //creat and edit Blog
+  const openAddBlog = (type, tempBlog) => {
     setType(type);
-    setTempProduct(tempProduct);
-    productModal.current.show();
+    setTempBlog(tempBlog);
+    blogModal.current.show();
   };
 
-  const closeAddProduct = () => {
-    productModal.current.hide();
+  const closeAddBlog = () => {
+    blogModal.current.hide();
   };
 
-  //delete product
+  //delete Blog
 
-  const openDeleteProduct = (tempProduct) => {
-    setTempProduct(tempProduct);
+  const openDeleteBlog = (tempBlog) => {
+    console.log(tempBlog);
+    setTempBlog(tempBlog);
     deleteModal.current.show();
   };
 
-  const closeDeleteProduct = () => {
+  const closeDeleteBlog = () => {
     deleteModal.current.hide();
   };
 
-  const deleteProducts = async () => {
+  const deleteBlogs = async () => {
     try {
-      await deleteDoc(doc(db, "products", tempProduct.id));
-      getProducts();
-      closeDeleteProduct();
+      await deleteDoc(doc(db, "blogs", tempBlog.id));
+      getBlogs();
+      closeDeleteBlog();
     } catch (error) {
       console.log(error);
     }
   };
+  function formatUnixTimestamp(timestamp) {
+    const date = new Date(timestamp * 1000); // 轉換為毫秒
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份從0開始，需加1
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  }
 
   return (
     <div className="p-3">
-      <ProductsModal
-        closeAddProduct={closeAddProduct}
-        getProducts={getProducts}
+      <BlogsModal
+        closeAddBlog={closeAddBlog}
+        getBlogs={getBlogs}
         type={type}
-        tempProduct={tempProduct}
+        tempBlog={tempBlog}
       />
       <DeleteModal
-        close={closeDeleteProduct}
-        text={tempProduct.title}
-        handleDelete={deleteProducts}
+        close={closeDeleteBlog}
+        text={tempBlog.title}
+        handleDelete={deleteBlogs}
       />
-      <h3>產品列表</h3>
+      <h3>專欄列表</h3>
       <hr />
       <div className="text-end">
         <button
           type="button"
           className="btn btn-primary btn-sm"
           onClick={() => {
-            openAddProduct("create", {});
+            openAddBlog("create", {});
           }}
         >
-          建立新商品
+          建立新文章
         </button>
       </div>
       <table className="table">
@@ -124,25 +137,22 @@ export default function AdminProducts() {
           <tr>
             <th scope="col">分類</th>
             <th scope="col">名稱</th>
-            <th scope="col">售價</th>
-            <th scope="col">啟用狀態</th>
-            <th scope="col">編輯</th>
+            <th scope="col">日期</th>
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => {
+          {blogs.map((article) => {
             return (
-              <tr key={product.id}>
-                <td>{product.category}</td>
-                <td>{product.title}</td>
-                <td>{product.price}</td>
-                <td>{product.is_enabled ? "啟用" : "未啟用"}</td>
+              <tr key={article.id}>
+                <td>{article.category}</td>
+                <td>{article.title}</td>
+                <td>{formatUnixTimestamp(article.date)}</td>
                 <td>
                   <button
                     type="button"
                     className="btn btn-primary btn-sm"
                     onClick={() => {
-                      openAddProduct("edit", product);
+                      openAddBlog("edit", article);
                     }}
                   >
                     編輯
@@ -151,7 +161,7 @@ export default function AdminProducts() {
                     type="button"
                     className="btn btn-outline-danger btn-sm ms-2"
                     onClick={() => {
-                      openDeleteProduct(product);
+                      openDeleteBlog(article);
                     }}
                   >
                     刪除

@@ -50,26 +50,40 @@ export default function Products() {
 
   //下方上下篇文章
   const OtherArticle = ({ text, index }) => {
-    return (
-      <div className="col-md-6 mt-2">
-        <div
-          className="d-flex align-items-center gap-3"
-          style={{ height: "200px" }}
-        >
-          <img
-            className="object-fit-cover w-50 rounded-3"
-            src={allArticle[index].img}
-            alt={allArticle[index].title}
+    console.log(text, index);
+    if (index || index === 0) {
+      return (
+        <div className="col-md-6 mt-2 otherArticle">
+          <div
+            className="d-flex align-items-center justify-content-center gap-3"
+            style={{ height: "200px" }}
+          >
+            <img
+              className="object-fit-cover w-50 rounded-3"
+              src={allArticle[index].img}
+              alt={allArticle[index].title}
+            />
+            <p>{allArticle[index].title}</p>
+          </div>
+          <Button
+            text={text}
+            linkto={`/blogs/${allArticle[index].id}`}
+            myClass="py-2 mt-3 w-50 mx-auto"
           />
-          <p>{allArticle[index].title}</p>
         </div>
-        <Button
-          text={text}
-          linkto={`/blogs/${allArticle[index].id}`}
-          myClass="py-2 mt-3 w-50 mx-auto"
-        />
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="col-md-6 mt-2 otherArticle">
+          <div
+            className="d-flex align-items-center justify-content-center gap-3"
+            style={{ height: "200px" }}
+          >
+            <p>{text}</p>
+          </div>
+        </div>
+      );
+    }
   };
 
   return (
@@ -77,7 +91,7 @@ export default function Products() {
       <div>
         {allArticle[articleIndex] && (
           <motion.div animate={controls}>
-            <div className="blog_article_detail card border-0 mb-4 text-decoration-none">
+            <div className="bg-transparent blog_article_detail card border-0 mb-4 text-decoration-none">
               <h4 className="my-3 fw-bold">{allArticle[articleIndex].title}</h4>
               <div className="cardDate rounded-4 py-2 px-3 fw-bold">
                 {formatUnixTimestamp(allArticle[articleIndex].date)}
@@ -111,11 +125,15 @@ export default function Products() {
               </div>
 
               <div className="d-flex flex-column flex-md-row">
-                {articleIndex !== 0 && (
+                {articleIndex !== 0 ? (
                   <OtherArticle text="上一篇" index={articleIndex - 1} />
+                ) : (
+                  <OtherArticle text="這是最新文章" />
                 )}
-                {articleIndex !== allArticle.length - 1 && (
+                {articleIndex !== allArticle.length - 1 ? (
                   <OtherArticle text="下一篇" index={articleIndex + 1} />
+                ) : (
+                  <OtherArticle text="這是最後一篇文章" />
                 )}
               </div>
             </div>

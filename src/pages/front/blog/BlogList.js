@@ -27,7 +27,7 @@ export default function Blog() {
               whileInView="show"
               viewport={{ once: true }}
             >
-              <div className="blog_article card border-0 mb-4 text-decoration-none">
+              <div className="blog_article card border-0 mb-4 text-decoration-none mb-4">
                 <img
                   src={item.img}
                   className="card-img-top rounded-5 mb-2"
@@ -43,7 +43,7 @@ export default function Blog() {
                 <Button
                   text="點我看"
                   linkto={`/blogs/${item.id}`}
-                  myClass="py-2 w-75"
+                  myClass="py-2 w-50 mx-auto"
                 />
               </div>
             </motion.div>

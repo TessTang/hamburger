@@ -269,7 +269,7 @@ export default function ProductDetail() {
             viewport={{ once: true }}
             className="my-5"
           >
-            <p className="bg-light text-center py-2">成分</p>
+            <p className="bg-dark text-center text-white py-2">成分</p>
             <p className="ps-3" style={{ whiteSpace: "pre-line" }}>
               {product.content}
             </p>

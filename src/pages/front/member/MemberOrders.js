@@ -126,73 +126,75 @@ export default function MemberOrders() {
         tempOrder={tempOrder}
         changeDate={changeDate}
       />
-      {user.user?.orders.length ? (
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>訂單號</th>
-              {!isMobile && <th>訂單日</th>}
-              {!isMobile && <th>訂單狀態</th>}
-              {!isMobile && <th>付款狀態</th>}
-              {!isMobile && <th>訂單金額</th>}
-              <th>查看詳情</th>
-            </tr>
-          </thead>
-          <tbody>
-            {userOrder.map((item, idx) => {
-              return (
-                <tr key={item.id}>
-                  <td>{idx + 1}</td>
-                  <td>{item.id}</td>
-                  {!isMobile && <td>{changeDate(item.create_at)}</td>}
-                  {!isMobile && (
+      <div className="px-3">
+        {user.user?.orders.length ? (
+          <Table striped bordered hover variant="light">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>訂單號</th>
+                {!isMobile && <th>訂單日</th>}
+                {!isMobile && <th>訂單狀態</th>}
+                {!isMobile && <th>付款狀態</th>}
+                {!isMobile && <th>訂單金額</th>}
+                <th>查看詳情</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userOrder.map((item, idx) => {
+                return (
+                  <tr key={item.id}>
+                    <td>{idx + 1}</td>
+                    <td>{item.id}</td>
+                    {!isMobile && <td>{changeDate(item.create_at)}</td>}
+                    {!isMobile && (
+                      <td>
+                        {(() => {
+                          switch (item.status) {
+                            case 0:
+                              return "未確認";
+                            case 1:
+                              return "已確認";
+                            case 2:
+                              return "外送中";
+                            case 3:
+                              return "已送達";
+                            default:
+                              return "";
+                          }
+                        })()}
+                      </td>
+                    )}
+                    {!isMobile && (
+                      <td>
+                        {item.is_paid ? (
+                          <span className="text-success fw-bolder">已付款</span>
+                        ) : (
+                          <span className="text-danger fw-bolder">未付款</span>
+                        )}
+                      </td>
+                    )}
+                    {!isMobile && (
+                      <td>{item.order.final_total?.toLocaleString()}</td>
+                    )}
                     <td>
-                      {(() => {
-                        switch (item.status) {
-                          case 0:
-                            return "未確認";
-                          case 1:
-                            return "已確認";
-                          case 2:
-                            return "外送中";
-                          case 3:
-                            return "已送達";
-                          default:
-                            return "";
-                        }
-                      })()}
+                      <Button
+                        text="查看"
+                        myClass="text-dark mx-auto"
+                        click={() => {
+                          openOrderModal(item);
+                        }}
+                      />
                     </td>
-                  )}
-                  {!isMobile && (
-                    <td>
-                      {item.is_paid ? (
-                        <span className="text-success fw-bolder">已付款</span>
-                      ) : (
-                        <span className="text-danger fw-bolder">未付款</span>
-                      )}
-                    </td>
-                  )}
-                  {!isMobile && (
-                    <td>{item.order.final_total?.toLocaleString()}</td>
-                  )}
-                  <td>
-                    <Button
-                      text="查看"
-                      myClass="text-dark"
-                      click={() => {
-                        openOrderModal(item);
-                      }}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      ) : (
-        <div>尚未有訂單</div>
-      )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        ) : (
+          <div>尚未有訂單</div>
+        )}
+      </div>
     </>
   );
 }

@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+export const goToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
+
 export default function ScrollToTop() {
   const [showTopBtn, setShowTopBtn] = useState(false);
   const { pathname } = useLocation();
@@ -18,13 +25,6 @@ export default function ScrollToTop() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
-  const goToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
 
   if (showTopBtn) {
     return (
