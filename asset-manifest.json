@@ -1,13 +1,12 @@
 {
   "files": {
-    "main.css": "/hamburger/static/css/main.23a63ef7.css",
-    "main.js": "/hamburger/static/js/main.ac3c0d0c.js",
+    "main.css": "/hamburger/static/css/main.c224a827.css",
+    "main.js": "/hamburger/static/js/main.f8de90ba.js",
     "static/js/453.980ea594.chunk.js": "/hamburger/static/js/453.980ea594.chunk.js",
     "static/media/bootstrap-icons.woff?": "/hamburger/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
     "static/media/hamburger_beef.png": "/hamburger/static/media/hamburger_beef.4b86e377d1497fff9ef6.png",
     "static/media/bootstrap-icons.woff2?": "/hamburger/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
     "static/media/hamburger_vege02.png": "/hamburger/static/media/hamburger_vege02.608d4384cfbadd556c80.png",
-    "static/media/banner.jpg": "/hamburger/static/media/banner.f9c63569549cc3b219d5.jpg",
     "static/media/hamburger01_bottom.png": "/hamburger/static/media/hamburger01_bottom.06c5b250ba629140c1d7.png",
     "static/media/hamburger01_top.png": "/hamburger/static/media/hamburger01_top.f90eaf4892d0b9e9c0fa.png",
     "static/media/hamburger_vege01.png": "/hamburger/static/media/hamburger_vege01.6c8fe99e399c7cb7905f.png",
@@ -19,12 +18,12 @@
     "static/media/hamburger_cheese01.png": "/hamburger/static/media/hamburger_cheese01.8dafdf0b75a1fb06cc0f.png",
     "static/media/logo.png": "/hamburger/static/media/logo.fa56f8afd6bfffdd2432.png",
     "index.html": "/hamburger/index.html",
-    "main.23a63ef7.css.map": "/hamburger/static/css/main.23a63ef7.css.map",
-    "main.ac3c0d0c.js.map": "/hamburger/static/js/main.ac3c0d0c.js.map",
+    "main.c224a827.css.map": "/hamburger/static/css/main.c224a827.css.map",
+    "main.f8de90ba.js.map": "/hamburger/static/js/main.f8de90ba.js.map",
     "453.980ea594.chunk.js.map": "/hamburger/static/js/453.980ea594.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.23a63ef7.css",
-    "static/js/main.ac3c0d0c.js"
+    "static/css/main.c224a827.css",
+    "static/js/main.f8de90ba.js"
   ]
 }
