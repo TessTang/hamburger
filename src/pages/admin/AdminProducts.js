@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { Modal } from "bootstrap";
+import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
+
 import ProductsModal from "../../components/admin/ProductsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
-import { Modal } from "bootstrap";
 
 import { db } from "../../utils/firebase";
-import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
+
+const itemsPerPage = 10;
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -20,35 +24,6 @@ export default function AdminProducts() {
   //1.拿到全部的資料
   //2.轉換成可以轉換pagenation與每頁對應資料  換頁時get對應頁面的funciton
 
-  const getPage = (page = 1) => {
-    const itemsPerPage = 10; // 每頁顯示的資料數量
-    const totalPage = Math.ceil(allProducts.length / itemsPerPage);
-    const getProductsForPage = (page) => {
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      return allProducts.slice(startIndex, endIndex);
-    };
-
-    setPagination({
-      total_pages: totalPage,
-      current_page: page,
-      has_pre: page > 1,
-      has_next: page < totalPage,
-      category: "",
-    });
-    setProducts(getProductsForPage(page));
-  };
-
-  useEffect(() => {
-    productModal.current = new Modal("#productModal");
-    deleteModal.current = new Modal("#deleteModal");
-    getProducts();
-  }, []);
-
-  useEffect(() => {
-    getPage();
-  }, [allProducts]);
-
   const getProducts = async (page = 1) => {
     try {
       const queryProducts = await getDocs(collection(db, "products"));
@@ -57,9 +32,30 @@ export default function AdminProducts() {
       }));
       setAllProducts(productsArray);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
+
+  const getPage = useCallback(
+    (page = 1) => {
+      const totalPage = Math.ceil(allProducts.length / itemsPerPage);
+      const getProductsForPage = (page) => {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return allProducts.slice(startIndex, endIndex);
+      };
+
+      setPagination({
+        total_pages: totalPage,
+        current_page: page,
+        has_pre: page > 1,
+        has_next: page < totalPage,
+        category: "",
+      });
+      setProducts(getProductsForPage(page));
+    },
+    [allProducts],
+  );
 
   //creat and edit product
   const openAddProduct = (type, tempProduct) => {
@@ -89,9 +85,21 @@ export default function AdminProducts() {
       getProducts();
       closeDeleteProduct();
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
+
+  useEffect(() => {
+    productModal.current = new Modal("#productModal");
+    deleteModal.current = new Modal("#deleteModal");
+    getProducts();
+  }, []);
+
+  useEffect(() => {
+    if (allProducts.length !== 0) {
+      getPage();
+    }
+  }, [allProducts, getPage]);
 
   return (
     <div className="p-3">

@@ -1,5 +1,7 @@
 import { useEffect, useState, useContext } from "react";
+
 import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
+
 import {
   MessageContext,
   handleSuccessMessage,
@@ -14,7 +16,6 @@ export default function ProductsModal({
   tempProduct,
 }) {
   const [, dispatch] = useContext(MessageContext);
-
   const [tempData, setTempData] = useState({
     title: "",
     category: "dessert",
@@ -26,24 +27,6 @@ export default function ProductsModal({
     is_enabled: 0,
     imageUrl: "",
   });
-
-  useEffect(() => {
-    if (type === "create") {
-      setTempData({
-        title: "",
-        category: "dessert",
-        origin_price: 80,
-        price: 40,
-        unit: "個",
-        description: "",
-        content: "",
-        is_enabled: 0,
-        imageUrl: "",
-      });
-    } else if (type === "edit") {
-      setTempData(tempProduct);
-    }
-  }, [type, tempProduct]);
 
   const handleChange = (e) => {
     const { name, value, checked } = e.target;
@@ -87,6 +70,24 @@ export default function ProductsModal({
     closeAddProduct();
     getProducts();
   };
+
+  useEffect(() => {
+    if (type === "create") {
+      setTempData({
+        title: "",
+        category: "dessert",
+        origin_price: 80,
+        price: 40,
+        unit: "個",
+        description: "",
+        content: "",
+        is_enabled: 0,
+        imageUrl: "",
+      });
+    } else if (type === "edit") {
+      setTempData(tempProduct);
+    }
+  }, [type, tempProduct]);
 
   return (
     <div

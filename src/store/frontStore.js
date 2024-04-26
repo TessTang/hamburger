@@ -1,7 +1,9 @@
 import { createContext } from "react";
+
 import Swal from "sweetalert2";
 import axios from "axios";
 import { doc, updateDoc } from "@firebase/firestore";
+
 import { db } from "../utils/firebase";
 
 export const FrontData = createContext({});
@@ -30,6 +32,18 @@ export const messageAlert = (type, text, time = 1000) => {
       timer: time,
     });
   }
+};
+//購物車sweet alert跳出
+export const delectMessageAlert = (text) => {
+  Swal.fire({
+    title: `確定刪除${text}?`,
+    showCancelButton: true,
+    confirmButtonText: "確認刪除",
+    confirmButtonColor: "#e91717",
+    cancelButtonText: `取消`,
+  }).then((result) => {
+    return result;
+  });
 };
 
 export const linePayRequest = (data, id, user, url) => {
@@ -75,11 +89,9 @@ export const linePayRequest = (data, id, user, url) => {
       if (getOrder.data.returnCode === "0000") {
         window.location.replace(getOrder.data.info.paymentUrl.web);
         messageAlert("success", "正在為您跳轉LinePay頁面", 10000);
-      } else {
-        console.log(getOrder);
       }
-    } catch (err) {
-      console.log("err", err);
+    } catch (error) {
+      messageAlert("warning", `噢!有地方出錯了${error}`);
     }
   })();
 };

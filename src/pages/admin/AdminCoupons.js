@@ -1,10 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import { Modal } from "bootstrap";
 import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
+
 import CouponsModal from "../../components/admin/CouponsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
+
 import { db } from "../../utils/firebase";
+
+const itemsPerPage = 10;
 
 export default function AdminCoupons() {
   const [coupons, setCoupons] = useState([]);
@@ -25,29 +30,31 @@ export default function AdminCoupons() {
       }));
       setAllCoupons(productsArray);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
   //獲取每頁coupon
-  const getPage = (page = 1) => {
-    const itemsPerPage = 10; // 每頁顯示的資料數量
-    const totalPage = Math.ceil(allCoupons.length / itemsPerPage);
-    const getCouponsForPage = (page) => {
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      return allCoupons.slice(startIndex, endIndex);
-    };
+  const getPage = useCallback(
+    (page = 1) => {
+      const totalPage = Math.ceil(allCoupons.length / itemsPerPage);
+      const getCouponsForPage = (page) => {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return allCoupons.slice(startIndex, endIndex);
+      };
 
-    setPagination({
-      total_pages: totalPage,
-      current_page: page,
-      has_pre: page > 1,
-      has_next: page < totalPage,
-      category: "",
-    });
-    setCoupons(getCouponsForPage(page));
-  };
+      setPagination({
+        total_pages: totalPage,
+        current_page: page,
+        has_pre: page > 1,
+        has_next: page < totalPage,
+        category: "",
+      });
+      setCoupons(getCouponsForPage(page));
+    },
+    [allCoupons],
+  );
 
   //creat and edit coupon
   const openAddCoupon = (type, tempCoupon) => {
@@ -78,7 +85,7 @@ export default function AdminCoupons() {
       getCoupons();
       closeDeleteCoupon();
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
@@ -92,8 +99,10 @@ export default function AdminCoupons() {
 
   //拿到所有coupon資料後進行getPage
   useEffect(() => {
-    getPage();
-  }, [allCoupons]);
+    if (allCoupons.length !== 0) {
+      getPage();
+    }
+  }, [allCoupons, getPage]);
 
   return (
     <div className="p-3">

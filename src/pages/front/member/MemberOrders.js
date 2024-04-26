@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../../../utils/firebase";
-import { FrontData } from "../../../store/frontStore";
+import { FrontData, messageAlert } from "../../../store/frontStore";
 import { checkLinePayPayment } from "../../../store/frontStore";
 import MemberOrderModal from "../../../components/MemberOrderModal";
 import Button from "../../../components/Button";
@@ -111,7 +111,7 @@ export default function MemberOrders() {
           }
           setUserOrder(orders.reverse());
         } catch (error) {
-          console.log(error);
+          messageAlert("warning", `噢!有地方出錯了${error}`);
         }
       };
       getOrder();
@@ -138,7 +138,6 @@ export default function MemberOrders() {
                 <th>#</th>
                 <th>訂單號</th>
                 {!isMobile && <th>訂單日</th>}
-                {/* {!isMobile && <th>訂單狀態</th>} */}
                 {!isMobile && <th>付款狀態</th>}
                 {!isMobile && <th>訂單金額</th>}
                 <th>查看詳情</th>
@@ -151,24 +150,6 @@ export default function MemberOrders() {
                     <td>{idx + 1}</td>
                     <td>{item.id}</td>
                     {!isMobile && <td>{changeDate(item.create_at)}</td>}
-                    {/* {!isMobile && (
-                      <td>
-                        {(() => {
-                          switch (item.status) {
-                            case 0:
-                              return "未確認";
-                            case 1:
-                              return "已確認";
-                            case 2:
-                              return "外送中";
-                            case 3:
-                              return "已送達";
-                            default:
-                              return "";
-                          }
-                        })()}
-                      </td>
-                    )} */}
                     {!isMobile && (
                       <td>
                         {item.is_paid ? (

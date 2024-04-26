@@ -1,9 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { Modal } from "bootstrap";
+import { getDocs, collection } from "firebase/firestore";
+
 import OrdersModal from "../../components/admin/OrdersModal";
 import Pagenation from "../../components/Pagenation";
-import { Modal } from "bootstrap";
 import { db } from "../../utils/firebase";
-import { getDocs, collection } from "firebase/firestore";
+
+const itemsPerPage = 10;
 
 export default function AdminProducts() {
   const [orders, setOrders] = useState([]);
@@ -13,24 +17,6 @@ export default function AdminProducts() {
 
   const orderModal = useRef(null);
 
-  const getPage = (page = 1) => {
-    const itemsPerPage = 10; // 每頁顯示的資料數量
-    const totalPage = Math.ceil(allOrders.length / itemsPerPage);
-    const getProductsForPage = (page) => {
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      return allOrders.slice(startIndex, endIndex);
-    };
-
-    setPagination({
-      total_pages: totalPage,
-      current_page: page,
-      has_pre: page > 1,
-      has_next: page < totalPage,
-      category: "",
-    });
-    setOrders(getProductsForPage(page));
-  };
   const getOrders = async (page = 1) => {
     try {
       const queryOrders = await getDocs(collection(db, "orders"));
@@ -39,9 +25,30 @@ export default function AdminProducts() {
       }));
       setAllOrders(ordersArray);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
+
+  const getPage = useCallback(
+    (page = 1) => {
+      const totalPage = Math.ceil(allOrders.length / itemsPerPage);
+      const getProductsForPage = (page) => {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return allOrders.slice(startIndex, endIndex);
+      };
+
+      setPagination({
+        total_pages: totalPage,
+        current_page: page,
+        has_pre: page > 1,
+        has_next: page < totalPage,
+        category: "",
+      });
+      setOrders(getProductsForPage(page));
+    },
+    [allOrders],
+  );
 
   //creat and edit product
   const openOrderModal = (order) => {
@@ -60,8 +67,10 @@ export default function AdminProducts() {
   }, []);
 
   useEffect(() => {
-    getPage();
-  }, [allOrders]);
+    if (allOrders.length !== 0) {
+      getPage();
+    }
+  }, [allOrders, getPage]);
 
   return (
     <div className="p-3">

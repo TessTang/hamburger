@@ -1,10 +1,13 @@
 import { useContext, useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+
 import { signOut } from "firebase/auth";
-import { auth } from "../../../utils/firebase";
-import { FrontData } from "../../../store/frontStore";
+
 import Button from "../../../components/Button";
 import Banner from "../../../components/Banner";
+
+import { FrontData } from "../../../store/frontStore";
+import { auth } from "../../../utils/firebase";
 
 export default function Member() {
   const navigate = useNavigate(null);
@@ -23,7 +26,7 @@ export default function Member() {
 
   return (
     <>
-      <Banner bgImg="https://modernrestaurantmanagement.com/assets/media/2019/06/changyoung-koh-1403529-unsplash-1600x655.jpg" />
+      <Banner bgImg="banner03.jpg" />
       <div className="d-flex" style={{ minHeight: "calc(100vh - 56px)" }}>
         <div className="bg-light col-3 col-md-2">
           <ul className="list-group list-group-flush">

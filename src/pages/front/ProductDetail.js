@@ -1,17 +1,22 @@
 import { useEffect, useState, useContext, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+
+import { motion } from "framer-motion";
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFeatherPointed,
   faBoltLightning,
 } from "@fortawesome/free-solid-svg-icons";
+
+import Banner from "../../components/Banner";
+import Button from "../../components/Button";
+
 import { FrontData, messageAlert } from "../../store/frontStore";
 import { db } from "../../utils/firebase";
-import Banner from "../../components/Banner";
-import { motion } from "framer-motion";
 import { fadeIn } from "../../utils/variants";
-import Button from "../../components/Button";
+
+let otherProduct_qty = 3;
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -47,40 +52,6 @@ export default function ProductDetail() {
     [quantity],
   );
 
-  //隨機三樣推薦相同分類產品
-  const filterOther = useCallback((array) => {
-    if (array.length <= 3) {
-      return array;
-    } else {
-      const other = [];
-      for (let i = 1; i <= 3; i++) {
-        const randomIndex = Math.floor(Math.random() * array.length);
-        other.push(array[randomIndex]);
-        array.splice(randomIndex, 1);
-      }
-      return other;
-    }
-  }, []);
-
-  //取得完整產品列表，抓取id品項且列出同分類
-
-  useEffect(() => {
-    const itemProduct = allProducts.find((val) => val.id === id);
-    const otherProductList = filterOther(
-      allProducts.filter((val) => {
-        return val.category === itemProduct.category && val.id !== id;
-      }),
-    );
-    setProduct(itemProduct);
-    setOtherProducts(otherProductList);
-    if (!itemProduct) return;
-    setQuantity(
-      [itemProduct, ...otherProductList].map((val) => {
-        return { product_id: val.id, qty: 1 };
-      }),
-    );
-  }, [id, allProducts]);
-
   //加入購物車
   //1.若尚未有購物車就建立一筆購物車資料
   //2.若有購物車且內無此產品就加入此資料
@@ -99,11 +70,47 @@ export default function ProductDetail() {
     if (!user.user) {
       navigate("../login");
       return;
-    } else {
-      try {
-        if (cart.length === 0) {
-          await setDoc(doc(db, "carts", user.user.uid), {
+    }
+    try {
+      if (cart.length === 0) {
+        await setDoc(doc(db, "carts", user.user.uid), {
+          carts: [
+            {
+              product: allProducts.find((val) => {
+                return val.id === id;
+              }),
+              qty: itemQty,
+              total: itemPrice,
+            },
+          ],
+          total: itemPrice,
+          final_total: itemPrice,
+        });
+      } else {
+        const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
+        const hadProduct = cartDoc
+          .data()
+          .carts.findIndex((item) => item.product.id === id);
+        let cartData = structuredClone(cartDoc.data());
+        if (hadProduct >= 0) {
+          await updateDoc(doc(db, "carts", user.user.uid), {
+            carts: cartData.carts.map((item, index) => {
+              if (index === hadProduct) {
+                return {
+                  ...cartData.carts[hadProduct],
+                  qty: (cartDoc.data().carts[hadProduct].qty += itemQty),
+                  total: (cartDoc.data().carts[hadProduct].total += itemPrice),
+                };
+              }
+              return item;
+            }),
+            total: (cartDoc.data().total += itemPrice),
+            final_total: (cartDoc.data().final_total += itemPrice),
+          });
+        } else {
+          await updateDoc(doc(db, "carts", user.user.uid), {
             carts: [
+              ...cartData.carts,
               {
                 product: allProducts.find((val) => {
                   return val.id === id;
@@ -112,62 +119,57 @@ export default function ProductDetail() {
                 total: itemPrice,
               },
             ],
-            total: itemPrice,
-            final_total: itemPrice,
+            total: (cartDoc.data().total += itemPrice),
+            final_total: (cartDoc.data().final_total += itemPrice),
           });
-        } else {
-          const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
-          const hadProduct = cartDoc
-            .data()
-            .carts.findIndex((item) => item.product.id === id);
-          let aa = structuredClone(cartDoc.data());
-          if (hadProduct >= 0) {
-            await updateDoc(doc(db, "carts", user.user.uid), {
-              carts: aa.carts.map((item, index) => {
-                if (index === hadProduct) {
-                  return {
-                    ...aa.carts[hadProduct],
-                    qty: (cartDoc.data().carts[hadProduct].qty += itemQty),
-                    total: (cartDoc.data().carts[hadProduct].total +=
-                      itemPrice),
-                  };
-                }
-                return item;
-              }),
-              total: (cartDoc.data().total += itemPrice),
-              final_total: (cartDoc.data().final_total += itemPrice),
-            });
-          } else {
-            await updateDoc(doc(db, "carts", user.user.uid), {
-              carts: [
-                ...aa.carts,
-                {
-                  product: allProducts.find((val) => {
-                    return val.id === id;
-                  }),
-                  qty: itemQty,
-                  total: itemPrice,
-                },
-              ],
-              total: (cartDoc.data().total += itemPrice),
-              final_total: (cartDoc.data().final_total += itemPrice),
-            });
-          }
         }
-        getCart();
-        messageAlert("success", "新增成功");
-      } catch (err) {
-        messageAlert("error", "新增失敗");
-        console.log(err);
       }
+      getCart();
+      messageAlert("success", "新增成功");
+    } catch (err) {
+      messageAlert("error", "新增失敗");
     }
   };
+
+  //取得完整產品列表，抓取id品項且列出同分類
+
+  useEffect(() => {
+    //隨機三樣推薦相同分類產品
+    const filterOther = (array) => {
+      if (array.length <= otherProduct_qty) {
+        return array;
+      } else {
+        const other = [];
+        for (let i = 1; i <= otherProduct_qty; i++) {
+          const randomIndex = Math.floor(Math.random() * array.length);
+          other.push(array[randomIndex]);
+          array.splice(randomIndex, 1);
+        }
+        return other;
+      }
+    };
+
+    const itemProduct = allProducts.find((val) => val.id === id);
+    const otherProductList = filterOther(
+      allProducts.filter((val) => {
+        return val.category === itemProduct.category && val.id !== id;
+      }),
+    );
+    setProduct(itemProduct);
+    setOtherProducts(otherProductList);
+    if (!itemProduct) return;
+    setQuantity(
+      [itemProduct, ...otherProductList].map((val) => {
+        return { product_id: val.id, qty: 1 };
+      }),
+    );
+  }, [id, allProducts]);
 
   return (
     <>
       {product && (
         <>
-          <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
+          <Banner bgImg="banner01.jpg" />
           <motion.div
             initial="hidden"
             whileInView="show"
@@ -187,10 +189,10 @@ export default function ProductDetail() {
             </motion.div>
             <motion.div
               variants={fadeIn("up", 0.25)}
-              className="col-sm-7 mt-2 mt-sm-0 d-flex flex-column align-items-center"
+              className="col-sm-7 mt-2 mt-sm-0 d-flex flex-column align-items-center align-items-sm-start"
             >
-              <div>
-                <h4 className="fw-bolder text-center">
+              <div className="text-sm-start text-center">
+                <h4 className="fw-bolder">
                   <FontAwesomeIcon
                     className="detailDeco_feather"
                     icon={faFeatherPointed}
@@ -205,9 +207,9 @@ export default function ProductDetail() {
                 <span>{product.description}</span>
               </div>
               <p className="card-text mb-0 mt-3">
-                NT${product.price}{" "}
+                NT$ {product.price}{" "}
                 <span className="text-muted">
-                  <del>NT${product.origin_price}</del>
+                  <del>NT$ {product.origin_price}</del>
                 </span>
               </p>
               <div className="d-flex align-items-center mt-3">
@@ -216,16 +218,16 @@ export default function ProductDetail() {
                   <div className="input-group-prepend">
                     <button
                       type="button"
-                      className="h-100 btn btn-dark btn-sm"
+                      className="h-100 btn btn-primary btn-sm"
                       onClick={() => {
                         changeQty(product.id, "min");
                       }}
                     >
-                      <i className="bi bi-dash"></i>
+                      <i className="bi bi-dash fs-5" />
                     </button>
                   </div>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control form-control-sm text-center"
                     value={
                       quantity.find((val) => val.product_id === product.id)
@@ -236,12 +238,12 @@ export default function ProductDetail() {
                   <div className="input-group-prepend">
                     <button
                       type="button"
-                      className="h-100 btn btn-dark btn-sm"
+                      className="h-100 btn btn-primary btn-sm"
                       onClick={() => {
                         changeQty(product.id, "plus");
                       }}
                     >
-                      <i className="bi bi-plus"></i>
+                      <i className="bi bi-plus fs-5" />
                     </button>
                   </div>
                 </div>
@@ -249,8 +251,7 @@ export default function ProductDetail() {
               <div className="position-relative">
                 <Button
                   text="加入購物車"
-                  bg="dark"
-                  myClass="w-200 mt-4"
+                  myClass="w-200 mt-5 p-3"
                   click={() => {
                     submit(product.id);
                   }}
@@ -269,7 +270,7 @@ export default function ProductDetail() {
             viewport={{ once: true }}
             className="my-5"
           >
-            <p className="bg-dark text-center text-white py-2">成分</p>
+            <p className="border-bottom text-center py-2">成分</p>
             <p className="ps-3" style={{ whiteSpace: "pre-line" }}>
               {product.content}
             </p>
@@ -304,8 +305,8 @@ export default function ProductDetail() {
                           }}
                           className="recomend_deco"
                           style={{ transform: "scaleX(-1)" }}
-                          src="https://demo2.pavothemes.com/poco/wp-content/uploads/2020/08/h1_thunder-1.png"
-                          alt=""
+                          src={require("../../assets/product/detail_thunder.png")}
+                          alt="thunder"
                         />
                         <motion.img
                           variants={{
@@ -315,8 +316,8 @@ export default function ProductDetail() {
                             },
                           }}
                           className="recomend_decoRight"
-                          src="https://demo2.pavothemes.com/poco/wp-content/uploads/2020/08/h1_thunder-1.png"
-                          alt=""
+                          src={require("../../assets/product/detail_thunder.png")}
+                          alt="thunder"
                         />
                         <img
                           className="card-img-top"
@@ -326,9 +327,9 @@ export default function ProductDetail() {
                       </div>
                       <p className="fs-4">{product.title}</p>
                       <p>
-                        NT${product.price}{" "}
+                        NT$ {product.price}{" "}
                         <span className="text-muted">
-                          <del>NT${product.origin_price}</del>
+                          <del>NT$ {product.origin_price}</del>
                         </span>
                       </p>
                     </Link>
@@ -345,11 +346,11 @@ export default function ProductDetail() {
                               changeQty(product.id, "min");
                             }}
                           >
-                            <i className="bi bi-dash"></i>
+                            <i className="bi bi-dash" />
                           </button>
                         </div>
                         <input
-                          type="number"
+                          type="text"
                           className="form-control form-control-sm text-center"
                           value={
                             quantity.find(
@@ -365,7 +366,7 @@ export default function ProductDetail() {
                               changeQty(product.id, "plus");
                             }}
                           >
-                            <i className="bi bi-plus"></i>
+                            <i className="bi bi-plus" />
                           </button>
                         </div>
                       </div>
@@ -373,7 +374,7 @@ export default function ProductDetail() {
                     <Button
                       text="加入購物車"
                       bg="dark"
-                      myClass="mt-2 mx-auto"
+                      myClass="mt-2 mx-auto p-2"
                       click={() => {
                         submit(product.id);
                       }}

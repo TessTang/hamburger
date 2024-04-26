@@ -1,29 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useOutletContext, useParams } from "react-router-dom";
 import Stack from "react-bootstrap/Stack";
+
 import { motion, useAnimationControls } from "framer-motion";
+
+import { messageAlert } from "../../../store/frontStore";
 import Button from "../../../components/Button";
 
 export default function Products() {
+  const [articleIndex, setArticleIndex] = useState();
+
   const { id } = useParams();
   const controls = useAnimationControls();
   const { allArticle } = useOutletContext();
-  const [articleIndex, setArticleIndex] = useState();
 
-  const getBlog = async (page = 1) => {
+  const getBlog = useCallback(async () => {
     try {
       const index = allArticle.findIndex((item) => {
         return item.id === id;
       });
       setArticleIndex(index);
     } catch (error) {
-      console.log(error);
+      messageAlert("warning", `噢!網頁可能有點錯誤 代碼:${error}`);
     }
-  };
+  }, [allArticle, id]);
 
   useEffect(() => {
     getBlog();
-  }, [allArticle, id]);
+  }, [getBlog]);
 
   //framer motion
 
@@ -50,7 +54,6 @@ export default function Products() {
 
   //下方上下篇文章
   const OtherArticle = ({ text, index }) => {
-    console.log(text, index);
     if (index || index === 0) {
       return (
         <div className="col-md-6 mt-2 otherArticle">

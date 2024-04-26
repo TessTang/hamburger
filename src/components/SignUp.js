@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { auth } from "../utils/firebase";
+
 import { createUserWithEmailAndPassword } from "firebase/auth";
+
 import Button from "./Button";
+
+import { auth } from "../utils/firebase";
 
 export default function SignUp({
   loginError,
@@ -24,7 +27,6 @@ export default function SignUp({
         setFireStore(res.user);
       })
       .catch((error) => {
-        console.log(error.code);
         switch (error.code) {
           case "auth/invalid-email":
             return setLoginError("信箱格式不正確");
@@ -81,7 +83,7 @@ export default function SignUp({
           />
         </label>
       </div>
-      <Button text="註冊" click={submit} myClass="p-2" bg="primary" />
+      <Button text="註冊" click={submit} myClass="p-2" />
     </>
   );
 }

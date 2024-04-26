@@ -5,12 +5,12 @@
   left: 10%;
   font-size: 4rem;
 
-  @media (max-width: 992px) {
+  @include media-breakpoint-down(lg) {
     font-size: 45px;
   }
 
-  @media (max-width: 768px) {
-    font-size: 30px;
+  @include media-breakpoint-down(md) {
+    font-size: 45px;
   }
 }
 
@@ -20,7 +20,7 @@
   background-color: transparent;
 
   .cardDate {
-    background-color: rgb(255, 212, 13);
+    border-bottom: 2px double $primary;
     letter-spacing: 0.3rem;
     width: fit-content;
     margin-bottom: 3px;
@@ -38,6 +38,12 @@
 }
 
 .blog_article {
+  border: none;
+  border-radius: 0;
+  border-top: 1px solid $primary;
+  padding-top: 3rem;
+  margin-bottom: 3rem;
+
   .myCardBody {
     p {
       overflow: hidden;
@@ -46,6 +52,11 @@
       -webkit-line-clamp: 2;
     }
   }
+}
+
+.blog_article_outer:first-child .blog_article {
+  padding-top: 0;
+  border: none;
 }
 
 .blog_article_detail {
@@ -82,7 +93,7 @@
     object-fit: cover;
   }
 
-  @media (max-width: 1024px) {
+  @include media-breakpoint-down(lg) {
     display: none;
   }
 }

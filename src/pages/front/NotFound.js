@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+
 import { motion } from "framer-motion";
+
 import Banner from "../../components/Banner";
 
 export default function NotFound() {
@@ -15,7 +17,7 @@ export default function NotFound() {
 
   return (
     <>
-      <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
+      <Banner bgImg="banner01.jpg" />
       <div className="container full-height d-flex justify-content-center align-items-center">
         <motion.div
           animate={{ scale: 1.5 }}
@@ -23,13 +25,13 @@ export default function NotFound() {
           className="fs-3"
         >
           <img
-            src="https://cdn-icons-png.flaticon.com/512/388/388480.png"
+            src={require("../../assets/notFound_warning.png")}
             style={{ width: "3rem" }}
             alt="warning"
           />
           找不到此頁面，將轉回首頁
           <img
-            src="https://cdn-icons-png.flaticon.com/512/388/388480.png"
+            src={require("../../assets/notFound_warning.png")}
             style={{ width: "3rem" }}
             alt="warning"
           />

@@ -1,5 +1,7 @@
 import { useEffect, useState, useContext } from "react";
+
 import { doc, setDoc, collection, updateDoc } from "firebase/firestore";
+
 import {
   MessageContext,
   handleSuccessMessage,
@@ -9,7 +11,6 @@ import { db } from "../../utils/firebase";
 
 export default function BlogsModal({ closeAddBlog, getBlogs, type, tempBlog }) {
   const [, dispatch] = useContext(MessageContext);
-
   const [tempData, setTempData] = useState({
     title: "",
     category: "",
@@ -18,21 +19,6 @@ export default function BlogsModal({ closeAddBlog, getBlogs, type, tempBlog }) {
     img: 0,
     tag: [],
   });
-
-  useEffect(() => {
-    if (type === "create") {
-      setTempData({
-        title: "",
-        category: "",
-        content: "",
-        date: Math.floor(Date.now() / 1000),
-        img: "",
-        tag: [],
-      });
-    } else if (type === "edit") {
-      setTempData(tempBlog);
-    }
-  }, [type, tempBlog]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,6 +58,21 @@ export default function BlogsModal({ closeAddBlog, getBlogs, type, tempBlog }) {
     closeAddBlog();
     getBlogs();
   };
+
+  useEffect(() => {
+    if (type === "create") {
+      setTempData({
+        title: "",
+        category: "",
+        content: "",
+        date: Math.floor(Date.now() / 1000),
+        img: "",
+        tag: [],
+      });
+    } else if (type === "edit") {
+      setTempData(tempBlog);
+    }
+  }, [type, tempBlog]);
 
   return (
     <div

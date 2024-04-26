@@ -18,7 +18,6 @@ const DEFAULT_OPTIONS = {
 const ScrollTriggerProvider = ({ children, options = {} }) => {
   const refScrollTrigger = useRef(null);
   const refTimeline = useRef();
-
   const progress = useMotionValue(0);
 
   useLayoutEffect(() => {

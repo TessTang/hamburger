@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+
+import { Modal } from "bootstrap";
+import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
+
 import BlogsModal from "../../components/admin/BlogsModal";
 import DeleteModal from "../../components/DeleteModal";
 import Pagenation from "../../components/Pagenation";
-import { Modal } from "bootstrap";
 
 import { db } from "../../utils/firebase";
-import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
+
+const itemsPerPage = 10;
 
 export default function AdminBlogs() {
   const [blogs, setBlogs] = useState([]);
@@ -18,37 +22,7 @@ export default function AdminBlogs() {
   const deleteModal = useRef(null);
 
   //1.拿到全部的資料
-  //2.轉換成可以轉換pagenation與每頁對應資料  換頁時get對應頁面的funciton
-
-  const getPage = (page = 1) => {
-    const itemsPerPage = 10; // 每頁顯示的資料數量
-    const totalPage = Math.ceil(allBlogs.length / itemsPerPage);
-    const getBlogsForPage = (page) => {
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      return allBlogs.slice(startIndex, endIndex);
-    };
-
-    setPagination({
-      total_pages: totalPage,
-      current_page: page,
-      has_pre: page > 1,
-      has_next: page < totalPage,
-      category: "",
-    });
-    setBlogs(getBlogsForPage(page));
-  };
-
-  useEffect(() => {
-    blogModal.current = new Modal("#blogModal");
-    deleteModal.current = new Modal("#deleteModal");
-    getBlogs();
-  }, []);
-
-  useEffect(() => {
-    getPage();
-  }, [allBlogs]);
-
+  //2.轉換成pagenation與每頁對應資料  換頁時get對應頁面的funciton
   const getBlogs = async (page = 1) => {
     try {
       const queryBlogs = await getDocs(collection(db, "blogs"));
@@ -62,9 +36,30 @@ export default function AdminBlogs() {
 
       setAllBlogs(blogsArray);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
+
+  const getPage = useCallback(
+    (page = 1) => {
+      const totalPage = Math.ceil(allBlogs.length / itemsPerPage);
+      const getBlogsForPage = (page) => {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return allBlogs.slice(startIndex, endIndex);
+      };
+
+      setPagination({
+        total_pages: totalPage,
+        current_page: page,
+        has_pre: page > 1,
+        has_next: page < totalPage,
+        category: "",
+      });
+      setBlogs(getBlogsForPage(page));
+    },
+    [allBlogs],
+  );
 
   //creat and edit Blog
   const openAddBlog = (type, tempBlog) => {
@@ -78,9 +73,7 @@ export default function AdminBlogs() {
   };
 
   //delete Blog
-
   const openDeleteBlog = (tempBlog) => {
-    console.log(tempBlog);
     setTempBlog(tempBlog);
     deleteModal.current.show();
   };
@@ -95,9 +88,11 @@ export default function AdminBlogs() {
       getBlogs();
       closeDeleteBlog();
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
+
+  //設定時間格式
   function formatUnixTimestamp(timestamp) {
     const date = new Date(timestamp * 1000); // 轉換為毫秒
     const year = date.getFullYear();
@@ -105,6 +100,20 @@ export default function AdminBlogs() {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}/${month}/${day}`;
   }
+
+  //進入頁面獲取blogs資訊
+  useEffect(() => {
+    blogModal.current = new Modal("#blogModal");
+    deleteModal.current = new Modal("#deleteModal");
+    getBlogs();
+  }, []);
+
+  //得到blogs後進行分頁動作
+  useEffect(() => {
+    if (allBlogs.length !== 0) {
+      getPage();
+    }
+  }, [allBlogs, getPage]);
 
   return (
     <div className="p-3">

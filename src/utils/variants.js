@@ -21,7 +21,7 @@ export const fadeIn = (direction, delay) => {
 //home 猜你喜歡
 export const likeProduct_h4 = {
   hover: {
-    backgroundColor: "#00813d",
+    backgroundColor: "#879416",
     color: "#ffffff",
     transition: { duration: 0.5 },
   },
@@ -39,13 +39,6 @@ export const likeProduct_icon = {
   },
 };
 
-export const likeProduct_content = {
-  hover: {
-    backgroundColor: "#f5e2c0bd",
-    flex: "1 1 auto",
-    transition: { duration: 0.5 },
-  },
-};
 export const likeProduct_fire = {
   hover: {
     opacity: 1,

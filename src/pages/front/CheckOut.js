@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+
 import {
   collection,
   doc,
@@ -8,13 +9,15 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { FrontData, linePayRequest } from "../../store/frontStore";
-import { db } from "../../utils/firebase";
 import { motion } from "framer-motion";
-import { fadeIn } from "../../utils/variants";
-import { messageAlert } from "../../store/frontStore";
+
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
+
+import { FrontData, linePayRequest } from "../../store/frontStore";
+import { messageAlert } from "../../store/frontStore";
+import { db } from "../../utils/firebase";
+import { fadeIn } from "../../utils/variants";
 
 export default function CheckOut() {
   const navigate = useNavigate();
@@ -56,6 +59,7 @@ export default function CheckOut() {
       ...user.user,
       orders: [...user.user.orders, newOrder.id],
     });
+
     checkUserData(user.user);
 
     await deleteDoc(doc(db, "carts", user.user.uid));
@@ -69,10 +73,10 @@ export default function CheckOut() {
         `https://tesstang.github.io/hamburger/#/ordersuccess/${newOrder.id}`,
       );
       getCart();
-    } else {
-      getCart();
-      navigate(`/ordersuccess/${newOrder.id}`);
+      return;
     }
+    getCart();
+    navigate(`/ordersuccess/${newOrder.id}`);
   };
 
   useEffect(() => {
@@ -85,7 +89,7 @@ export default function CheckOut() {
 
   return (
     <>
-      <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
+      <Banner bgImg="banner01.jpg" />
       <motion.div initial="hidden" animate="show" className="container">
         <div className="row justify-content-center">
           <div className="col-md-10">
@@ -117,7 +121,9 @@ export default function CheckOut() {
                     <div className="w-100">
                       <div className="d-flex justify-content-between">
                         <p className="mb-0 fw-bold">{item.product.title}</p>
-                        <p className="mb-0">NT${item.total.toLocaleString()}</p>
+                        <p className="mb-0">
+                          NT$ {item.total.toLocaleString()}
+                        </p>
                       </div>
                       <p className="mb-0 fw-bold">x{item.qty}</p>
                     </div>
@@ -135,7 +141,7 @@ export default function CheckOut() {
                       小計
                     </th>
                     <td className="text-end border-0 px-0 pt-4">
-                      NT${cart.total?.toLocaleString()}
+                      NT$ {cart.total?.toLocaleString()}
                     </td>
                   </tr>
                   {cart.coupon?.deduct && (
@@ -147,7 +153,7 @@ export default function CheckOut() {
                         優惠券折抵
                       </th>
                       <td className="text-end border-0 px-0 pt-4">
-                        NT${cart.coupon.deduct}
+                        NT$ {cart.coupon.deduct}
                       </td>
                     </tr>
                   )}
@@ -168,7 +174,7 @@ export default function CheckOut() {
               <div className="d-flex justify-content-between mt-4">
                 <p className="mb-0 h4 fw-bold">總金額</p>
                 <p className="mb-0 h4 fw-bold">
-                  NT$
+                  NT$&nbsp;
                   {cart.final_total ? cart.final_total?.toLocaleString() : "0"}
                 </p>
               </div>
@@ -243,11 +249,17 @@ export default function CheckOut() {
                   className="form-control"
                   id="ContactPhone"
                   placeholder="ex:0912345678"
-                  {...register("tel", { required: true })}
+                  {...register("tel", {
+                    required: { value: true, message: "請填寫喔!" },
+                    pattern: {
+                      value: /^09\d{8}$/,
+                      message: "請填寫手機號碼，09開頭10碼數字",
+                    },
+                  })}
                 />
                 {errors.tel && (
                   <p className="errorAlert">
-                    請填寫
+                    {errors.tel?.message}
                     <i className="bi bi-hand-index-fill" />
                   </p>
                 )}
@@ -304,19 +316,18 @@ export default function CheckOut() {
                   {...register("message")}
                 />
               </div>
-              <div className="d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100">
-                <Link to={"/products"} className="text-dark mt-md-0 mt-3">
-                  <i className="bi bi-chevron-left" /> 回到產品頁面
-                </Link>
-                <Button
-                  text="送出訂單"
-                  myClass="py-3 px-7"
-                  bg="dark"
-                  click={handleSubmit(onSubmit)}
-                />
-              </div>
             </form>
           </motion.div>
+          <div className="d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100">
+            <Link to={"/products"} className="text-dark mt-md-0 mt-3">
+              <i className="bi bi-chevron-left" /> 回到產品頁面
+            </Link>
+            <Button
+              text="送出訂單"
+              myClass="py-3 px-7"
+              click={handleSubmit(onSubmit)}
+            />
+          </div>
         </div>
       </motion.div>
     </>

@@ -12,16 +12,18 @@ export default function ScrollToTop() {
   const [showTopBtn, setShowTopBtn] = useState(false);
   const { pathname } = useLocation();
 
+  //set showTopBtn
   useEffect(() => {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 400) {
         setShowTopBtn(true);
-      } else {
-        setShowTopBtn(false);
+        return;
       }
+      setShowTopBtn(false);
     });
   }, []);
 
+  //set change page position
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -32,7 +34,5 @@ export default function ScrollToTop() {
         <i className="bi bi-arrow-bar-up back_To_TopIcon" />
       </div>
     );
-  } else {
-    return null;
   }
 }

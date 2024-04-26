@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,19 +8,22 @@ import {
   faPlateWheat,
   faMotorcycle,
 } from "@fortawesome/free-solid-svg-icons";
-import { FrontData } from "../../store/frontStore";
+
 import { ScrollTriggerProvider } from "../../components/ScrollTriggerProvider";
+import Screen from "../../components/Screen";
+import Button from "../../components/Button";
+
+import { FrontData, messageAlert } from "../../store/frontStore";
 import {
   fadeIn,
   marqueeVariants,
   hoverScale,
   likeProduct_h4,
   likeProduct_icon,
-  likeProduct_content,
   likeProduct_fire,
 } from "../../utils/variants";
-import Screen from "../../components/Screen";
-import Button from "../../components/Button";
+
+const likeProduct_qty = 3;
 
 export default function Home() {
   const { allProducts } = useContext(FrontData);
@@ -71,17 +75,17 @@ export default function Home() {
       let hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24);
       let days = parseInt(milliseconds / (1000 * 60 * 60 * 24));
       return [
-        { title: "Day", time: days },
-        { title: "Hour", time: hours },
-        { title: "Min", time: minutes },
-        { title: "Sec", time: seconds },
+        { title: "日", time: days },
+        { title: "時", time: hours },
+        { title: "分", time: minutes },
+        { title: "秒", time: seconds },
       ];
     };
     return getFormattedTime(time).map((item) => {
       return (
         <div className="fs-1 calendar" key={item.title}>
           <p className="calendar_title">{item.title}</p>
-          <p className="text-danger calendar_time">{item.time}</p>
+          <p className="calendar_time">{item.time}</p>
         </div>
       );
     });
@@ -93,7 +97,7 @@ export default function Home() {
       try {
         const recomendProduct = [...allProducts];
         const other = [];
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= likeProduct_qty; i++) {
           const randomIndex = Math.floor(
             Math.random() * recomendProduct.length,
           );
@@ -102,7 +106,7 @@ export default function Home() {
         }
         setProduct(other);
       } catch (error) {
-        console.log(error);
+        messageAlert("warning", `噢!網頁有地方出錯了${error}`);
       }
     };
     if (allProducts.length > 0) {
@@ -112,7 +116,6 @@ export default function Home() {
 
   return (
     <>
-      {/* <HomeBanner /> */}
       {/* 首頁第一區塊 */}
       <ScrollTriggerProvider>
         <Screen />
@@ -145,17 +148,14 @@ export default function Home() {
                     />
                   </div>
 
-                  <motion.div
-                    variants={likeProduct_content}
-                    className="text-center"
-                  >
+                  <motion.div className="text-center">
                     <motion.h4 variants={likeProduct_h4}>
                       {item.title}
                       <motion.div
                         variants={likeProduct_icon}
                         className="d-inline-block ps-2"
                       >
-                        <i className="bi bi-stars"></i>
+                        <i className="bi bi-stars" />
                       </motion.div>
                     </motion.h4>
                     <div className="d-flex justify-content-between mt-1 myCardBody">
@@ -166,7 +166,7 @@ export default function Home() {
                       className="productFire"
                     >
                       <img
-                        src="https://themeholy.com/wordpress/pizzan/wp-content/themes/pizzan/assets/img/fire.png"
+                        src={require("../../assets/home_likeproduct_fire.png")}
                         alt="fire_deco"
                       />
                     </motion.div>
@@ -194,7 +194,7 @@ export default function Home() {
             <div className="home_aboutus_leftIMG">
               <motion.img
                 variants={hoverScale(0.9)}
-                src="https://demo2.wpopal.com/fazfood/wp-content/uploads/2023/10/h3_img.png"
+                src={require("../../assets/home_about_leftimg.png")}
                 alt="hamburger"
               />
             </div>
@@ -240,7 +240,7 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* 促銷 */}
+      {/* 限時促銷 */}
       <motion.div
         variants={fadeIn("up", 0.3)}
         initial="hidden"
@@ -261,15 +261,17 @@ export default function Home() {
               },
             }}
             className="promotion_leftDeco"
-            src="https://cdn-icons-png.flaticon.com/256/478/478008.png"
-            alt=""
+            src={require("../../assets/home_promotion_sale.png")}
+            alt="sale_deco"
           />
-          <h3 className="text-warning promotion_lefth3">限時!!雙重美味</h3>
+          <div>
+            <h3 className="text-warning promotion_lefth3">限時!!雙重美味</h3>
 
-          <h4 className="fs-2 fs-bold">魚x雞雙享堡</h4>
-          <p>
-            夏日限定！多汁雞排與清爽鱈魚排的完美組合，一口咬下，感受兩種口感的絕妙融合！
-          </p>
+            <h4 className="fs-2 fs-bold">魚x雞雙享堡</h4>
+            <p>
+              夏日限定！多汁雞排與清爽鱈魚排的完美組合，一口咬下，感受兩種口感的絕妙融合！
+            </p>
+          </div>
           <div>
             販售結束倒數計時
             <p>只到4/29!</p>
@@ -279,7 +281,7 @@ export default function Home() {
                   new Date("2024-04-30T00:00:00").getTime() -
                   new Date().getTime()
                 }
-              ></Timer>
+              />
             </div>
           </div>
         </motion.div>
@@ -290,7 +292,7 @@ export default function Home() {
         >
           <motion.img
             variants={hoverScale(1.1)}
-            src="https://demo2.wpopal.com/fazfood/wp-content/uploads/2023/10/revslider_h2-buger.png"
+            src={require("../../assets/home_promotion_hamburger.png")}
             alt="promotionHam"
           />
         </motion.div>
@@ -304,7 +306,7 @@ export default function Home() {
         <motion.img
           variants={fadeIn("right", 0.2)}
           className="deco"
-          src="https://modinatheme.com/html/foodking-html/assets/img/shape/drinks.png"
+          src={require("../../assets/home_activity_coke.png")}
           alt="coke"
         />
         <div className="container my-7">
@@ -317,27 +319,27 @@ export default function Home() {
               whileHover="hover"
               className="home_activity d-flex"
               style={{
-                backgroundImage:
-                  "url('https://modinatheme.com/html/foodking-html/assets/img/banner/offer-bg.png')",
+                backgroundImage: `url(${require("../../assets/home_activity_background01.png")})`,
               }}
             >
               <div className="offer-content">
-                <h5 className="mb-5">crispy, every bite taste</h5>
+                <h5 className="mb-5">每一口，都香脆可口</h5>
                 <h3>
-                  SUPER <br />
-                  DELICIOUS
+                  新鮮健康
+                  <br />
+                  美味可口
                 </h3>
               </div>
               <div className="foodImg">
                 <div className="burger-text">
                   <img
-                    src="https://modinatheme.com/html/foodking-html/assets/img/shape/burger-text.png"
+                    src={require("../../assets/home_activity_burgerDeco.png")}
                     alt="shape-img"
                   />
                 </div>
                 <motion.img
                   variants={hoverScale(1.2)}
-                  src="https://modinatheme.com/html/foodking-html/assets/img/food/main-food.png"
+                  src={require("../../assets/home_activity_foodImg01.png")}
                   alt="food-img"
                 />{" "}
               </div>
@@ -349,8 +351,7 @@ export default function Home() {
               whileHover="hover"
               className="home_activity d-flex"
               style={{
-                backgroundImage:
-                  "url('https://modinatheme.com/html/foodking-html/assets/img/banner/burger-bg.png')",
+                backgroundImage: `url(${require("../../assets/home_activity_background02.png")})`,
               }}
             >
               <div className="offer-content">
@@ -363,13 +364,13 @@ export default function Home() {
               <div className="foodImg">
                 <div className="burger-text">
                   <img
-                    src="https://modinatheme.com/html/foodking-html/assets/img/shape/burger-text.png"
+                    src={require("../../assets/home_activity_burgerDeco.png")}
                     alt="shape-img"
                   />
                 </div>
                 <motion.img
                   variants={hoverScale(1.2)}
-                  src="https://modinatheme.com/html/foodking-html/assets/img/food/burger-2.png"
+                  src={require("../../assets/home_activity_foodImg02.png")}
                   alt="hamberger-img"
                 />{" "}
               </div>
@@ -388,14 +389,14 @@ export default function Home() {
         <div className="d-flex flex-column justify-content-between">
           <div className="overflow-hidden home_aboutus_right text-center text-light pt-5">
             <h3 className="fs-3 mt-4 fs-bolder">您最愛的餐點，馬上就到了！</h3>
-            <p className="fs-4 m-5 fst-italic">
+            <p className="fs-4 m-5">
               我們不僅提供各種款式的漢堡選擇，以滿足各種口味和喜好，還提供品質保證外送服務，讓您輕鬆享用美味佳餚！
             </p>
           </div>
           <div className="deliver_down">
             <div className="driver">
               <img
-                src="https://demo2.wpopal.com/fazfood/wp-content/uploads/2023/10/h2_delivery.png"
+                src={require("../../assets/home_deliver_driver.png")}
                 alt="driverImg"
               />
             </div>
@@ -406,23 +407,23 @@ export default function Home() {
                 animate="animate"
               >
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/353/353343.png"
+                  src={require("../../assets/home_deliver_house01.png")}
                   alt="house"
                 />
                 <img
-                  src="https://cdn-icons-png.flaticon.com/256/2156/2156890.png"
+                  src={require("../../assets/home_deliver_house02.png")}
                   alt="house"
                 />
                 <img
-                  src="https://cdn-icons-png.freepik.com/512/619/619155.png"
+                  src={require("../../assets/home_deliver_house03.png")}
                   alt="house"
                 />
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/2282/2282383.png"
+                  src={require("../../assets/home_deliver_house04.png")}
                   alt="traffic_light"
                 />
                 <img
-                  src="https://cdn.icon-icons.com/icons2/3761/PNG/512/modern_house_building_home_icon_231035.png"
+                  src={require("../../assets/home_deliver_house05.png")}
                   alt="house"
                 />
               </motion.div>
@@ -432,23 +433,23 @@ export default function Home() {
                 animate="animate"
               >
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/353/353343.png"
+                  src={require("../../assets/home_deliver_house01.png")}
                   alt="house"
                 />
                 <img
-                  src="https://cdn-icons-png.flaticon.com/256/2156/2156890.png"
+                  src={require("../../assets/home_deliver_house02.png")}
                   alt="house"
                 />
                 <img
-                  src="https://cdn-icons-png.freepik.com/512/619/619155.png"
+                  src={require("../../assets/home_deliver_house03.png")}
                   alt="house"
                 />
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/2282/2282383.png"
+                  src={require("../../assets/home_deliver_house04.png")}
                   alt="traffic_light"
                 />
                 <img
-                  src="https://cdn.icon-icons.com/icons2/3761/PNG/512/modern_house_building_home_icon_231035.png"
+                  src={require("../../assets/home_deliver_house05.png")}
                   alt="house"
                 />
               </motion.div>

@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
+
 import { doc, setDoc, updateDoc } from "firebase/firestore";
+
 import {
   MessageContext,
   handleSuccessMessage,
@@ -15,7 +17,6 @@ export default function CouponsModal({
 }) {
   const [date, setDate] = useState(new Date());
   const [, dispatch] = useContext(MessageContext);
-
   const [tempData, setTempData] = useState({
     title: "",
     is_enabled: 1,
@@ -23,22 +24,6 @@ export default function CouponsModal({
     due_date: new Date(),
     code: "testCode",
   });
-
-  useEffect(() => {
-    if (type === "create") {
-      setTempData({
-        title: "",
-        is_enabled: 1,
-        deduct: 80,
-        due_date: new Date(),
-        code: "",
-      });
-      setDate(new Date());
-    } else if (type === "edit") {
-      setTempData(tempCoupon);
-      setDate(new Date(tempCoupon.due_date));
-    }
-  }, [type, tempCoupon]);
 
   const handleChange = (e) => {
     const { name, value, checked } = e.target;
@@ -68,7 +53,6 @@ export default function CouponsModal({
         handleSuccessMessage(dispatch, "新增成功");
       } catch (err) {
         handleErrorMessage(dispatch, "新增失敗");
-        console.log("新增失敗", err);
       }
     } else if (type === "edit") {
       try {
@@ -79,13 +63,28 @@ export default function CouponsModal({
         handleSuccessMessage(dispatch, "更改成功");
       } catch (err) {
         handleErrorMessage(dispatch, "更改失敗");
-        console.log("更改失敗", err);
       }
     }
 
     closeAddCoupon();
     getCoupons();
   };
+
+  useEffect(() => {
+    if (type === "create") {
+      setTempData({
+        title: "",
+        is_enabled: 1,
+        deduct: 80,
+        due_date: new Date(),
+        code: "",
+      });
+      setDate(new Date());
+    } else if (type === "edit") {
+      setTempData(tempCoupon);
+      setDate(new Date(tempCoupon.due_date));
+    }
+  }, [type, tempCoupon]);
 
   return (
     <div

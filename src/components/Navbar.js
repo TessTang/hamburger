@@ -1,17 +1,20 @@
 import { useContext, useState, useCallback, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+
 import { FrontData } from "../store/frontStore";
 
 export default function Navbar() {
   const { cart, user } = useContext(FrontData);
   const [roll, setRoll] = useState(true);
+
+  //偵測使用者是否scroll
   const handleNavigation = useCallback((e) => {
     const window = e.currentTarget;
     if (window.scrollY > 0) {
       setRoll(false);
-    } else {
-      setRoll(true);
+      return;
     }
+    setRoll(true);
   }, []);
 
   useEffect(() => {
@@ -32,9 +35,6 @@ export default function Navbar() {
             alt="logo"
           />
         </NavLink>
-        <NavLink className="nav-item nav-link" to="/">
-          首頁
-        </NavLink>
         <NavLink className="nav-item nav-link" to="/products">
           產品
         </NavLink>
@@ -42,7 +42,7 @@ export default function Navbar() {
           專欄
         </NavLink>
       </div>
-      <div className="navbarSection col-5 col-md-4 justify-content-center gap-4 justify-content-md-end">
+      <div className="navbarSection col-5 col-md-4 justify-content-center gap-5 justify-content-md-end">
         <NavLink className="nav-item nav-link position-relative" to="/cart">
           <i className="bi bi-bag-fill fs-5" />
           <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">

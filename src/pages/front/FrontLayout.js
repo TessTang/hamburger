@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { auth, db } from "../../utils/firebase";
+
 import Navbar from "../../components/Navbar";
-import { FrontData } from "../../store/frontStore";
 import Loading from "../../components/Loading";
 import AnimatedPage from "../../components/AnimatedPage";
 
+import { FrontData, messageAlert } from "../../store/frontStore";
+import { auth, db } from "../../utils/firebase";
+
 export default function FrontLayout() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ manager: false, user: null });
   const [userIsChecked, setUserIsChecked] = useState(false);
@@ -18,36 +21,31 @@ export default function FrontLayout() {
 
   //確認是否登入，有登入setUser資料
   const checkUserData = async (data) => {
-    if (data) {
-      const docSnap = await getDoc(doc(db, "users", data.uid));
-      if (docSnap.exists()) {
-        setUser({ manager: docSnap.data().manager, user: docSnap.data() });
-        setUserIsChecked(true);
-      } else {
-        console.log("No users data");
-      }
+    if (!data) return;
+    const docSnap = await getDoc(doc(db, "users", data.uid));
+    if (docSnap.exists()) {
+      setUser({ manager: docSnap.data().manager, user: docSnap.data() });
+      setUserIsChecked(true);
     } else {
-      return;
+      messageAlert("warning", `噢!網頁使用者登入狀況出錯了`);
     }
   };
 
   //若登入了就取得購物車資料
-  const getCart = async () => {
-    setIsLoading(true);
+  const getCart = useCallback(async () => {
     if (user.user) {
       try {
         const cartDoc = await getDoc(doc(db, "carts", user.user.uid));
         setCart(cartDoc.data() || []);
         setCartIsChecked(true);
       } catch (error) {
-        console.log(error);
+        messageAlert("warning", `噢!購物車內容出錯了${error}`);
       }
     }
-    setIsLoading(false);
-  };
+  }, [user]);
 
   //getProduct data
-  const getProducts = async (page = 1) => {
+  const getProducts = async () => {
     try {
       setIsLoading(true);
       const queryProducts = await getDocs(collection(db, "products"));
@@ -57,7 +55,7 @@ export default function FrontLayout() {
       setAllProducts(productsArray);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      messageAlert("warning", `噢!取得產品出錯了${error}`);
     }
   };
 
@@ -76,7 +74,7 @@ export default function FrontLayout() {
   //有user資料後取得購物車資料
   useEffect(() => {
     getCart();
-  }, [user]);
+  }, [getCart]);
 
   return (
     <FrontData.Provider

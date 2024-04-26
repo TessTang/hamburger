@@ -1,23 +1,29 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup";
 import Stack from "react-bootstrap/Stack";
+
 import { useAnimationControls, useScroll, useTransform } from "framer-motion";
 import { motion } from "framer-motion";
 import { collection, getDocs } from "firebase/firestore";
+
+import Banner from "../../../components/Banner";
+
+import { messageAlert } from "../../../store/frontStore";
 import { db } from "../../../utils/firebase";
 import { fadeIn } from "../../../utils/variants";
-import Banner from "../../../components/Banner";
+
+const itemsPerPage = 10;
 
 export default function Blog() {
   const [article, setArticle] = useState([]);
   const [pagination, setPagination] = useState([]);
-  const controls = useAnimationControls();
   const [allArticle, setAllArticle] = useState([]);
-  const [blogIsLoading, setBlogIsLoading] = useState(true);
+
+  const controls = useAnimationControls();
   const { tag, category, id } = useParams();
 
-  const getBlog = async (page = 1) => {
+  const getBlog = async () => {
     try {
       const queryProducts = await getDocs(collection(db, "blogs"));
       const productsArray = queryProducts.docs
@@ -28,58 +34,46 @@ export default function Blog() {
           return b.date - a.date;
         });
       setAllArticle(productsArray);
-      setBlogIsLoading(false);
     } catch (error) {
-      console.log(error);
+      messageAlert("warning", `噢!網頁有地方出錯了${error}`);
     }
   };
 
   //取得全部資料後將資料分頁
-  const getPage = (page = 1) => {
-    controls.stop();
-    let productList = [];
-    if (tag) {
-      productList = allArticle.filter((item) => item.tag.includes(tag));
-    } else if (category) {
-      productList =
-        category === "all"
-          ? allArticle
-          : allArticle.filter((item) => item.category === category);
-    } else {
-      productList = allArticle;
-    }
-    const itemsPerPage = 10; // 每頁顯示的資料數量
-    const totalPage = Math.ceil(productList.length / itemsPerPage);
-    const getProductsForPage = (page) => {
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      return productList.slice(startIndex, endIndex);
-    };
+  const getPage = useCallback(
+    (page = 1) => {
+      controls.stop();
+      let productList = [];
+      if (tag) {
+        productList = allArticle.filter((item) => item.tag.includes(tag));
+      } else if (category) {
+        productList =
+          category === "all"
+            ? allArticle
+            : allArticle.filter((item) => item.category === category);
+      } else {
+        productList = allArticle;
+      }
+      const totalPage = Math.ceil(productList.length / itemsPerPage);
+      const getProductsForPage = (page) => {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return productList.slice(startIndex, endIndex);
+      };
 
-    setPagination({
-      total_pages: totalPage,
-      current_page: page,
-      has_pre: page > 1,
-      has_next: page < totalPage,
-      category: "",
-    });
-    setArticle(getProductsForPage(page));
-  };
+      setPagination({
+        total_pages: totalPage,
+        current_page: page,
+        has_pre: page > 1,
+        has_next: page < totalPage,
+        category: "",
+      });
+      setArticle(getProductsForPage(page));
+    },
+    [allArticle, category, tag, controls],
+  );
 
-  //framer motion
-
-  useEffect(() => {
-    controls.set((i) => ({
-      opacity: 0,
-      y: 75,
-    }));
-    controls.start((i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.15 },
-    }));
-  }, [controls, article]);
-
+  //分類list item
   const ListItem = ({ title, text, img, myClass }) => {
     return (
       <Link
@@ -119,25 +113,41 @@ export default function Blog() {
   //動畫區end
 
   useEffect(() => {
+    getBlog();
+  }, []);
+
+  //0.1秒後抓取視窗高度
+  useEffect(() => {
     setTimeout(() => {
       setScrollY(ref.current.scrollHeight);
     }, 100);
   }, [article, tag, category, id]);
-  // console.log(article);
 
+  //抓取產品資料
   useEffect(() => {
-    getBlog();
-  }, []);
-  //一進入就抓取產品資料，更改產品分類重新抓取
+    if (allArticle.length !== 0) {
+      getPage();
+    }
+  }, [allArticle, getPage]);
+
+  //framer motion
   useEffect(() => {
-    getPage();
-  }, [blogIsLoading, tag, category]);
+    controls.set((i) => ({
+      opacity: 0,
+      y: 75,
+    }));
+    controls.start((i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.15 },
+    }));
+  }, [controls, article]);
 
   return (
     <>
-      <Banner bgImg="https://themeholy.com/wordpress/pizzan/wp-content/uploads/2023/06/breadcumb_bg_2-1.jpg">
+      <Banner bgImg="banner02.jpg">
         <h3 className="blog_bannerText">
-          Blog{" "}
+          專欄{" "}
           <span>
             {tag ? `標籤: ${tag}` : category ? `分類: ${category}` : ""}
           </span>
@@ -161,32 +171,31 @@ export default function Blog() {
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true }}
-                  className="card-header px-0 py-4 bg-white border border-bottom-0 border-top border-start-0 border-end-0 rounded-0"
+                  className="card-header px-0 bg-white"
                 >
                   <div className="d-flex justify-content-between align-items-center pe-1 mb-2">
                     <h4 className="mb-0 fw-bold">文章分類</h4>
-                    <i className="bi bi-tag fs-4"></i>
                   </div>
-                  <ListGroup as="ul" className="fs-4">
+                  <ListGroup as="ul" className="fs-5">
                     <ListItem
                       title="all"
                       text="全部"
-                      img="https://cdn-icons-png.freepik.com/512/5155/5155599.png"
+                      img={require("../../../assets/blog/category_all.png")}
                     />
                     <ListItem
                       title="foods"
                       text="食物"
-                      img="https://cdn-icons-png.flaticon.com/128/2497/2497906.png"
+                      img={require("../../../assets/blog/category_foods.png")}
                     />
                     <ListItem
                       title="activity"
                       text="活動"
-                      img="https://cdn-icons-png.flaticon.com/512/4065/4065822.png"
+                      img={require("../../../assets/blog/category_activity.png")}
                     />
                     <ListItem
                       title="news"
                       text="店鋪信息"
-                      img="https://cdn-icons-png.flaticon.com/256/2666/2666060.png"
+                      img={require("../../../assets/blog/category_news.png")}
                     />
                   </ListGroup>
                 </motion.div>
@@ -202,7 +211,7 @@ export default function Blog() {
                 <div className="card-header px-0 py-4 bg-white border border-bottom-0 border-top border-start-0 border-end-0 rounded-0">
                   <div className="d-flex justify-content-between align-items-center pe-1 mb-2">
                     <h4 className="mb-0 fw-bold">標籤</h4>
-                    <i className="bi bi-tag fs-4"></i>
+                    <i className="bi bi-tag fs-4" />
                   </div>
                   <Stack direction="horizontal" gap={2} className="flex-wrap">
                     {[

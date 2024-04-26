@@ -1,13 +1,16 @@
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+
 import { doc, updateDoc } from "firebase/firestore";
-import { FrontData } from "../../../store/frontStore";
-import { db } from "../../../utils/firebase";
+
 import Button from "../../../components/Button";
 
+import { FrontData, messageAlert } from "../../../store/frontStore";
+import { db } from "../../../utils/firebase";
+
 export default function MemberAddProfile() {
-  const { user } = useContext(FrontData);
+  const { user, checkUserData } = useContext(FrontData);
   const navigate = useNavigate(null);
 
   const {
@@ -17,7 +20,6 @@ export default function MemberAddProfile() {
     setValue,
   } = useForm();
 
-  // console.log(user)
   useEffect(() => {
     setValue("displayName", user.user?.displayName);
     setValue("realName", user.user?.realName);
@@ -29,14 +31,14 @@ export default function MemberAddProfile() {
   const onSubmit = async (data) => {
     try {
       await updateDoc(doc(db, "users", user.user.uid), data);
+      checkUserData(user.user);
       navigate("/member/memberprofile");
-      window.location.reload();
-    } catch (err) {
-      console.error("匯入Error: ", err);
+    } catch (error) {
+      messageAlert("warning", `噢!資料匯入過程中有誤，代碼:${error}`);
     }
   };
 
-  const DataList = ({ text, data, children }) => {
+  const DataList = ({ text, children }) => {
     return (
       <div
         className="container d-flex align-items-center p-3"
@@ -47,7 +49,7 @@ export default function MemberAddProfile() {
             text={text}
             myClass="py-2 rounded-3 text-dark cursor-default"
             bg="light"
-          ></Button>
+          />
         </label>
         <div className="d-flex align-items-center flex-wrap col-10">
           {children}
@@ -125,16 +127,25 @@ export default function MemberAddProfile() {
         </DataList>
         <DataList text="電話">
           <input
-            {...register("phoneNumber", { required: true })}
+            {...register("phoneNumber", {
+              required: { value: true, message: "請填寫喔!" },
+              pattern: {
+                value: /^09\d{8}$/,
+                message: "請填寫手機號碼，09開頭10碼數字",
+              },
+            })}
             name="phoneNumber"
             id="memberDisplayName"
-            type="number"
+            type="tel"
             className="col-12 col-md-7 rounded-4 p-2"
             maxLength={10}
           />
           <div className="ps-2 fw-light">
             {errors.phoneNumber && (
-              <span className="errorAlert pe-2">請填寫喔</span>
+              <span className="errorAlert pe-2">
+                {" "}
+                {errors.phoneNumber?.message}
+              </span>
             )}
             預設外送用電話
           </div>

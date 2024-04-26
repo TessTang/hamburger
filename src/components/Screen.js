@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+
 import { motion, useScroll, useTransform } from "framer-motion";
+
 import { useScrollTrigger } from "./ScrollTriggerProvider";
 
+//animation設定
 const banner = {
   animate: {
     transition: {
@@ -33,23 +36,20 @@ const hamburgerAnimation = {
       delay: 2 - custom * 0.25,
     },
   }),
-  shake: (custom) => ({
-    x: [0, custom - 3, custom + 1, custom - 2, custom + 2, 0],
-    transition: {
-      x: {
-        repeat: Infinity,
-        repeatType: "loop",
-        duration: 2,
-        ease: "linear",
-      },
-    },
-  }),
 };
 
-const Screen = () => {
-  const [hamHeight, setHamHeight] = useState(0);
+//SECTION背景顏色變化設定
+const colorStart = "#000000";
+const colorEnd = "#ffffff";
+const fontColorFinal = "#474747ee";
+const fontColorStart = "#e3ece5d2";
 
+const Screen = () => {
+  //hamburger layer animate
+  const [hamHeight, setHamHeight] = useState(0);
+  const hamRef = useRef(null);
   const { scrollY } = useScroll();
+
   const y1 = useTransform(scrollY, [0, 300], [0, hamHeight * 0.2]);
   const y2 = useTransform(scrollY, [0, 300], [0, hamHeight * 0.15]);
   const y3 = useTransform(scrollY, [0, 300], [0, hamHeight * 0.1]);
@@ -57,20 +57,9 @@ const Screen = () => {
   const y5 = useTransform(scrollY, [0, 300], [0, hamHeight * -0.02]);
   const y6 = useTransform(scrollY, [0, 300], [0, hamHeight * -0.1]);
   const y7 = useTransform(scrollY, [0, 300], [0, hamHeight * -0.15]);
-  const y8 = useTransform(scrollY, [0, 300], [0, -600]);
 
-  const mt1Ref = useRef(null);
-  useEffect(() => {
-    setHamHeight(mt1Ref.current.clientHeight);
-  }, []);
-
+  //section background color animate
   const progress = useScrollTrigger();
-  const colorStart = "#000000";
-  const colorEnd = "#c7e4df";
-
-  const fontColorFinal = "#474747ee";
-  const fontColorStart = "#e3ece5d2";
-
   const bg = useTransform(progress, [0, 1], [colorStart, colorEnd]);
   const fontColor = useTransform(
     progress,
@@ -78,9 +67,26 @@ const Screen = () => {
     [fontColorStart, fontColorFinal],
   );
 
+  const HamburgerLayer = ({ y, zIndex, title, custom }) => (
+    <motion.div
+      className="box"
+      style={{ x: 0, y: y, zIndex: zIndex }}
+      custom={custom}
+      variants={hamburgerAnimation}
+      initial="initial"
+      animate="animate"
+    >
+      <img
+        src={require(`../assets/${title}.png`)}
+        alt={title}
+        style={{ width: "100%" }}
+      />
+    </motion.div>
+  );
+
   const AnimatedLetters = ({ title }) => (
     <motion.span
-      className="row-title"
+      className="row-title d-block"
       variants={banner}
       initial="initial"
       animate="animate"
@@ -97,52 +103,26 @@ const Screen = () => {
     </motion.span>
   );
 
-  const [playMarquee, setPlayMarquee] = useState(false);
-
+  //偵測 section 高度調整 hamburger layer 移動距離
   useEffect(() => {
-    setPlayMarquee(true);
+    setHamHeight(hamRef.current.clientHeight);
   }, []);
-
-  const HamburgerLayer = ({ y, zIndex, title, custom }) => (
-    <motion.div
-      className="box"
-      style={{ x: 0, y: y, zIndex: zIndex }}
-      custom={custom}
-      variants={hamburgerAnimation}
-      initial="initial"
-      animate="animate"
-      whileInView="shake"
-    >
-      <img
-        src={require(`../assets/${title}.png`)}
-        alt={title}
-        style={{ width: "100%" }}
-      />
-    </motion.div>
-  );
 
   return (
     <motion.div
-      className="screen d-flex align-items-center justify-content-around"
+      className="screen d-flex flex-wrap"
       style={{ height: "100vh", backgroundColor: bg }}
     >
-      <motion.img
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        style={{ y: y8, x: 0 }}
-        src="https://modinatheme.com/html/foodking-html/assets/img/shape/tomato-shape-2.png"
-        alt="bannerSmallImg"
-        className="bannerSmallImg"
-      />
+      {/* 左邊字體banner */}
       <motion.div
         variants={banner}
         className="banner flex-grow-1 col-3"
         style={{ color: fontColor }}
       >
         <div className="banner-row">
-          <div className="row-col">
+          <div className="row-col text-center ps-3">
             <AnimatedLetters title="Ham" />
+            <AnimatedLetters title="burger" />
           </div>
           <div className="row-col">
             <motion.span
@@ -155,21 +135,13 @@ const Screen = () => {
             </motion.span>
           </div>
         </div>
-
-        <div className={`banner-row marquee  ${playMarquee && "animate"}`}>
-          <div className="marquee__inner">
-            <AnimatedLetters title="fresh" />
-            <AnimatedLetters title="fresh" />
-            <AnimatedLetters title="fresh" />
-            <AnimatedLetters title="fresh" />
-          </div>
-        </div>
-        <div className="banner-row center">
-          <AnimatedLetters title="Burger" />
-        </div>
       </motion.div>
 
-      <div className="mt-1 col-4 col-md-auto" ref={mt1Ref}>
+      {/* 漢堡動畫區塊 */}
+      <div
+        className="mt-1 col-4 col-md-auto d-flex flex-column justify-content-around"
+        ref={hamRef}
+      >
         <HamburgerLayer custom={1} y={y1} zIndex="1" title="hamburger01_top" />
         <HamburgerLayer custom={2} y={y2} zIndex="5" title="hamburger_vege01" />
         <HamburgerLayer custom={3} y={y3} zIndex="4" title="hamburger_tomato" />
@@ -188,6 +160,27 @@ const Screen = () => {
           title="hamburger01_bottom"
         />
       </div>
+
+      <motion.div
+        variants={banner}
+        className="w-100"
+        style={{ color: fontColor }}
+      >
+        <div className={`marquee animate`}>
+          <div className="marquee__inner">
+            <AnimatedLetters title="新鮮" />
+            <AnimatedLetters title="美味" />
+            <AnimatedLetters title="快速" />
+            <AnimatedLetters title="健康" />
+          </div>
+          <div className="marquee__inner">
+            <AnimatedLetters title="新鮮" />
+            <AnimatedLetters title="美味" />
+            <AnimatedLetters title="快速" />
+            <AnimatedLetters title="健康" />
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 };

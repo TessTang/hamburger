@@ -97,7 +97,7 @@ export default function Products() {
 
   return (
     <AnimatedPage>
-      <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
+      <Banner bgImg="banner01.jpg" />
       <div className="container mt-md-5 mt-3 mb-7">
         <div className="row">
           {/* left side */}
@@ -110,41 +110,40 @@ export default function Products() {
           >
             <div className="accordion border border-bottom border-top-0 border-start-0 border-end-0 mb-3">
               <div className="card border-0 text-center">
-                <div className="card-header px-0 py-4 bg-white border border-bottom-0 border-top border-start-0 border-end-0 rounded-0">
+                <div className="card-header px-0 py-4">
                   <div className="d-flex justify-content-between align-items-center pe-1 mb-2">
                     <h4 className="mb-0 fw-bold">產品分類</h4>
-                    <i className="bi bi-tag fs-4"></i>
                   </div>
-                  <ListGroup as="ul" className="fs-4">
+                  <ListGroup as="ul" className="fs-5">
                     <ListItem
                       title="all"
                       text="全部品項"
-                      img="https://cdn-icons-png.flaticon.com/128/1509/1509483.png"
+                      img={require("../../assets/product/category_all.png")}
                     />
                     <ListItem
                       title="hamburger"
                       text="漢堡"
-                      img="https://cdn-icons-png.flaticon.com/128/2497/2497906.png"
+                      img={require("../../assets/product/category_hamburger.png")}
                     />
                     <ListItem
                       title="chicken"
                       text="炸雞"
-                      img="https://cdn-icons-png.flaticon.com/128/2497/2497905.png"
+                      img={require("../../assets/product/category_chicken.png")}
                     />
                     <ListItem
                       title="drink"
                       text="飲料"
-                      img="https://cdn-icons-png.flaticon.com/128/2769/2769608.png"
+                      img={require("../../assets/product/category_drink.png")}
                     />
                     <ListItem
                       title="dessert"
                       text="點心"
-                      img="https://cdn-icons-png.flaticon.com/128/2497/2497904.png"
+                      img={require("../../assets/product/category_dessert.png")}
                     />
                     <ListItem
                       title="salad"
                       text="沙拉"
-                      img="https://cdn-icons-png.flaticon.com/512/8512/8512332.png"
+                      img={require("../../assets/product/category_salad.png")}
                     />
                   </ListGroup>
                 </div>
@@ -154,7 +153,7 @@ export default function Products() {
           {/* right side */}
           <div className="col-md-9">
             <div className="product_sort d-flex">
-              <span>價格排序</span>
+              <span>排序</span>
               <ListGroup horizontal>
                 <ListGroup.Item
                   className={`price_Sort ${sort === "up" && "active"}`}
@@ -162,7 +161,8 @@ export default function Products() {
                     setSort("up");
                   }}
                 >
-                  升序
+                  價格低
+                  <i className="bi bi-arrow-right" />高
                 </ListGroup.Item>
                 <ListGroup.Item
                   className={`price_Sort ${sort === "down" && "active"}`}
@@ -170,7 +170,8 @@ export default function Products() {
                     setSort("down");
                   }}
                 >
-                  降序
+                  價格高
+                  <i className="bi bi-arrow-right" />低
                 </ListGroup.Item>
               </ListGroup>
             </div>
@@ -197,8 +198,8 @@ export default function Products() {
                         />
                         <div className="card-body p-0 text-center">
                           <h4 className="mb-0 mt-3">{product.title}</h4>
-                          <p className="card-text mb-0">NT${product.price}</p>
-                          <p className="text-muted mt-3"></p>
+                          <p className="card-text mb-0">NT$ {product.price}</p>
+                          <p className="text-muted mt-3" />
                         </div>
                         {/* hover區 */}
                         <motion.div
@@ -215,8 +216,10 @@ export default function Products() {
                             <h4 className="mb-0 mt-3 fw-bolder">
                               {product.title}
                             </h4>
-                            <p className="card-text mb-0">NT${product.price}</p>
-                            <p className="text-muted mt-3"></p>
+                            <p className="card-text mb-0">
+                              NT$ {product.price}
+                            </p>
+                            <p className="text-muted mt-3" />
                           </div>
                         </motion.div>
                       </Link>

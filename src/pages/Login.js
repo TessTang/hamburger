@@ -15,10 +15,11 @@ import { motion } from "framer-motion";
 import SignUp from "../components/SignUp";
 import Banner from "../components/Banner";
 import Button from "../components/Button";
+import AnimatedPage from "../components/AnimatedPage";
+
+import { FrontData, messageAlert } from "../store/frontStore";
 import { auth, db } from "../utils/firebase";
 import { fadeIn } from "../utils/variants";
-import { FrontData, messageAlert } from "../store/frontStore";
-import AnimatedPage from "../components/AnimatedPage";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,7 +27,6 @@ export default function Login() {
   const { user } = useContext(FrontData);
 
   const [loginError, setLoginError] = useState("");
-
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -37,13 +37,13 @@ export default function Login() {
     if (user.user) {
       navigate("/member/memberprofile");
     }
-  });
+  }, [user]);
 
   const handleData = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const submit = async (e) => {
+  const submit = async () => {
     try {
       signInWithEmailAndPassword(auth, data.username, data.password)
         .then(() => {
@@ -51,23 +51,21 @@ export default function Login() {
           navigate("../");
         })
         .catch((error) => {
-          console.log(error);
           switch (error.code) {
+            case "auth/user-not-found":
+              return setLoginError("用戶不存在");
             case "auth/invalid-email":
               return setLoginError("信箱格式不正確");
             case "auth/weak-password":
               return setLoginError("密碼錯誤");
             case "auth/invalid-credential":
-              return setLoginError("密碼錯誤");
+              return setLoginError("用戶不存在");
             case "auth/missing-password":
               return setLoginError("請輸入密碼");
-            case "auth/user-not-found":
-              return setLoginError("用戶不存在");
             default:
-              setLoginError("登入失敗");
+              setLoginError("登入失敗 請確認Google帳號登入");
           }
         });
-      // }
     } catch (error) {
       setLoginError(error.response.data.message);
     }
@@ -87,8 +85,8 @@ export default function Login() {
       });
       messageAlert("success", "註冊成功");
       navigate("/member/memberaddprofile");
-    } catch (err) {
-      console.error("匯入Error: ", err);
+    } catch (error) {
+      messageAlert("warning", `噢!網頁寫入帳號出錯了${error}`);
     }
   };
 
@@ -99,19 +97,19 @@ export default function Login() {
       const { isNewUser } = getAdditionalUserInfo(result);
       if (isNewUser) {
         setFireStore(result.user);
-      } else {
-        messageAlert("success", "登入成功");
-        navigate("/products");
+        return;
       }
+      messageAlert("success", "登入成功");
+      navigate("/products");
     } catch (error) {
-      console.log("googlesignuperror", error);
+      messageAlert("warning", `噢!網頁 Google 登入出錯了${error}`);
     }
   };
 
   return (
     <AnimatedPage>
       {" "}
-      <Banner bgImg="https://nunforest.com/fast-foody/burger/upload/banners/ban2.jpg" />
+      <Banner bgImg="banner01.jpg" />
       <motion.div
         variants={fadeIn("up", 0.3)}
         initial="hidden"
@@ -169,7 +167,7 @@ export default function Login() {
                   placeholder="Password"
                 />
               </div>
-              <Button text="登入" click={submit} myClass="p-2" bg="primary" />
+              <Button text="登入" click={submit} myClass="p-2" />
             </div>
           </Tab>
           <Tab eventKey="signup" title="註冊">
@@ -188,10 +186,7 @@ export default function Login() {
         animate="show"
         className="position-absolute login_deco top-50"
       >
-        <img
-          src="https://modinatheme.com/html/foodking-html/assets/img/shape/patato-shape.png"
-          alt="deco"
-        />
+        <img src={require("../assets/login_deco.png")} alt="deco" />
       </motion.div>
     </AnimatedPage>
   );

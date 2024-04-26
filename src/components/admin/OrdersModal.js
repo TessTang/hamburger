@@ -1,5 +1,7 @@
 import { useEffect, useState, useContext } from "react";
+
 import { doc, updateDoc } from "firebase/firestore";
+
 import {
   MessageContext,
   handleSuccessMessage,
@@ -9,20 +11,11 @@ import { db } from "../../utils/firebase";
 
 export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {
   const [, dispatch] = useContext(MessageContext);
-
   const [tempData, setTempData] = useState({
     is_paid: "",
     status: 0,
     ...tempOrder,
   });
-
-  useEffect(() => {
-    setTempData({
-      ...tempOrder,
-      is_paid: tempOrder.is_paid,
-      status: tempOrder.status,
-    });
-  }, [tempOrder]);
 
   const handleChange = (e) => {
     const { name, value, checked } = e.target;
@@ -48,9 +41,16 @@ export default function OrdersModal({ closeAddProduct, getOrders, tempOrder }) {
       closeAddProduct();
     } catch (error) {
       handleErrorMessage(dispatch, "更改失敗");
-      console.log(error);
     }
   };
+
+  useEffect(() => {
+    setTempData({
+      ...tempOrder,
+      is_paid: tempOrder.is_paid,
+      status: tempOrder.status,
+    });
+  }, [tempOrder]);
 
   return (
     <div
