@@ -36,7 +36,7 @@ export default function Home() {
         variants={fadeIn("up", 0.1)}
         initial="hidden"
         whileInView="show"
-        className="mt-5 mb-3 myTitle"
+        className="mt-5 mb-5 myTitle"
       >
         {text}
         <span className="wave" />
@@ -123,7 +123,7 @@ export default function Home() {
 
       {/* 隨機推薦三款產品 */}
 
-      <div className="container overflow-hidden">
+      <div className="container overflow-hidden mt-5">
         <SectionTitle text="猜你喜歡" />
         <div className="row my-2">
           {product.map((item, idx) => {
@@ -219,7 +219,7 @@ export default function Home() {
             <p className="fs-4 my-5">
               每個漢堡都是精心製作，充滿幸福感。我們始於對美食的熱愛和速食的追求。不論您在工作間隙享用還是在家用餐，我們都提供最美味的漢堡和最貼心的服務。
             </p>
-            <div className="row row-cols-1 row-cols-md-3 flex-grow-1">
+            <div className="row row-cols-1 row-cols-md-3 flex-grow-1 mb-5">
               <AboutIcon
                 custom="1"
                 icon={faBurger}

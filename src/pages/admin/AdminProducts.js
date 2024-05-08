@@ -5,7 +5,7 @@ import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 
 import ProductsModal from "../../components/admin/ProductsModal";
 import DeleteModal from "../../components/DeleteModal";
-import Pagenation from "../../components/Pagenation";
+import Pagination from "../../components/Pagination";
 
 import { db } from "../../utils/firebase";
 
@@ -22,7 +22,7 @@ export default function AdminProducts() {
   const deleteModal = useRef(null);
 
   //1.拿到全部的資料
-  //2.轉換成可以轉換pagenation與每頁對應資料  換頁時get對應頁面的funciton
+  //2.轉換成可以轉換Pagination與每頁對應資料  換頁時get對應頁面的funciton
 
   const getProducts = async (page = 1) => {
     try {
@@ -171,7 +171,7 @@ export default function AdminProducts() {
         </tbody>
       </table>
 
-      <Pagenation pagination={pagination} changePage={getPage} />
+      <Pagination pagination={pagination} changePage={getPage} />
     </div>
   );
 }

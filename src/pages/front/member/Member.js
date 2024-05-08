@@ -10,7 +10,7 @@ import { FrontData } from "../../../store/frontStore";
 import { auth } from "../../../utils/firebase";
 
 export default function Member() {
-  const navigate = useNavigate(null);
+  const navigate = useNavigate();
   const { user, setUser, setCart, userIsChecked } = useContext(FrontData);
 
   //未登入進入網址=>跳回首頁  無填寫過資料=>新增資料頁面
@@ -22,7 +22,7 @@ export default function Member() {
         navigate("/member/memberaddprofile");
       }
     }
-  }, [user, userIsChecked]);
+  }, [user, userIsChecked, navigate]);
 
   return (
     <>

@@ -37,7 +37,7 @@ export default function Login() {
     if (user.user) {
       navigate("/member/memberprofile");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const handleData = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });

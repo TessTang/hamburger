@@ -11,7 +11,7 @@ import { db } from "../../../utils/firebase";
 
 export default function MemberAddProfile() {
   const { user, checkUserData } = useContext(FrontData);
-  const navigate = useNavigate(null);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -25,7 +25,7 @@ export default function MemberAddProfile() {
     setValue("realName", user.user?.realName);
     setValue("address", user.user?.address);
     setValue("phoneNumber", user.user?.phoneNumber);
-  }, [user]);
+  }, [user, setValue]);
 
   //送出後將資料寫入資料庫，並轉回profile頁面
   const onSubmit = async (data) => {

@@ -4,10 +4,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFeatherPointed,
-  faBoltLightning,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFeatherPointed } from "@fortawesome/free-solid-svg-icons";
 
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
@@ -24,7 +21,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState({});
   const [otherProducts, setOtherProducts] = useState([]);
   const [quantity, setQuantity] = useState([]);
-  const navigate = useNavigate(null);
+  const navigate = useNavigate();
 
   //偵測頁面上所有產品更動數量
   const changeQty = useCallback(
@@ -218,7 +215,7 @@ export default function ProductDetail() {
                   <div className="input-group-prepend">
                     <button
                       type="button"
-                      className="h-100 btn btn-primary btn-sm"
+                      className="h-100 btn btn-primary btn-sm text-white"
                       onClick={() => {
                         changeQty(product.id, "min");
                       }}
@@ -238,7 +235,7 @@ export default function ProductDetail() {
                   <div className="input-group-prepend">
                     <button
                       type="button"
-                      className="h-100 btn btn-primary btn-sm"
+                      className="h-100 btn btn-primary btn-sm text-white"
                       onClick={() => {
                         changeQty(product.id, "plus");
                       }}
@@ -256,10 +253,6 @@ export default function ProductDetail() {
                     submit(product.id);
                   }}
                 />
-                <FontAwesomeIcon
-                  className="detailDeco_lighting"
-                  icon={faBoltLightning}
-                />
               </div>
             </motion.div>
           </motion.div>
@@ -271,7 +264,10 @@ export default function ProductDetail() {
             className="my-5"
           >
             <p className="border-bottom text-center py-2">成分</p>
-            <p className="ps-3" style={{ whiteSpace: "pre-line" }}>
+            <p
+              className="ps-3"
+              style={{ whiteSpace: "pre-line", textAlign: "center" }}
+            >
               {product.content}
             </p>
           </motion.div>

@@ -1,10 +1,10 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup";
 import { motion, useAnimationControls } from "framer-motion";
 import { FrontData } from "../../store/frontStore";
 import { fadeIn } from "../../utils/variants";
-import Pagenation from "../../components/Pagenation";
+import Pagination from "../../components/Pagination";
 import Banner from "../../components/Banner";
 import AnimatedPage from "../../components/AnimatedPage";
 
@@ -16,44 +16,42 @@ export default function Products() {
   const [sort, setSort] = useState("");
   const controls = useAnimationControls();
 
-  //一進入就抓取產品資料，更改產品分類重新抓取
-  useEffect(() => {
-    getPage();
-  }, [allProducts, productCategory, sort]);
-
   //取得全部資料後將資料分頁
-  const getPage = (page = 1) => {
-    controls.stop();
-    const productList =
-      productCategory === "all"
-        ? allProducts
-        : allProducts.filter((item) => item.category === productCategory);
-    const itemsPerPage = 10; // 每頁顯示的資料數量
-    const totalPage = Math.ceil(productList.length / itemsPerPage);
-    const getProductsForPage = (page) => {
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      if (sort === "up") {
-        return productList.slice(startIndex, endIndex).sort((a, b) => {
-          return a.price - b.price;
-        });
-      } else if (sort === "down") {
-        return productList.slice(startIndex, endIndex).sort((a, b) => {
-          return b.price - a.price;
-        });
-      }
-      return productList.slice(startIndex, endIndex);
-    };
+  const getPage = useCallback(
+    (page = 1) => {
+      controls.stop();
+      const productList =
+        productCategory === "all"
+          ? allProducts
+          : allProducts.filter((item) => item.category === productCategory);
+      const itemsPerPage = 10; // 每頁顯示的資料數量
+      const totalPage = Math.ceil(productList.length / itemsPerPage);
+      const getProductsForPage = (page) => {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        if (sort === "up") {
+          return productList.slice(startIndex, endIndex).sort((a, b) => {
+            return a.price - b.price;
+          });
+        } else if (sort === "down") {
+          return productList.slice(startIndex, endIndex).sort((a, b) => {
+            return b.price - a.price;
+          });
+        }
+        return productList.slice(startIndex, endIndex);
+      };
 
-    setPagination({
-      total_pages: totalPage,
-      current_page: page,
-      has_pre: page > 1,
-      has_next: page < totalPage,
-      category: "",
-    });
-    setProducts(getProductsForPage(page));
-  };
+      setPagination({
+        total_pages: totalPage,
+        current_page: page,
+        has_pre: page > 1,
+        has_next: page < totalPage,
+        category: "",
+      });
+      setProducts(getProductsForPage(page));
+    },
+    [allProducts, controls, productCategory, sort],
+  );
 
   //framer motion
 
@@ -69,12 +67,18 @@ export default function Products() {
     }));
   }, [controls, products]);
 
+  //一進入就抓取產品資料，更改產品分類重新抓取
+  useEffect(() => {
+    getPage();
+  }, [getPage]);
+
   //分類標籤元件
   const ListItem = ({ title, text, img }) => {
     return (
       <ListGroup.Item
         as="li"
         className={`${productCategory === `${title}` && "active"} myHover`}
+        style={{ cursor: "pointer" }}
         onClick={() => {
           setProductCategory(`${title}`);
         }}
@@ -227,7 +231,7 @@ export default function Products() {
                   );
                 })}
             </div>
-            <Pagenation pagination={pagination} changePage={getPage} />
+            <Pagination pagination={pagination} changePage={getPage} />
           </div>
         </div>
       </div>

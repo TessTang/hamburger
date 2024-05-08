@@ -5,14 +5,14 @@ import Button from "../../../components/Button";
 
 export default function MemberProfile() {
   const { user } = useContext(FrontData);
-  const navigate = useNavigate(null);
+  const navigate = useNavigate();
 
   //若會員資料還沒有填寫過，就先進新增資料頁面
   useEffect(() => {
     if (user.user?.realName === "") {
       navigate("/member/memberaddprofile");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const DataList = ({ text, data }) => {
     return (

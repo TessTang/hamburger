@@ -5,7 +5,7 @@ import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 
 import BlogsModal from "../../components/admin/BlogsModal";
 import DeleteModal from "../../components/DeleteModal";
-import Pagenation from "../../components/Pagenation";
+import Pagination from "../../components/Pagination";
 
 import { db } from "../../utils/firebase";
 
@@ -22,7 +22,7 @@ export default function AdminBlogs() {
   const deleteModal = useRef(null);
 
   //1.拿到全部的資料
-  //2.轉換成pagenation與每頁對應資料  換頁時get對應頁面的funciton
+  //2.轉換成Pagination與每頁對應資料  換頁時get對應頁面的funciton
   const getBlogs = async (page = 1) => {
     try {
       const queryBlogs = await getDocs(collection(db, "blogs"));
@@ -182,7 +182,7 @@ export default function AdminBlogs() {
         </tbody>
       </table>
 
-      <Pagenation pagination={pagination} changePage={getPage} />
+      <Pagination pagination={pagination} changePage={getPage} />
     </div>
   );
 }

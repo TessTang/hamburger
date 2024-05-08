@@ -2,7 +2,7 @@ import { useOutletContext } from "react-router-dom";
 
 import { motion } from "framer-motion";
 
-import Pagenation from "../../../components/Pagenation";
+import Pagination from "../../../components/Pagination";
 import Button from "../../../components/Button";
 
 import { fadeIn } from "../../../utils/variants";
@@ -36,7 +36,7 @@ export default function Blog() {
                 className="card-img-top rounded-5 mb-2"
                 alt={item.title}
               />
-              <div className="cardDate rounded-4 py-2 px-3 fw-bold">
+              <div className="cardDate rounded-4 py-2 px-3">
                 {formatUnixTimestamp(item.date)}
               </div>
               <div className="card-body p-0 text-center myCardBody mb-3">
@@ -44,7 +44,7 @@ export default function Blog() {
                 <p className="mb-0">{item.content}</p>
               </div>
               <Button
-                text="點我看"
+                text="查看更多"
                 linkto={`/blogs/${item.id}`}
                 myClass="py-2 w-50 mx-auto mt-2"
               />
@@ -52,7 +52,7 @@ export default function Blog() {
           </motion.div>
         );
       })}
-      <Pagenation pagination={pagination} changePage={getPage} />
+      <Pagination pagination={pagination} changePage={getPage} />
     </div>
   );
 }

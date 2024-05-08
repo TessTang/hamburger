@@ -35,7 +35,7 @@ export default function Dashboard() {
       }
       navigate("../");
     });
-  }, []);
+  }, [navigate]);
 
   return (
     <MessageContext.Provider value={reducer}>

@@ -15,7 +15,7 @@ import { fadeIn } from "../../utils/variants";
 export default function Cart() {
   const { cart, getCart, user, userIsChecked } = useContext(FrontData);
   const [message, setMessage] = useState({ type: "", message: "" });
-  const navigate = useNavigate(null);
+  const navigate = useNavigate();
 
   //增減數量
   const changeQty = (item, type) => {
@@ -160,17 +160,18 @@ export default function Cart() {
         navigate("../login");
       }
     }
-  }, [cart, userIsChecked, user]);
+  }, [cart, userIsChecked, user, navigate]);
 
   return (
     <>
       <Banner bgImg="banner01.jpg" />
       <div className="container full-height">
         <motion.div initial="hidden" animate="show" className="mt-3">
-          <motion.h3 variants={fadeIn("up", 0.1)} className="mt-3 mb-4 fs-2">
-            <i className="bi bi-cart" />
+          <motion.h3
+            variants={fadeIn("up", 0.1)}
+            className="mt-3 mb-4 fs-2 fw-bold"
+          >
             購物車
-            <i className="bi bi-cart" />
           </motion.h3>
           {!cart.carts || cart.carts?.length === 0 ? (
             <div className="fs-4 mt-5">購物車是空的喔!</div>
@@ -202,7 +203,7 @@ export default function Cart() {
                         >
                           <th
                             scope="row"
-                            className="border-0 px-0 font-weight-normal py-4 d-flex flex-column flex-md-row column-gap-2"
+                            className="border-0 px-0 py-4 d-flex flex-column flex-md-row column-gap-2 align-items-md-center"
                           >
                             <img
                               className="col-md-5"
@@ -262,7 +263,7 @@ export default function Cart() {
                           <td className="border-0 align-middle position-relative">
                             <button
                               type="button"
-                              className="cartDeleteBtn btn btn-primary"
+                              className="cartDeleteBtn btn btn-outline-primary border-0 py-2"
                               onClick={() => {
                                 deleteCart(item.product.id, item.product.title);
                               }}

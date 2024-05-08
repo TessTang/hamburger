@@ -85,7 +85,7 @@ export default function CheckOut() {
     setValue("tel", user.user?.phoneNumber);
     setValue("address", user.user?.address);
     setValue("message", "");
-  }, [user]);
+  }, [user, setValue]);
 
   return (
     <>

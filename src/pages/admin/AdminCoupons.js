@@ -5,7 +5,7 @@ import { doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 
 import CouponsModal from "../../components/admin/CouponsModal";
 import DeleteModal from "../../components/DeleteModal";
-import Pagenation from "../../components/Pagenation";
+import Pagination from "../../components/Pagination";
 
 import { db } from "../../utils/firebase";
 
@@ -176,7 +176,7 @@ export default function AdminCoupons() {
         </tbody>
       </table>
 
-      <Pagenation pagination={pagination} changePage={getCoupons} />
+      <Pagination pagination={pagination} changePage={getCoupons} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { Modal } from "bootstrap";
 import { getDocs, collection } from "firebase/firestore";
 
 import OrdersModal from "../../components/admin/OrdersModal";
-import Pagenation from "../../components/Pagenation";
+import Pagination from "../../components/Pagination";
 import { db } from "../../utils/firebase";
 
 const itemsPerPage = 10;
@@ -145,7 +145,7 @@ export default function AdminProducts() {
           })}
         </tbody>
       </table>
-      <Pagenation pagination={pagination} changePage={getPage} />
+      <Pagination pagination={pagination} changePage={getPage} />
     </div>
   );
 }
