@@ -1,13 +1,15 @@
 {
   "files": {
-    "main.css": "/hamburger/static/css/main.cc1af55e.css",
-    "main.js": "/hamburger/static/js/main.5d5ec4ed.js",
+    "main.css": "/hamburger/static/css/main.69cd0721.css",
+    "main.js": "/hamburger/static/js/main.1ea6c054.js",
     "static/js/453.8cf3443b.chunk.js": "/hamburger/static/js/453.8cf3443b.chunk.js",
-    "static/media/Index.gif": "/hamburger/static/media/Index.eb8c164f3bcbab676248.gif",
-    "static/media/Line Pay.gif": "/hamburger/static/media/Line Pay.19904bde8c987d6af15c.gif",
-    "static/media/Blog.gif": "/hamburger/static/media/Blog.15524049f7df6a70a37a.gif",
-    "static/media/Product.gif": "/hamburger/static/media/Product.414456e6f9e081f30892.gif",
+    "static/media/hamburger-blog.gif": "/hamburger/static/media/hamburger-blog.64023d4ae2401194b8e2.gif",
+    "static/media/hamburger-index_gif.gif": "/hamburger/static/media/hamburger-index_gif.96f88a18d525679eaed3.gif",
+    "static/media/hamburger-product.gif": "/hamburger/static/media/hamburger-product.266abe7d76fdd205d0e7.gif",
+    "static/media/hamburger-linePay.gif": "/hamburger/static/media/hamburger-linePay.e21c65b8b06e011a9552.gif",
+    "static/media/hamburger-backSide.gif": "/hamburger/static/media/hamburger-backSide.52ef316370ebad423480.gif",
     "static/media/home_promotion_background.png": "/hamburger/static/media/home_promotion_background.333790f977a9c5981281.png",
+    "static/media/hamburger-index.jpg": "/hamburger/static/media/hamburger-index.ffc450525bd4f724a871.jpg",
     "static/media/bootstrap-icons.woff?": "/hamburger/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
     "static/media/home_promotion_hamburger.png": "/hamburger/static/media/home_promotion_hamburger.5006e1a9eaee37e1692a.png",
     "static/media/hamburger_beef.png": "/hamburger/static/media/hamburger_beef.4b86e377d1497fff9ef6.png",
@@ -40,12 +42,12 @@
     "static/media/category_activity.png": "/hamburger/static/media/category_activity.bc00216468097b6bebab.png",
     "static/media/home_deliver_house03.png": "/hamburger/static/media/home_deliver_house03.07d9dbd048853d867ad2.png",
     "index.html": "/hamburger/index.html",
-    "main.cc1af55e.css.map": "/hamburger/static/css/main.cc1af55e.css.map",
-    "main.5d5ec4ed.js.map": "/hamburger/static/js/main.5d5ec4ed.js.map",
+    "main.69cd0721.css.map": "/hamburger/static/css/main.69cd0721.css.map",
+    "main.1ea6c054.js.map": "/hamburger/static/js/main.1ea6c054.js.map",
     "453.8cf3443b.chunk.js.map": "/hamburger/static/js/453.8cf3443b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cc1af55e.css",
-    "static/js/main.5d5ec4ed.js"
+    "static/css/main.69cd0721.css",
+    "static/js/main.1ea6c054.js"
   ]
 }
