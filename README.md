@@ -3,7 +3,7 @@
 ---
 
 > [此專案為速食外送網站，主打快速、方便和美味。無論您在家、辦公室或任何地方，只需幾個網路訂餐，即可享受到新鮮熱辣的速食美食。]
-
+![image](https://github.com/TessTang/hamburger/blob/main/src/assets/gitHub_img/hamburger-index.jpg)
 
 ---
 
@@ -61,14 +61,19 @@ https://tesstang.github.io/hamburger/
 
 ---
 * 首頁 -大量動畫效果增加網頁互動感
-![image](https://github.com/TessTang/hamburger/blob/main/src/assets/Index.gif)
+![image](https://github.com/TessTang/hamburger/blob/main/src/assets/gitHub_img/hamburger-index_gif.gif)
 
 * 產品 -多樣且有分類與排序方便觀看
-![image](https://github.com/TessTang/hamburger/blob/main/src/assets/Product.gif)
+![image](https://github.com/TessTang/hamburger/blob/main/src/assets/gitHub_img/hamburger-product.gif)
 
 * Blog -多篇文章增加網頁豐富度
-![image](https://github.com/TessTang/hamburger/blob/main/src/assets/Blog.gif)
+![image](https://github.com/TessTang/hamburger/blob/main/src/assets/gitHub_img/hamburger-blog.gif)
 
+* Line Pay 金流 -串接 Line Pay 使網頁付款多樣化
+![image](https://github.com/TessTang/hamburger/blob/main/src/assets/gitHub_img/hamburger-linePay.gif)
+
+* 網頁後台 -管理員帳號可進入網頁後台管理網頁內容
+![image](https://github.com/TessTang/hamburger/blob/main/src/assets/gitHub_img/hamburger-backSide.gif)
 
 
 ## 安裝流程
