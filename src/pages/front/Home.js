@@ -274,11 +274,11 @@ export default function Home() {
           </div>
           <div>
             販售結束倒數計時
-            <p>只到5/30!</p>
+            <p>只到9/30!</p>
             <div className="d-flex mx-auto justify-content-around pt-5 clander_outer">
               <Timer
                 duration={
-                  new Date("2024-05-30T00:00:00").getTime() -
+                  new Date("2024-09-30T00:00:00").getTime() -
                   new Date().getTime()
                 }
               />
